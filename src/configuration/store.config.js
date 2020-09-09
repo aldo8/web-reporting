@@ -3,9 +3,9 @@ import { routerMiddleware } from 'connected-react-router';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import appReducer from 'reducers';
-import {createBrowserHistory} from 'history';
+import { history } from './route.config';
 
-export default function storeConfig (state) {
+function storeConfig (state) {
     const middlewares = []
     if(process.env.NODE_ENV ==='development') {
         middlewares.push(logger)
@@ -14,8 +14,12 @@ export default function storeConfig (state) {
     const store = createStore(
         appReducer,
         composeEnhance(
-            applyMiddleware(routerMiddleware(createBrowserHistory),thunk,...middlewares)
-        )
-    )
+            applyMiddleware(
+                routerMiddleware(history),
+                thunk,
+                ...middlewares
+            )),
+            );
     return store;
 }
+export default storeConfig;

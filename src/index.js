@@ -2,15 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import storeConfig from './configuration/store.config';
 import * as serviceWorker from './serviceWorker';
-import Container from './components/Container/Container';
-import Login from 'view/Login/Login';
+import {Container} from 'components';
 import { Provider } from 'react-redux';
 
 
 const store = storeConfig()
 ReactDOM.render(
     <Provider store={store}>
-       <Login/>
+       <Container/>
     </Provider>,
     document.getElementById('root')
 );

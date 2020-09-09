@@ -1,9 +1,9 @@
 import {combineReducers} from 'redux';
 import {connectRouter} from 'connected-react-router';
-import { createBrowserHistory } from 'history';
+import { history } from 'configuration/route.config';
 
 
 const appReducer = combineReducers({
-    router:connectRouter(createBrowserHistory)
+    router:connectRouter(history)
 })
 export default appReducer;
