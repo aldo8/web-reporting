@@ -1,4 +1,5 @@
-import React from "react";
+import PropTypes from "prop-types";
+import React, { useEffect } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -14,6 +15,9 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import { Formik } from "formik";
 import * as Yup from "yup";
+import { MENU } from "constants/menu";
+import { getStorage } from "utils/storage.helper";
+import { isNull } from "lodash";
 
 function Copyright() {
   return (
@@ -66,11 +70,22 @@ const validationSchema = Yup.object().shape({
   password: Yup.string()
 });
 export default function Login(props) {
-  console.log('LOGIN',props)
+  
   const _handleSubmit = (value) => {    
     props.login(value);
   }; 
+  useEffect(() => {
+    const {isLoading,token,navigateTo} = props
+    console.log('render change props',props)
+    console.log('render change props',!isNull(token))
+    if(token !== null){
+      console.log('AKU JALAN TOT')
+      navigateTo(MENU.DASHBOARD)
+    }
+  
+  })
   const classes = useStyles();
+  console.log('LOGIN PROPS',props)
   return (
     <Grid container component="main" className={classes.root}>
     
@@ -136,4 +151,12 @@ export default function Login(props) {
       </Grid>
     </Grid>
   );
+}
+Login.prototype = {
+  isLoading:PropTypes.bool,
+  token:PropTypes.string
+};
+Login.defaultProps = {
+  token:null,
+  isLoading:false
 }

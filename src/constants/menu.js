@@ -1,7 +1,7 @@
 export const MENU = {
     DASHBOARD:'/dashboard',
     USER:'/user',
-    LOCATION:'/location',
+    LOKASI:'/lokasi',
     OUTLET:'/outlet',
     DEVICES:'/devices',
     SETTING:'/setting',
