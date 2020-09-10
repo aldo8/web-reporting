@@ -1,5 +1,5 @@
 import {FAILURE_TYPE,LOGIN,REQUEST_TYPE,SUCCESS_TYPE} from './actionTypes';
-import {WebApi} from 'api'
+import {authApi} from 'api'
 export const login = (data) => dispatch => {
-    const api = WebApi.newInstance();
+    const api = authApi.newInstance();
 }

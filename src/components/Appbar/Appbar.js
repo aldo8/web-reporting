@@ -15,12 +15,10 @@ import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import MailIcon from '@material-ui/icons/Mail';
+import AssignmentIcon from '@material-ui/icons/Assignment';
 import { MENU } from 'constants/menu';
 
 const drawerWidth = 240;
-
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -101,6 +99,7 @@ export default function ApplicationBar(props) {
       switch (key) {
           case `DASHBOARD`:
             props.navigateTo(MENU.DASHBOARD)
+            props.login({username:'ilman',password:'ilman',rememberMe:true})
               break;
       
           default:
@@ -111,6 +110,7 @@ export default function ApplicationBar(props) {
     <div className={classes.root}>
       <CssBaseline />
       <AppBar
+        color='primary' 
         position="fixed"
         className={clsx(classes.appBar, {
           [classes.appBarShift]: open,
@@ -155,7 +155,7 @@ export default function ApplicationBar(props) {
         <List>
           {['DASHBOARD', 'USER', 'LOKASI', 'OUTLET','DEVICES','SETTING','REPORT'].map((text, index) => (
             <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+              <ListItemIcon><AssignmentIcon/></ListItemIcon>
               <ListItemText primary={text} onClick={() => handleNavigation(text)}/>
             </ListItem>
           ))}

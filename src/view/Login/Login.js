@@ -61,19 +61,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const _handleSubmit = (value) => {
-  console.log('LOGIN',value)
-  // this.props.login(value);
-}; 
-
 const validationSchema = Yup.object().shape({
   userName: Yup.string(),
   password: Yup.string()
 });
-export default function Login() {
+export default function Login(props) {
+  console.log('LOGIN',props)
+  const _handleSubmit = (value) => {    
+    props.login(value);
+  }; 
   const classes = useStyles();
   return (
     <Grid container component="main" className={classes.root}>
+    
       <CssBaseline />
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>

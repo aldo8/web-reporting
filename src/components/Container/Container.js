@@ -6,7 +6,6 @@ import { history } from 'configuration/route.config';
 
 export default class Container extends React.Component{
     render(){
-        console.log('Container',this.props)
         return(
             <>
             <ApplicationBar/>
