@@ -1,0 +1,218 @@
+@import "../../themes/colors.scss";
+@import "../../themes/fonts.scss";
+@import "../../themes/size.scss";
+
+.table-detail-row {
+  border: "4px solid blue";
+}
+
+.checkbox-custom {
+  color: rgb(244, 203, 0);
+  padding: "0px 5px";
+  width: "14px";
+  height: "14px";
+}
+
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 15px;
+
+  th,
+  td {
+    max-width: 100px;
+    padding: 3px 0px;
+    text-align: left;
+    text-transform: capitalize;
+    cursor: pointer;
+  }
+
+  thead > th {
+    font-family: "Lato-Bold";
+    font-size: 0.9vw !important;
+    font-weight: 500;
+    line-height: 0.9vw; 
+    
+  }
+
+  tbody > tr {
+    
+    td {
+      font-family: "Lato-Medium";
+      font-size: 0.8vw;
+      font-weight: 500;
+      color: map-get($colors, black);
+      text-transform: capitalize;
+    }
+  }
+
+  .td-tr-column-number {
+    max-width: 30px;
+    text-align: center;
+  }
+}
+
+.table-body-tr {
+  // box-shadow: 0px 0.2vw 0.6vw rgba(0, 0, 0, 0.161);
+  background-color: #fff;
+  overflow-y: visible;
+  border-radius: 5px;
+  padding: 0px 5px;
+  text-align: center;
+  padding: 10px;
+  font-family: "Lato-Medium";
+  font-size: 0.72917vw;
+  line-height: 0.88542vw;
+  font-weight: 500;
+  color: "black";
+}
+
+.table-head-tr {
+  th {
+    font-size: 0.8242vw !important;
+    font-family: "Lato-Bold";
+    color: black;
+    font-weight: 500;
+    line-height: 0.8424vw;
+  }
+}
+
+.table-body-cell {
+  line-height: 20px;
+  padding: 16px 0px;
+}
+
+.pagination {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  justify-content: flex-end;
+  .paging {
+    display: flex;
+    flex-direction: row;
+    box-shadow: 0px vw(2) vw(4) rgba(0, 0, 0, 0.161);
+    .page-active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: vw(45.99);
+      min-width: vw(45.99);
+      height: vw(35.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Gotham-Regular";
+      background-color: map-get($colors, primary);
+      font-size: vw(13);
+      line-height: vw(16);
+      border-radius: 0;
+      cursor: pointer;
+    }
+    .page-inactive {
+      width: vw(45.99);
+      min-width: vw(45.99);
+      height: vw(35.3);
+      width: vw(45.99);
+      min-width: vw(45.99);
+      height: vw(35.3);
+      background-color: white;
+      display: flex;
+      align-items: center;
+      font-family: "Gotham-Regular";
+      justify-content: center;
+      font-size: vw(13);
+      line-height: vw(16);
+      border-radius: 0;
+      cursor: pointer;
+    }
+    .page-inactive:hover {
+      background-color: map-get($colors, primary);
+      cursor: pointer;
+    }
+    .next-page {
+      width: vw(45.99);
+      min-width: vw(45.99);
+      height: vw(35.3);
+      width: vw(45.99);
+      min-width: vw(45.99);
+      height: vw(35.3);
+      background-color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0;
+      cursor: pointer;
+      .arrow-icon {
+        font-size: vw(24);
+      }
+    }
+    .next-page:hover {
+      background-color: map-get($colors, primary);
+      cursor: pointer;
+    }
+  }
+}
+
+.page-size-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  select {
+    box-shadow: 2px 2px 2px 2px whitesmoke;
+    margin: vw(0) vw(10);
+    padding: vw(5);
+    outline: none;
+    border: none;
+    background-color: white;
+    border-radius: 6px;
+    font-family: "Lato-Medium";
+    font-size: 0.7434vw !important;
+  }
+
+  p {
+    font-size: 0.7553vw !important;
+    font-family: "Lato-Medium";
+    font-weight: 500;
+    margin-right: vw(10);
+  }
+}
+
+.filters-container {
+  display: flex;
+  flex-direction: row;
+  // justify-content: space-between;
+  .dropdowns-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 0 !important;
+    .dropdown-container {
+      margin-left: vw(27.78);
+    }
+    .search-container {
+      display: flex;
+      flex-direction: row;
+      align-self: flex-end;
+      margin-left: 4vw;
+    }
+    .dropdown-container:first-child {
+      margin-left: 0;
+    }
+  }
+}
+
+.button-reset {
+  cursor: pointer;
+  align-self: flex-end;
+  padding: 6px 20px;
+  outline: none;
+  border-radius: 5px;
+  text-transform: capitalize;
+  border: none;
+  margin: 2px 10px;
+  background-color: map-get($colors, ut-color );
+  font-size: 0.7vw;
+  font-family: 'Lato-Bold';
+  font-weight: 500;
+}

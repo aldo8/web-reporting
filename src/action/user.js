@@ -1,52 +1,54 @@
-import {GET_USER, SUCCESS_TYPE, FAILURE_TYPE, REQUEST_TYPE} from 'action/actionTypes';
-import {getStorage} from 'utils/storage.helper';
-export const getUser = () => dispatch => {
-    dispatch({type:`${GET_USER}${REQUEST_TYPE}`});
-    const user = getStorage(USER_STORAGE);
-    if(user) {
-        dispatch({
-            type:`${GET_USER}${SUCCESS_TYPE}`,
-            payload:{data:user},
-        });
-    } else {
-        dispatch({
-            type:`${GET_USER}${FAILURE_TYPE}`,
-            payload:{message:null},
-        });
-    }  
-};
+import {SUCCESS_TYPE, FAILURE_TYPE, REQUEST_TYPE, USER, DETAIL_USER, UPDATE_USER, DELETE_USER} from 'action/actionTypes';
+import normalizeHelper from 'utils/normalize.helper';
+import { userApi } from 'api';
+import { schemaListUser } from 'schema/user';
 
-export const listUser = (data,token) => dispatch => {
+const api = (token) => userApi.newInstance(token);
+export const listUser = (data,token) => async (dispatch) => {
     dispatch({
-        type:`${GET_USER}${REQUEST_TYPE}`
-    })
+        type:`${USER}${REQUEST_TYPE}`
+    });
     try {
+        let response
+        response = await api(token).listUser(data);
+        response = normalizeHelper(response.data,schemaListUser);
+        console.log('list User Reponse:',response)
         dispatch({
-            type:`${GET_USER}${SUCCESS_TYPE}`
+            type:`${USER}${SUCCESS_TYPE}`,
+            payload:{response}
         })
     } catch (error) {
-        type:`${GET_USER}${FAILURE_TYPE}`
-    }
-}
-export const createUser = (data,token) => dispatch => {
-    dispatch({
-        type:`${CREATE_USER}${REQUEST_TYPE}`
-    })
-    try {
+        console.log('error request:',error)
         dispatch({
-            type:`${CREATE_USER}${SUCCESS_TYPE}`
+            type:`${USER}${FAILURE_TYPE}`
         })
-    } catch (error) {
-        type:`${CREATE_USER}${FAILURE_TYPE}`
+        
     }
 }
-export const getUserDetail = (data,token) => dispatch => {
+
+// export const createUser = (data,token) => async => (dispatch) => {
+//     dispatch({
+//         type:`${CREATE_USER}${REQUEST_TYPE}`
+//     })
+//     try {
+//         dispatch({
+//             type:`${CREATE_USER}${SUCCESS_TYPE}`
+//         })
+//     } catch (error) {
+//         type:`${CREATE_USER}${FAILURE_TYPE}`
+//     }
+// }
+export const getUserDetail = (data,token) => async (dispatch) => {
     dispatch({
         type:`${DETAIL_USER}${REQUEST_TYPE}`
     })
     try {
+        let response
+        response = await api(token).detailUser(data);
+        response = normalizeHelper(response.data,schemaListUser);
         dispatch({
-            type:`${DETAIL_USER}${SUCCESS_TYPE}`
+            type:`${DETAIL_USER}${SUCCESS_TYPE}`,
+            payload:{response}
         })
     } catch (error) {
         dispatch({
@@ -54,27 +56,35 @@ export const getUserDetail = (data,token) => dispatch => {
         })
     }
 }
-export const updateUser = (data,token) => dispatch => {
+export const updateUser = (data,token) => async (dispatch) => {
     dispatch({
         type:`${UPDATE_USER}${REQUEST_TYPE}`
     })
     try {
+        const response = await api(token).updateUser(data)
         dispatch({
-            type:`${UPDATE_USER}${SUCCESS_TYPE}`
+            type:`${UPDATE_USER}${SUCCESS_TYPE}`,
+            payload:{response}
         })
     } catch (error) {
-        type:`${UPDATE_USER}${FAILURE_TYPE}`
+        dispatch({
+            type:`${UPDATE_USER}${FAILURE_TYPE}`
+        })
     }
 }
-export const deleteUser = (data,token) => dispatch => {
+export const deleteUser = (data,token) => async (dispatch) => {
     dispatch({
         type:`${DELETE_USER}${REQUEST_TYPE}`
     })
     try {
+        const response = await api(token).deleteUser(data)
         dispatch({
-            type:`${DELETE_USER}${SUCCESS_TYPE}`
+            type:`${DELETE_USER}${SUCCESS_TYPE}`,
+            payload:{response}
         })
     } catch (error) {
-        type:`${DELETE_USER}${FAILURE_TYPE}`
+        dispatch({
+            type:`${DELETE_USER}${FAILURE_TYPE}`
+        })
     }
 }

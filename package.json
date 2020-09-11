@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^3.0.2",
+    "@material-ui/lab": "^4.0.0-alpha.56",
     "axios": "^0.20.0",
     "connected-react-router": "^6.8.0",
     "dotenv": "^8.2.0",
@@ -12,6 +13,7 @@
     "history": "^4.10.1",
     "json-api-normalize": "^1.1.5",
     "lodash": "^4.17.20",
+    "moment": "^2.27.0",
     "node-sass": "^4.14.1",
     "nodemon": "^2.0.4",
     "react": "^16.13.1",

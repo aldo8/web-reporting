@@ -1,12 +1,14 @@
 import {combineReducers} from 'redux';
 import {connectRouter} from 'connected-react-router';
 import { history } from 'configuration/route.config';
-import userReducer from './auth'
-import loadingReducer from './loading'
+import authReducer from './auth';
+import {userReducer} from './user';
+import loadingReducer from './loading';
 
 
 const appReducer = combineReducers({
     router:connectRouter(history),
+    auth:authReducer,
     user:userReducer,
     loading:loadingReducer
 })

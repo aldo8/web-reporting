@@ -18,13 +18,6 @@ export const DETAIL_OUTLET = 'DETAIL_OUTLET';
 export const UPDATE_OUTLET = 'UPDATE_OUTLET';
 export const DELETE_OUTLET = 'DELETE_OUTLET';
 
-// Services Outlet
-export const GET_OUTLET = 'GET_OUTLET';
-export const CREATE_OUTLET = 'CREATE_OUTLET';
-export const DETAIL_OUTLET = 'DETAIL_OUTLET';
-export const UPDATE_OUTLET = 'UPDATE_OUTLET';
-export const DELETE_OUTLET = 'DELETE_OUTLET';
-
 // Services Location
 export const GET_LOCATION = 'GET_LOCATION';
 export const CREATE_LOCATION = 'CREATE_LOCATION';

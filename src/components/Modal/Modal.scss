@@ -1,0 +1,13 @@
+@import '../../themes/fonts';
+@import '../../themes/colors';
+@import '../../themes/size';
+.modal-container{
+    background-color: #FFFFFF;
+    outline: none;
+    width: vw(1153);
+    border-radius: vw(10);
+    display: flex;
+    flex-direction: column;
+    padding: vw(11) vw(13) vw(40) vw(40);
+    margin: 0;
+}
