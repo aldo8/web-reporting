@@ -75,11 +75,8 @@ export default function Login(props) {
     props.login(value);
   }; 
   useEffect(() => {
-    const {isLoading,token,navigateTo} = props
-    console.log('render change props',props)
-    console.log('render change props',!isNull(token))
+    const {token,navigateTo} = props
     if(token !== null){
-      console.log('AKU JALAN TOT')
       navigateTo(MENU.DASHBOARD)
     }
   
@@ -102,7 +99,6 @@ export default function Login(props) {
           <Formik
             initialValues={{ username: "", password: "" }}
             validationSchema={validationSchema}
-            // onSubmit={handlingSubmit}
           >
             {(props) => (
               <form className={classes.form} noValidate>
