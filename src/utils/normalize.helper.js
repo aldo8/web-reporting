@@ -1,5 +1,6 @@
 import normalize from 'json-api-normalize';
 export default (response,{data,key}) => {
+    
 let dataNormalize = {}
     const getData = normalize(response).get(data);
     return {

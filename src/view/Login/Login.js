@@ -82,7 +82,7 @@ export default function Login(props) {
   
   })
   const classes = useStyles();
-  console.log('LOGIN PROPS',props)
+  console.log('asd PROPS',props)
   return (
     <Grid container component="main" className={classes.root}>
     
@@ -97,11 +97,13 @@ export default function Login(props) {
             Sign in
           </Typography>
           <Formik
-            initialValues={{ username: "", password: "" }}
+            initialValues={{ username: "", password: "" , rememberMe:true }}
             validationSchema={validationSchema}
           >
-            {(props) => (
+            {(props) => console.log('ini apa',props) (
+              
               <form className={classes.form} noValidate>
+                {console.log('data login',props)}
                 <TextField
                   onChange={props.handleChange('username')}
                   variant="outlined"
@@ -125,7 +127,7 @@ export default function Login(props) {
                   id="password"
                 />
                 <FormControlLabel
-                  control={<Checkbox value="remember" color="primary" />}
+                  control={<Checkbox value="remember" color="primary" onClick={() => props.handleChange('rememberMe')  } />}
                   label="Remember me"
                 />
                 <Button

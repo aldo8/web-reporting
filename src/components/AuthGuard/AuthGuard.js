@@ -31,7 +31,6 @@ export default function (ComposedComponent) {
         }
         
         render () {
-            console.log('Hai')
             return <ComposedComponent history={this.props.history} location={this.props.location} match={this.props.match} {...this.props.component}/>;
         }
     }

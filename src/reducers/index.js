@@ -5,6 +5,7 @@ import authReducer from './auth';
 import {userReducer} from './user';
 import loadingReducer from './loading';
 import { outletReducer } from './outlet';
+import { locationReducer } from './location';
 
 
 const appReducer = combineReducers({
@@ -12,6 +13,7 @@ const appReducer = combineReducers({
     auth:authReducer,
     user:userReducer,
     outlet:outletReducer,
+    location:locationReducer,
     loading:loadingReducer
 })
 export default appReducer;
