@@ -4,12 +4,14 @@ import { history } from 'configuration/route.config';
 import authReducer from './auth';
 import {userReducer} from './user';
 import loadingReducer from './loading';
+import { outletReducer } from './outlet';
 
 
 const appReducer = combineReducers({
     router:connectRouter(history),
     auth:authReducer,
     user:userReducer,
+    outlet:outletReducer,
     loading:loadingReducer
 })
 export default appReducer;

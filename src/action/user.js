@@ -1,4 +1,4 @@
-import {SUCCESS_TYPE, FAILURE_TYPE, REQUEST_TYPE, USER, DETAIL_USER, UPDATE_USER, DELETE_USER} from 'action/actionTypes';
+import {SUCCESS_TYPE, FAILURE_TYPE, REQUEST_TYPE, USER, DETAIL_USER, UPDATE_USER, DELETE_USER, CREATE_USER} from 'action/actionTypes';
 import normalizeHelper from 'utils/normalize.helper';
 import { userApi } from 'api';
 import { schemaListUser } from 'schema/user';
@@ -12,7 +12,6 @@ export const listUser = (data,token) => async (dispatch) => {
         let response
         response = await api(token).listUser(data);
         response = normalizeHelper(response.data,schemaListUser);
-        console.log('list User Reponse:',response)
         dispatch({
             type:`${USER}${SUCCESS_TYPE}`,
             payload:{response}
@@ -26,18 +25,22 @@ export const listUser = (data,token) => async (dispatch) => {
     }
 }
 
-// export const createUser = (data,token) => async => (dispatch) => {
-//     dispatch({
-//         type:`${CREATE_USER}${REQUEST_TYPE}`
-//     })
-//     try {
-//         dispatch({
-//             type:`${CREATE_USER}${SUCCESS_TYPE}`
-//         })
-//     } catch (error) {
-//         type:`${CREATE_USER}${FAILURE_TYPE}`
-//     }
-// }
+export const createUser = (data,token) => async  (dispatch) => {
+    dispatch({
+        type:`${CREATE_USER}${REQUEST_TYPE}`
+    })
+    const response = await api(data).createUser(data)
+    try {
+        dispatch({
+            type:`${CREATE_USER}${SUCCESS_TYPE}`,
+            payload:{response}
+        })
+    } catch (error) {
+        dispatch({
+            type:`${CREATE_USER}${FAILURE_TYPE}`
+        })
+    }
+}
 export const getUserDetail = (data,token) => async (dispatch) => {
     dispatch({
         type:`${DETAIL_USER}${REQUEST_TYPE}`

@@ -9,7 +9,8 @@ export default class User extends React.Component {
     constructor(props){
         super(props)
         this.state = {
-            isDetail:false
+            isOpenModal:false,
+            isCreateUser:false
         }
     }
     componentDidMount = () => {
@@ -23,10 +24,10 @@ export default class User extends React.Component {
 
     }
     handleClick = async (data) => {
-        const {isDetail} = this.state;
+        const {isOpenModal} = this.state;
         const {getUserDetail,token}=this.props;
         await getUserDetail(data.id,token)
-        this.setState({isDetail:!isDetail})
+        this.setState({isOpenModal:!isOpenModal})
         console.log('detailUser',this.props.detailUser)
     }  
     handleClickDelete = (id) => {
@@ -38,6 +39,40 @@ export default class User extends React.Component {
         updateUser(data,token)
         console.log('Update ngapdet',data)
     }
+    handleCreateUser = (data) => {
+        const {token} = this.props
+        this.props.createUser(data,token);
+    }
+    renderModal = () => {
+        const {isOpenModal,isCreateUser} = this.state;
+        const {isLoading} = this.props
+        return (
+            <Modal
+            open={isOpenModal}
+            onClose={() => this.setState({isOpenModal:!isOpenModal})}
+            style={{width:'fit-content',height:'fit-content',margin:'auto'}}
+            >
+                <DialogContent style={{
+                    display: 'flex',
+                    width: 'fit-content',
+                    height: 'fit-content',
+                    justifyContent:'center',
+                    alignItems:'center',
+                    padding:0,
+                    overflowY:"visible"
+                    }}>
+                    <ModalComponent
+                        isCreatedUser={isCreateUser}
+                        isLoading={isLoading}
+                        dataDetail={this.props.detailUser?.data}
+                        handleClickUpdate={(data) => this.handleClickUpdate(data)}
+                        handleCreateUser={(data) => this.handleCreateUser(data)}
+                    />
+                </DialogContent>
+            </Modal>
+        )
+    }
+    
     renderTable = () => {
         const {isLoading,dataListUser} = this.props;
         return (
@@ -90,39 +125,12 @@ export default class User extends React.Component {
                 />  
         )
     }
-    renderModal = () => {
-        const {isDetail} = this.state;
-        const {isLoading} = this.props
-        return (
-            <Modal
-            open={isDetail}
-            onClose={() => this.setState({isDetail:!isDetail})}
-            style={{width:'fit-content',height:'fit-content',margin:'auto'}}
-            >
-                <DialogContent style={{
-                    display: 'flex',
-                    width: 'fit-content',
-                    height: 'fit-content',
-                    justifyContent:'center',
-                    alignItems:'center',
-                    padding:0,
-                    overflowY:"visible"
-                    }}>
-                    <ModalComponent
-                        isLoading={isLoading}
-                        dataDetail={this.props.detailUser?.data}
-                        handleClickUpdate={(data) => this.handleClickUpdate(data)}
-                    />
-                </DialogContent>
-            </Modal>
-        )
-    }
     render(){
+        const {isCreateUser,isOpenModal} = this.state;
         return(
-            
             <div className='container'>
+            <Button onClick={() => {this.setState({isCreateUser:!isCreateUser,isOpenModal:!isOpenModal})}}>Add User</Button>
                 {this.renderTable()}
-
                 {this.renderModal()}
             </div>
             
