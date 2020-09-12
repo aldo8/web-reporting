@@ -1,7 +1,7 @@
 import {SUCCESS_TYPE, FAILURE_TYPE, REQUEST_TYPE,GET_OUTLET, DETAIL_OUTLET, UPDATE_OUTLET, DELETE_OUTLET, CREATE_OUTLET} from 'action/actionTypes';
 import normalizeHelper from 'utils/normalize.helper';
 import { outletApi } from 'api';
-import { schemaListOutlet } from 'schema/outlet';
+import { schemaListOutlet,schemaDetailOutlet } from 'schema/outlet';
 
 const api = (token) => outletApi.newInstance(token);
 export const listOutlet = (data,token) => async (dispatch) => {
@@ -48,7 +48,7 @@ export const getOutletDetail = (data,token) => async (dispatch) => {
     try {
         let response
         response = await api(token).detailOutlet(data);
-        response = normalizeHelper(response.data,schemaListOutlet);
+        response = normalizeHelper(response.data,schemaDetailOutlet);
         dispatch({
             type:`${DETAIL_OUTLET}${SUCCESS_TYPE}`,
             payload:{response}

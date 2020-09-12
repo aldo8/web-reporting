@@ -30,3 +30,15 @@ export const schemaListOutlet = {
     "devices.phoneNumber",
   ],
 };
+
+export const schemaDetailOutlet = {
+  data:[
+      "type",
+      "id",
+      "name",
+      "rate",
+      "createdBy",
+      "created",
+      "isActive",
+  ]
+}
