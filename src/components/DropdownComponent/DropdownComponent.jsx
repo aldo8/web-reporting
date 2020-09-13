@@ -40,13 +40,8 @@ export default class DropdownComponent extends React.Component {
     }
 
     selectItem = (item) => {
-        let newItem = item
-        if(item === 'Periodic Inspection'){
-        newItem = 'INS'
-            return this.props.onSelectAction(newItem);
-        }
-        if (item.Name) return this.props.onSelectAction(item.Name)
-        return this.props.onSelectAction(newItem);   
+        console.log('item',item)
+        return this.props.onSelectAction(item);   
     }
     renderDropdownList = () => {
     return (
@@ -54,7 +49,8 @@ export default class DropdownComponent extends React.Component {
             {this.props.data
             && this.props.data.map((item, index) => (item && 
             <div className="list-item" onClick={() => this.selectItem(item)} key={index}>
-                {this._handleJobType(item,this.props.itemKey)}
+                {/* {this._handleJobType(item,this.props.itemKey)} */}
+                {item.name}
             </div>
             ))}
         </ul>

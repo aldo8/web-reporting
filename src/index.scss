@@ -92,14 +92,17 @@
 .filters-container {
   display: flex;
   flex-direction: row;
+  margin-bottom: 1vw;
   // justify-content: space-between;
   .dropdowns-container {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     margin-top: 0 !important;
+    padding-left: 2vw;
     .dropdown-container {
       margin-left: vw(27.78);
+      
     }
     .search-container {
       display: flex;

@@ -16,8 +16,6 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { MENU } from "constants/menu";
-import { getStorage } from "utils/storage.helper";
-import { isNull } from "lodash";
 import { CircularProgress } from "@material-ui/core";
 
 function Copyright() {

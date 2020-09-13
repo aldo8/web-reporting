@@ -33,7 +33,6 @@ export default class Lokasi extends React.Component {
   }
   renderModal = () => {
     const { isOpenModal, name } = this.state;
-    const { token } = this.props
     return (
       <Modal
         open={isOpenModal}
