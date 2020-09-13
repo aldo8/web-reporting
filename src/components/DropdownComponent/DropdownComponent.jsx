@@ -86,12 +86,6 @@ export default class DropdownComponent extends React.Component {
         )
     }
     render(){
-        const {displayMode} = this.props
-        if (displayMode === 'mobile'){
-            return (
-                this._renderDropdownMobile()
-            )
-        }
         return (
             <div className='dropdown'>
                 {this._renderDropdown()}

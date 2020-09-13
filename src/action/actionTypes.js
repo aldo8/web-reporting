@@ -31,3 +31,7 @@ export const CREATE_DEVICES = 'CREATE_DEVICES';
 export const DETAIL_DEVICES = 'DETAIL_DEVICES';
 export const UPDATE_DEVICES = 'UPDATE_DEVICES';
 export const DELETE_DEVICES = 'DELETE_DEVICES';
+
+// Services Transaction
+export const GET_LIST_TRANSACTION = 'GET_LIST_TRANSACTION';
+export const ADD_TRANSACTION = 'ADD_TRANSACTION'; 

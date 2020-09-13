@@ -6,14 +6,19 @@ import {userReducer} from './user';
 import loadingReducer from './loading';
 import { outletReducer } from './outlet';
 import { locationReducer } from './location';
+import { transactionReducer } from './transaction';
+import { deviceReducer } from './device';
 
 
 const appReducer = combineReducers({
     router:connectRouter(history),
+    loading:loadingReducer,
     auth:authReducer,
     user:userReducer,
-    outlet:outletReducer,
     location:locationReducer,
-    loading:loadingReducer
+    outlet:outletReducer,
+    device:deviceReducer,
+    transaction:transactionReducer
+    
 })
 export default appReducer;

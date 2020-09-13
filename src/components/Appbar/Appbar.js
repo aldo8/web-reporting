@@ -148,7 +148,7 @@ export default function ApplicationBar(props) {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap>
-              User Login
+              {`${props.user.userName} as ${props.user.role ==='SA' ? 'Super Admin' : props.user.role === 'A' ? 'Admin' : 'User'}`}
             </Typography>
           </Toolbar>
         </AppBar>

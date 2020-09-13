@@ -11,18 +11,21 @@ import {
   Setting,
   Report,
 } from "view";
+import Authorization from "components/AuthGuard";
 
 const routes = (
   <div>
   <Switch>
-    <Route exact path={MENU.DASHBOARD} component={Dashboard} />
-    <Route exact path={MENU.USER} component={User} />
-    <Route exact path={MENU.LOKASI} component={Lokasi} />
-    <Route exact path={MENU.OUTLET} component={Outlet} />
-    <Route exact path={MENU.DEVICES} component={Devices} />
-    <Route exact path={MENU.SETTING} component={Setting} />
-    <Route exact path={MENU.REPORT} component={Report} />
+    <Route exact path={MENU.DASHBOARD} component={Authorization(Dashboard)} />
+    <Route exact path={MENU.LOKASI} component={Authorization(Lokasi)} />
+    <Route exact path={MENU.USER} component={Authorization(User)} />
+    <Route exact path={MENU.DEVICES} component={Authorization(Devices)} />
+    <Route exact path={MENU.LOKASI} component={Authorization(Lokasi)} />
+    <Route exact path={MENU.OUTLET} component={Authorization(Outlet)} />
+    <Route exact path={MENU.SETTING} component={Authorization(Setting)} />
+    <Route exact path={MENU.REPORT} component={Authorization(Report)} />
     <Route exact path={MENU.LOGIN} component={Login} />
+    <Route exact path='*'component={Login} />
   </Switch>
   </div>
 );

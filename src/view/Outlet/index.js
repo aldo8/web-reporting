@@ -7,6 +7,7 @@ import { DETAIL_OUTLET, GET_OUTLET } from 'action/actionTypes';
 
 const loadingSelector = createLoadingSelector([GET_OUTLET,DETAIL_OUTLET])
 const mapStateToProps = (state) => ({
+    token:state.auth.token,
     isLoading:loadingSelector(state),
     dataOutlet:state.outlet.listOutlet.data,
     detailOutlet:state.outlet.detailOutlet.data,

@@ -6,4 +6,5 @@ export const MENU = {
     DEVICES:'/devices',
     SETTING:'/setting',
     REPORT:'/report',
+    LOGIN:'/login'
 }

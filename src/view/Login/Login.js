@@ -18,6 +18,7 @@ import * as Yup from "yup";
 import { MENU } from "constants/menu";
 import { getStorage } from "utils/storage.helper";
 import { isNull } from "lodash";
+import { CircularProgress } from "@material-ui/core";
 
 function Copyright() {
   return (
@@ -73,8 +74,10 @@ export default function Login(props) {
   
   const _handleSubmit = (value) => {    
     props.login(value);
-  }; 
+  };
+  
   useEffect(() => {
+    console.log('asd PROPS',props) 
     const {token,navigateTo} = props
     if(token !== null){
       navigateTo(MENU.DASHBOARD)
@@ -82,10 +85,12 @@ export default function Login(props) {
   
   })
   const classes = useStyles();
-  console.log('asd PROPS',props)
+  if(props.isLoading){
+    return <CircularProgress className='circular-progress' size={100}/>
+  }
   return (
+
     <Grid container component="main" className={classes.root}>
-    
       <CssBaseline />
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
@@ -97,10 +102,10 @@ export default function Login(props) {
             Sign in
           </Typography>
           <Formik
-            initialValues={{ username: "", password: "" , rememberMe:true }}
+            initialValues={{ username: "", password: "" , rememberMe:false }}
             validationSchema={validationSchema}
           >
-            {(props) => console.log('ini apa',props) (
+            {(props) =>  (
               
               <form className={classes.form} noValidate>
                 {console.log('data login',props)}
@@ -127,7 +132,7 @@ export default function Login(props) {
                   id="password"
                 />
                 <FormControlLabel
-                  control={<Checkbox value="remember" color="primary" onClick={() => props.handleChange('rememberMe')  } />}
+                  control={<Checkbox value="remember" color="primary" onClick={() =>props.setFieldValue('rememberMe',!props.values.rememberMe)  } />}
                   label="Remember me"
                 />
                 <Button

@@ -18,7 +18,7 @@ export const login = (data,token) => async (dispatch) => {
         setStorage(USER_STORAGE,response.data)
         dispatch({
             type:`${LOGIN}${SUCCESS_TYPE}`,
-            payload:{response}
+            payload:{data:response}
         })
     } catch (error) {
         console.log('errorLogin:',error)

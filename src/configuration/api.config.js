@@ -1,7 +1,7 @@
 import * as axios from 'axios'
 const axiosConfig = {
     timeout:60000,
-    baseURL:'http://128.199.106.232:8080',
+    baseURL:process.env.REACT_APP_API_URL,
     headers: {
         Accept:'application/json',
         'content-type': 'application/json',

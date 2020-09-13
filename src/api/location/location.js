@@ -18,7 +18,7 @@ export default class locationApi extends baseApi {
     updateLocation = (data) => {
         return this.axios.put(`/api/v1/locations/${data}`)
     }
-    deleteLocation = (data) => {
-        return this.axios.delete(`/api/v1/locations/${data}`)
+    deleteLocation = (id) => {
+        return this.axios.delete(`/api/v1/locations/${id}`)
     }
 }

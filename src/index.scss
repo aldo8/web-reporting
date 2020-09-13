@@ -1,3 +1,6 @@
+@import "./themes/colors.scss";
+@import "./themes/fonts.scss";
+@import "./themes/size.scss";
 .container {
   flex-grow: 1;
   padding-left: 10vw;
@@ -15,4 +18,97 @@
   justify-self: center;
   align-self: center;
   position: fixed;
+}
+.pagination {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  justify-content: flex-end;
+  .paging {
+    display: flex;
+    flex-direction: row;
+    box-shadow: 0px vw(2) vw(4) rgba(0, 0, 0, 0.161);
+    .page-active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: vw(45.99);
+      min-width: vw(45.99);
+      height: vw(35.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Gotham-Regular";
+      background-color: #e0e1e2;
+      font-size: vw(13);
+      line-height: vw(16);
+      border-radius: 0;
+      cursor: pointer;
+    }
+    .page-inactive {
+      width: vw(45.99);
+      min-width: vw(45.99);
+      height: vw(35.3);
+      width: vw(45.99);
+      min-width: vw(45.99);
+      height: vw(35.3);
+      background-color: white;
+      display: flex;
+      align-items: center;
+      font-family: "Gotham-Regular";
+      justify-content: center;
+      font-size: vw(13);
+      line-height: vw(16);
+      border-radius: 0;
+      cursor: pointer;
+    }
+    .page-inactive:hover {
+      background-color:#e0e1e2;
+      cursor: pointer;
+    }
+    .next-page {
+      width: vw(45.99);
+      min-width: vw(45.99);
+      height: vw(35.3);
+      width: vw(45.99);
+      min-width: vw(45.99);
+      height: vw(35.3);
+      background-color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0;
+      cursor: pointer;
+      .arrow-icon {
+        font-size: vw(24);
+      }
+    }
+    .next-page:hover {
+      background-color: #e0e1e2;
+      cursor: pointer;
+    }
+  }
+}
+.filters-container {
+  display: flex;
+  flex-direction: row;
+  // justify-content: space-between;
+  .dropdowns-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-top: 0 !important;
+    .dropdown-container {
+      margin-left: vw(27.78);
+    }
+    .search-container {
+      display: flex;
+      flex-direction: row;
+      align-self: flex-end;
+      margin-left: 4vw;
+    }
+    .dropdown-container:first-child {
+      margin-left: 0;
+    }
+  }
 }

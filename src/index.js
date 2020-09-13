@@ -5,6 +5,7 @@ import * as serviceWorker from './serviceWorker';
 import {Container} from 'components';
 import { Provider } from 'react-redux';
 import './index.scss';
+import 'semantic-ui-css/semantic.min.css'
 
 const store = storeConfig()
 ReactDOM.render(

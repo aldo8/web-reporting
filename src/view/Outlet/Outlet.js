@@ -11,14 +11,13 @@ export default class Outlet extends React.Component {
       createOutlet: {
         isActive: true,
         name: null,
-        locationId: uuid.v4(),
+        locationId:null,
         rate: 0,
       }
     };
   }
   componentDidMount = () => {
-    const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJhYmNkN2NjMi03MjQzLTQyNmEtYTUxNy0zYWJkYWVlOTM0YjAiLCJyb2xlIjoiU0EiLCJuYmYiOjE1OTk5MzU3MTIsImV4cCI6MTU5OTk0MjkxMiwiaWF0IjoxNTk5OTM1NzEyfQ.EWJAGjHrv5D-8z1d6jRKgcs-KN1WqUYPIcmCuh_QJ40"
+    const {token} = this.props;
     this.props.listOutlet("", token);
   };
   handleClickModal = () => {
@@ -52,7 +51,7 @@ export default class Outlet extends React.Component {
     }
   }
   handleClickDetail = async (data) => {
-    const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiJhYmNkN2NjMi03MjQzLTQyNmEtYTUxNy0zYWJkYWVlOTM0YjAiLCJyb2xlIjoiU0EiLCJuYmYiOjE1OTk5MzU3MTIsImV4cCI6MTU5OTk0MjkxMiwiaWF0IjoxNTk5OTM1NzEyfQ.EWJAGjHrv5D-8z1d6jRKgcs-KN1WqUYPIcmCuh_QJ40"
+    const {token} = this.props
     const { isOpenDetail } = this.state;
     await this.props.getOutletDetail(data, token);
     this.setState({ isOpenDetail: !isOpenDetail })

@@ -22,8 +22,7 @@ export default function (ComposedComponent) {
             console.log('handleUser',this.props)
             const user = getStorage(USER_STORAGE);
             if( !user) {
-                this.props.goToLogin();
-                return;
+                return this.props.goToLogin();
             }
             if (!this.props.user.tokenResponse){
                 this.props.getUser();
