@@ -14,7 +14,7 @@ const mapStateToProps = (state) => ({
 })
 const mapDispatchToProps = (dispatch) => ({
     navigateTo: (path) => dispatch(push(path)),
-    getDevice: (data, token) => dispatch(listDevice(data)),
+    getDevice: (data, token) => dispatch(listDevice(data,token)),
     createDevice: (data, token) => dispatch(createDevice(data, token)),
     getDeviceDetail: (data, token) => dispatch(getDeviceDetail(data, token)),
     updateDevice: (data, token) => dispatch(updateDevice(data, token)),

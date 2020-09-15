@@ -9,7 +9,8 @@ const loadingSelector = createLoadingSelector([GET_LOCATION,UPDATE_LOCATION,DELE
 const mapStateToProps = (state) => ({
     isLoading:loadingSelector(state),
     dataLocation:state.location.listLocation.data,
-    token:state.auth.token
+    token:state.auth.token,
+    detailLocation:state.location.detailLocation.data
 })
 const mapDispatchToProps = (dispatch) => ({
     navigateTo:(path) => dispatch(push(path)),

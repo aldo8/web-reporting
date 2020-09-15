@@ -6,17 +6,17 @@ export default class locationApi extends baseApi {
         if(!this.api) this.api = new locationApi(apiConfig(token));
         return this.api;
     }
-    listLocation = (data) => {
-        return this.axios.get('/api/v1/locations',data)
+    listLocation = (params) => {
+        return this.axios.get('/api/v1/locations',{params})
     }
-    createLocation = (data) => {
-        return this.axios.post('/api/v1/locations',data)
+    createLocation = (params) => {
+        return this.axios.post('/api/v1/locations',params)
     }
-    detailLocation = (data) => {
-        return this.axios.get(`/api/v1/locations/${data}`)
+    detailLocation = (params) => {
+        return this.axios.get(`/api/v1/locations/${params}`)
     }
     updateLocation = (data) => {
-        return this.axios.put(`/api/v1/locations/${data}`)
+        return this.axios.put(`/api/v1/locations/${data.id}`,data)
     }
     deleteLocation = (id) => {
         return this.axios.delete(`/api/v1/locations/${id}`)

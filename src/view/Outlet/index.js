@@ -4,6 +4,7 @@ import Outlet from './Outlet';
 import { listOutlet,createOutlet,getOutletDetail, updateOutlet, deleteOutlet} from 'action/outlet';
 import { createLoadingSelector } from 'utils/selector.helper';
 import { DETAIL_OUTLET, GET_OUTLET } from 'action/actionTypes';
+import { listLocation } from 'action/location';
 
 const loadingSelector = createLoadingSelector([GET_OUTLET,DETAIL_OUTLET])
 const mapStateToProps = (state) => ({
@@ -11,6 +12,7 @@ const mapStateToProps = (state) => ({
     isLoading:loadingSelector(state),
     dataOutlet:state.outlet.listOutlet.data,
     detailOutlet:state.outlet.detailOutlet.data,
+    dataLocation:state.location.listLocation.data
 })
 const mapDispatchToProps = (dispatch) => ({
     navigateTo:(path) => dispatch(push(path)),
@@ -18,6 +20,7 @@ const mapDispatchToProps = (dispatch) => ({
     createOutlet:(data,token) => dispatch(createOutlet(data,token)),
     getOutletDetail:(data,token) => dispatch(getOutletDetail(data,token)),
     updateOutlet:(data,token) => dispatch(updateOutlet(data,token)),
-    deleteOutlet:(data,token) => dispatch(deleteOutlet(data,token))
+    deleteOutlet:(data,token) => dispatch(deleteOutlet(data,token)),
+    listLocation:(data,token) => dispatch(listLocation(data,token))
 })
 export default connect(mapStateToProps,mapDispatchToProps)(Outlet);

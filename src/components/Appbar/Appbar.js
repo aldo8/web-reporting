@@ -15,10 +15,10 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import AssignmentIcon from "@material-ui/icons/Assignment";
 import { MENU } from "constants/menu";
-import { getStorage } from "utils/storage.helper";
+import { getStorage, removeStorage } from "utils/storage.helper";
 import { USER_STORAGE } from "constants/storage";
+import { Person, Settings, Dashboard, LocationOn, Assessment, Store, PhoneAndroid,ExitToApp } from '@material-ui/icons'
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -119,6 +119,9 @@ export default function ApplicationBar(props) {
       case `REPORT`:
         props.navigateTo(MENU.REPORT);
         break;
+      case 'EXIT':
+        removeStorage(USER_STORAGE);
+        props.navigateTo(MENU.LOGIN)
       default:
         break;
     }
@@ -148,7 +151,7 @@ export default function ApplicationBar(props) {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap>
-              {`${props.user.userName} as ${props.user.role ==='SA' ? 'Super Admin' : props.user.role === 'A' ? 'Admin' : 'User'}`}
+              {`${props.user.userName} as ${props.user.role === 'SA' ? 'Super Admin' : props.user.role === 'A' ? 'Admin' : 'User'}`}
             </Typography>
           </Toolbar>
         </AppBar>
@@ -170,32 +173,98 @@ export default function ApplicationBar(props) {
               {theme.direction === "rtl" ? (
                 <ChevronRightIcon />
               ) : (
-                <ChevronLeftIcon />
-              )}
+                  <ChevronLeftIcon />
+                )}
             </IconButton>
           </div>
           <Divider />
           <List>
-            {[
-              "DASHBOARD",
-              "USER",
-              "LOKASI",
-              "OUTLET",
-              "DEVICES",
-              "SETTING",
-              "REPORT",
-            ].map((text, index) => (
-              <ListItem
-                button
-                key={text}
-                onClick={() => handleNavigation(text)}
-              >
-                <ListItemIcon>
-                  <AssignmentIcon />
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
+            <ListItem
+              button
+              onClick={() => handleNavigation('DASHBOARD')}
+            >
+              <ListItemIcon>
+                <Dashboard />
+              </ListItemIcon>
+              <ListItemText primary='DASHBOARD' />
+            </ListItem>
+          </List>
+          <List>
+            <ListItem
+              button
+              onClick={() => handleNavigation('USER')}
+            >
+              <ListItemIcon>
+                <Person />
+              </ListItemIcon>
+              <ListItemText primary='USER' />
+            </ListItem>
+          </List>
+          <List>
+            <ListItem
+              button
+              onClick={() => handleNavigation('LOKASI')}
+            >
+              <ListItemIcon>
+                <LocationOn />
+              </ListItemIcon>
+              <ListItemText primary={'LOKASI'} />
+            </ListItem>
+          </List>
+          <List>
+            <ListItem
+              button
+              onClick={() => handleNavigation('OUTLET')}
+            >
+              <ListItemIcon>
+                <Store />
+              </ListItemIcon>
+              <ListItemText primary={'OUTLET'} />
+            </ListItem>
+          </List>
+          <List>
+            <ListItem
+              button
+              onClick={() => handleNavigation('DEVICES')}
+            >
+              <ListItemIcon>
+                <PhoneAndroid />
+              </ListItemIcon>
+              <ListItemText primary={'DEVICES'} />
+            </ListItem>
+          </List>
+          <List>
+            <ListItem
+              button
+              onClick={() => handleNavigation('SETTING')}
+            >
+              <ListItemIcon>
+                <Settings />
+              </ListItemIcon>
+              <ListItemText primary='SETTING' />
+            </ListItem>
+          </List>
+          <List>
+            <ListItem
+              button
+              onClick={() => handleNavigation('REPORT')}
+            >
+              <ListItemIcon>
+                <Assessment />
+              </ListItemIcon>
+              <ListItemText primary='REPORT' />
+            </ListItem>
+          </List>
+          <List>
+            <ListItem
+              button
+              onClick={() => handleNavigation('EXIT')}
+            >
+              <ListItemIcon>
+                <ExitToApp />
+              </ListItemIcon>
+              <ListItemText primary='LOG OUT' />
+            </ListItem>
           </List>
         </Drawer>
       </div>

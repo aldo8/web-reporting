@@ -39,7 +39,7 @@ export default class SearchInput extends React.Component {
     }
 
     render(){
-        const information = this.props.displayMode === 'web' ? this.props.webInfo : 'Search';
+        const information = 'Search location,outlet,phone number, and etc...';
         const display = this.props.displaySearch == null ? "" : this.props.displaySearch
         return (
             <Paper 
@@ -47,6 +47,7 @@ export default class SearchInput extends React.Component {
                 elevation={1}
             >
             <InputBase
+            style={{paddingLeft:'25px'}}
                 inputRef={(e) => { this.state.inputBase = e } } 
                 className='search-text'
                 value={display}

@@ -9,6 +9,7 @@ export default class Devices extends React.Component {
     }
     componentDidMount = () => {
         const {token} = this.props
+        console.log('Devices Props',this.props)
         this.props.getDevice(null,token);
     }
     renderContent = () => {

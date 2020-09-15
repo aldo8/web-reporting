@@ -16,9 +16,9 @@ export default class outletApi extends baseApi {
         return this.axios.get(`/api/v1/outlets/${data}`)
     }
     updateOutlet = (data) => {
-        return this.axios.put(`/api/v1/outlets/${data}`)
+        return this.axios.put(`/api/v1/outlets/${data.id}`,data)
     }
     deleteOutlet = (data) => {
-        return this.axios.delete(`/api/v1/outlets/${data}`)
+        return this.axios.delete(`/api/v1/outlets/${data.id}`)
     }
 }
