@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import moment from 'moment';
 import {
   Delete,
-  Visibility,
+  Edit,
   ArrowUpward,
   ArrowDownward,
 } from "@material-ui/icons";
@@ -132,7 +132,7 @@ export default class CustomTable extends Component {
         <td classes={{ ...this.props.tableCellClasses }}>
           <Link />
           <IconButton style={{ padding: 0}} component="span" onClick={() => onDetail(data)}>
-            <Visibility />
+            <Edit />
           </IconButton>
         </td>
       );

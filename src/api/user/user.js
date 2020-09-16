@@ -6,9 +6,9 @@ export default class userApi extends baseApi {
         if(!this.api) this.api = new userApi(apiConfig(token));
         return this.api;
     }
-    listUser = (data) => {
-        return this.axios.get('/api/v1/users',data)
-    }
+    listUser = (params) => {
+        return this.axios.get('/api/v1/users',{params})
+    {}}
     createUser = (data) => {
         return this.axios.post('/api/v1/users',data)
     }
@@ -16,7 +16,7 @@ export default class userApi extends baseApi {
         return this.axios.get(`/api/v1/users/${data}`)
     }
     updateUser = (data) => {
-        return this.axios.put(`/api/v1/users/${data}`)
+        return this.axios.put(`/api/v1/users/${data.id}`,data)
     }
     deleteUser = (data) => {
         return this.axios.delete(`/api/v1/users/${data}`)

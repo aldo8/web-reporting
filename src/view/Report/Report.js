@@ -31,7 +31,7 @@ export default class Report extends React.Component {
     }
     componentDidMount = () => {
         const { token } = this.props;
-        this.props.getListTransaction('', token)
+        this.props.getListTransaction(null, token)
         this.props.getListLocation(null, token)
         this.props.getListOutlet(null, token)
     }
@@ -53,15 +53,15 @@ export default class Report extends React.Component {
         const { currentFilter } = this.state;
         let temp = "";
         dataFilter.forEach((element, index) => {
-            console.log('element value',currentFilter[element])
-            console.log('element',element)
+            console.log('element value', currentFilter[element])
+            console.log('element', element)
             if (!isNull(currentFilter[element])) {
-                if(element === 'created'){
+                if (element === 'created') {
                     temp += `${element}>=${currentFilter[element]}`
-                }else{
+                } else {
                     temp += `${element}==${currentFilter[element]}`;
                 }
-                
+
                 if (dataFilter.length > index + 1) {
                     temp += `,`
                 }
@@ -71,17 +71,17 @@ export default class Report extends React.Component {
     }
     setQuery = (key) => {
         const { token } = this.props;
-        const { currentFilter, SearchValue, PageNumber, sorting,startDate,endDate } = this.state;
-        if(key === 'date'){
+        const { currentFilter, SearchValue, PageNumber, sorting, startDate, endDate } = this.state;
+        if (key === 'date') {
             let start = moment(startDate).format('YYYY-MM-DD')
             let end = moment(endDate).format('YYYY-MM-DD')
             const created = `${start} 00:00:01,created<=${end} 23:59:59`
             this.setState({
-                currentFilter:{
+                currentFilter: {
                     ...currentFilter,
-                    created:created    
+                    created: created
                 }
-            })   
+            })
         }
         let queryTemp = {}
         const getFilter = this.setFilter(Object.keys(currentFilter))
@@ -110,13 +110,13 @@ export default class Report extends React.Component {
     handleFilterDate = () => {
         const { currentFilter, startDate, endDate } = this.state;
         const { token } = this.props;
-        console.log('Handle',this.queryTemp)
-        console.log('Tse',this.state)
-        
-        this.props.getListTransaction({ ...this.queryTemp}, token)
+        console.log('Handle', this.queryTemp)
+        console.log('Tse', this.state)
+
+        this.props.getListTransaction({ ...this.queryTemp }, token)
     }
     handleSearch = (key, value) => {
-        const {currentFilter} = this.state;
+        const { currentFilter } = this.state;
         if (key === 'change') {
             this.setState({ SearchValue: value })
         }
@@ -158,11 +158,6 @@ export default class Report extends React.Component {
                         </div>
                     </div>
                     <div className='dropdowns-container'>
-                        <div style={{marginTop:'34px'}}>
-                        <SearchInput displaySearch={this.state.SearchValue} onSearch={this.handleSearch} />
-                        </div>
-                    </div>
-                    <div className='dropdowns-container'>
                         <div style={{ marginTop: '30px' }}>
                             <Button onClick={() => this.handleFilterDate()}>Cari</Button>
                         </div>
@@ -185,96 +180,96 @@ export default class Report extends React.Component {
         const PageNumber = listTransaction.meta?.pageNumber;
         const totalPages = listTransaction.meta?.totalPages;
         return (
-                <div className={"pagination"}>
-                    <div className={"paging"}>
-                        {prevPage && (
-                            <div
-                                className={"next-page"}
-                                onClick={() =>
-                                    this.onPagination("PageNumber", PageNumber - 1)
-                                }
-                            >
-                                <KeyboardArrowLeft className="arrow-icon" />
-                            </div>
-                        )}
-                        {PageNumber - 3 > 0 && (
-                            <div
-                                className={"page-inactive"}
-                                onClick={() =>
-                                    this.onPagination("PageNumber", PageNumber - 3)
-                                }
-                            >
-                                {PageNumber - 3}
-                            </div>
-                        )}
-                        {PageNumber - 2 > 0 && (
-                            <div
-                                className={"page-inactive"}
-                                onClick={() =>
-                                    this.onPagination("PageNumber", PageNumber - 2)
-                                }
-                            >
-                                {PageNumber - 2}
-                            </div>
-                        )}
-                        {PageNumber - 1 > 0 && (
-                            <div
-                                className={"page-inactive"}
-                                onClick={() =>
-                                    this.onPagination("PageNumber", PageNumber - 1)
-                                }
-                            >
-                                {PageNumber - 1}
-                            </div>
-                        )}
+            <div className={"pagination"}>
+                <div className={"paging"}>
+                    {prevPage && (
                         <div
-                            className={"page-active"}
-                            onClick={() => this.onPagination("PageNumber", PageNumber)}
+                            className={"next-page"}
+                            onClick={() =>
+                                this.onPagination("PageNumber", PageNumber - 1)
+                            }
                         >
-                            {PageNumber}
+                            <KeyboardArrowLeft className="arrow-icon" />
                         </div>
-                        {PageNumber + 1 <= totalPages && (
-                            <div
-                                className={"page-inactive"}
-                                onClick={() =>
-                                    this.onPagination("PageNumber", PageNumber + 1)
-                                }
-                            >
-                                {PageNumber + 1}
-                            </div>
-                        )}
-                        {PageNumber + 2 < totalPages && (
-                            <div
-                                className={"page-inactive"}
-                                onClick={() =>
-                                    this.onPagination("PageNumber", PageNumber + 2)
-                                }
-                            >
-                                {PageNumber + 2}
-                            </div>
-                        )}
-                        {PageNumber + 3 < totalPages && (
-                            <div
-                                className={"page-inactive"}
-                                onClick={() =>
-                                    this.onPagination("PageNumber", PageNumber + 3)
-                                }
-                            >
-                                {PageNumber + 3}
-                            </div>
-                        )}
-                        {nextPage && (
-                            <div
-                                className={"next-page"}
-                                onClick={() =>
-                                    this.onPagination("PageNumber", PageNumber + 1)
-                                }
-                            >
-                                <KeyboardArrowRight className="arrow-icon" />
-                            </div>
-                        )}
+                    )}
+                    {PageNumber - 3 > 0 && (
+                        <div
+                            className={"page-inactive"}
+                            onClick={() =>
+                                this.onPagination("PageNumber", PageNumber - 3)
+                            }
+                        >
+                            {PageNumber - 3}
+                        </div>
+                    )}
+                    {PageNumber - 2 > 0 && (
+                        <div
+                            className={"page-inactive"}
+                            onClick={() =>
+                                this.onPagination("PageNumber", PageNumber - 2)
+                            }
+                        >
+                            {PageNumber - 2}
+                        </div>
+                    )}
+                    {PageNumber - 1 > 0 && (
+                        <div
+                            className={"page-inactive"}
+                            onClick={() =>
+                                this.onPagination("PageNumber", PageNumber - 1)
+                            }
+                        >
+                            {PageNumber - 1}
+                        </div>
+                    )}
+                    <div
+                        className={"page-active"}
+                        onClick={() => this.onPagination("PageNumber", PageNumber)}
+                    >
+                        {PageNumber}
                     </div>
+                    {PageNumber + 1 <= totalPages && (
+                        <div
+                            className={"page-inactive"}
+                            onClick={() =>
+                                this.onPagination("PageNumber", PageNumber + 1)
+                            }
+                        >
+                            {PageNumber + 1}
+                        </div>
+                    )}
+                    {PageNumber + 2 < totalPages && (
+                        <div
+                            className={"page-inactive"}
+                            onClick={() =>
+                                this.onPagination("PageNumber", PageNumber + 2)
+                            }
+                        >
+                            {PageNumber + 2}
+                        </div>
+                    )}
+                    {PageNumber + 3 < totalPages && (
+                        <div
+                            className={"page-inactive"}
+                            onClick={() =>
+                                this.onPagination("PageNumber", PageNumber + 3)
+                            }
+                        >
+                            {PageNumber + 3}
+                        </div>
+                    )}
+                    {nextPage && (
+                        <div
+                            className={"next-page"}
+                            onClick={() =>
+                                this.onPagination("PageNumber", PageNumber + 1)
+                            }
+                        >
+                            <KeyboardArrowRight className="arrow-icon" />
+                        </div>
+                    )}
                 </div>
+            </div>
         );
 
 
@@ -285,14 +280,14 @@ export default class Report extends React.Component {
             currency: 'IDR',
             minimumFractionDigits: 0
         })
-        const tableHeader = ['Created','Phone Number', 'Location', 'Outlet', 'Rate', 'Counter In', 'Counter In1','Counter Out', 'Counter Out1', 'Total Kotor', 'Total Bersih']
+        const tableHeader = ['No', 'Created', 'Phone Number', 'Location', 'Outlet', 'Rate', 'Counter In', 'Counter Out', 'Total Kotor']
         const { listTransaction } = this.props
+        let discount = 0
+        discount = listTransaction.data && listTransaction?.data[0]?.tolerance
         const sumTotal = listTransaction.data && listTransaction?.data.reduce((accum, item) => accum + item.total, 0)
-        const sumTotal1 = listTransaction.data && listTransaction?.data.reduce((accum, item) => accum + item.total1, 0)
         const sumCounterIn = listTransaction.data && listTransaction?.data.reduce((accum, item) => accum + item.counterIn, 0)
-        const sumCounterIn1 = listTransaction.data && listTransaction?.data.reduce((accum, item) => accum + item.counterIn1, 0)
         const sumCounterOut = listTransaction.data && listTransaction?.data.reduce((accum, item) => accum + item.counterOut, 0)
-        const sumCounterOut1 = listTransaction.data && listTransaction?.data.reduce((accum, item) => accum + item.counterOut1, 0)
+
         return (
             <PDFExport
                 ref={component => (this.pdfExportComponent = component)}
@@ -310,16 +305,17 @@ export default class Report extends React.Component {
                     </Table.Header>
                     <Table.Body>
                         {listTransaction.data && listTransaction.data.map((data, index) => (
+
                             <Table.Row>
+
+                                <Table.Cell>{index + 1}</Table.Cell>
                                 <Table.Cell>{moment(data.created).format("MM-DD-YYYY")}</Table.Cell>
                                 <Table.Cell>{data.device.phoneNumber}</Table.Cell>
                                 <Table.Cell>{data.location.name}</Table.Cell>
                                 <Table.Cell>{data.outlet.name}</Table.Cell>
                                 <Table.Cell>{data.rate}</Table.Cell>
                                 <Table.Cell>{data.counterIn}</Table.Cell>
-                                <Table.Cell>{data.counterIn1}</Table.Cell>
                                 <Table.Cell>{data.counterOut}</Table.Cell>
-                                <Table.Cell>{data.counterOut1}</Table.Cell>
                                 <Table.Cell>{data.total}</Table.Cell>
                                 <Table.Cell>{data.total1}</Table.Cell>
 
@@ -331,21 +327,31 @@ export default class Report extends React.Component {
                             <Table.Cell />
                             <Table.Cell />
                             <Table.Cell />
+                            <Table.Cell style={{ fontWeight: 'bold' }}>Grand Total</Table.Cell>
                             <Table.Cell style={{ fontWeight: 'bold' }}>{sumCounterIn}</Table.Cell>
-                            <Table.Cell style={{ fontWeight: 'bold' }}>{sumCounterIn1}</Table.Cell>
                             <Table.Cell style={{ fontWeight: 'bold' }}>{sumCounterOut}</Table.Cell>
-                            <Table.Cell style={{ fontWeight: 'bold' }}>{sumCounterOut1}</Table.Cell>
                             <Table.Cell style={{ fontWeight: 'bold' }}>{formatter.format(sumTotal)}</Table.Cell>
-                            <Table.Cell style={{ fontWeight: 'bold' }}>{formatter.format(sumTotal1)}</Table.Cell>
                         </Table.Row>
-
+                    </Table.Body>
+                    <Table.Body>
+                        <Table.Row>
+                            <Table.Cell />
+                            <Table.Cell />
+                            <Table.Cell />
+                            <Table.Cell />
+                            <Table.Cell />
+                            <Table.Cell style={{ fontWeight: 'bold' }}>{`Grand Total Dari Kemungkinan Data Masuk Error ${discount}%`}</Table.Cell>
+                            <Table.Cell style={{ fontWeight: 'bold' }}>{sumCounterIn - (sumCounterIn * discount / 100)}</Table.Cell>
+                            <Table.Cell style={{ fontWeight: 'bold' }}>{sumCounterOut - (sumCounterOut * discount / 100)}</Table.Cell>
+                            <Table.Cell style={{ fontWeight: 'bold' }}>{formatter.format(sumTotal - (sumTotal * discount / 100))}</Table.Cell>
+                        </Table.Row>
                     </Table.Body>
                 </Table>
             </PDFExport>
         )
     }
     render() {
-        console.log('State',this.state)
+        console.log('State', this.state)
         const { isLoading } = this.props;
         if (isLoading) {
             return <CircularProgress size={100} className='circular-progress' />

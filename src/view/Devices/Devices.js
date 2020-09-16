@@ -2,7 +2,7 @@ import { CircularProgress, Modal } from '@material-ui/core';
 import React from 'react';
 import { Table } from 'semantic-ui-react';
 import moment from 'moment';
-import { Visibility, Delete } from '@material-ui/icons';
+import { Edit, Delete } from '@material-ui/icons';
 import DropdownComponent from "components/DropdownComponent/DropdownComponent";
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import { createDevice } from 'action/device';
@@ -169,7 +169,7 @@ export default class Devices extends React.Component {
     };
 
     renderTable = () => {
-        const tableHeader = ['Created', 'Phone Number', 'Outlet Name', 'Rate', 'Add By', 'Location', 'Detail'];
+        const tableHeader = ['No', 'Phone Number', 'Outlet Name', 'Rate', 'Location', 'Detail'];
         const { dataListDevice } = this.props
         console.log('dataListDevice', dataListDevice)
         return (
@@ -184,14 +184,13 @@ export default class Devices extends React.Component {
                 <Table.Body>
                     {dataListDevice.data && dataListDevice.data.map((data, index) => (
                         <Table.Row>
-                            <Table.Cell>{moment(data.created).format("DD-MM-YYYY")}</Table.Cell>
+                            <Table.Cell>{index + 1}</Table.Cell>
                             <Table.Cell>{data.phoneNumber}</Table.Cell>
                             <Table.Cell>{data.outlet.name}</Table.Cell>
                             <Table.Cell>{data.outlet.rate}</Table.Cell>
-                            <Table.Cell>{data.addBy.userName}</Table.Cell>
                             <Table.Cell>{data.location.name}</Table.Cell>
                             <Table.Cell onClick={() => this.handleClickModal(data)}>
-                                <Visibility style={{ cursor: 'pointer' }} />
+                                <Edit style={{ cursor: 'pointer' }} />
                                 <Delete style={{ marginLeft: '20px', cursor: 'pointer' }} />
                             </Table.Cell>
                         </Table.Row>
@@ -199,6 +198,111 @@ export default class Devices extends React.Component {
                 </Table.Body>
             </Table>
         )
+    }
+    onPagination = (key,PageNumber) => {
+        const {token} = this.props;
+        this.props.getDevice({PageNumber},token)
+    }
+    renderPagination = () => {
+        const { dataListDevice } = this.props;
+        const nextPage = dataListDevice.meta?.hasNextPage;
+        const prevPage = dataListDevice.meta?.hasPreviousPage;
+        const PageNumber = dataListDevice.meta?.pageNumber;
+        const totalPages = dataListDevice.meta?.totalPages;
+        return (
+            <div className={"pagination"}>
+                <div className={"paging"}>
+                    {prevPage && (
+                        <div
+                            className={"next-page"}
+                            onClick={() =>
+                                this.onPagination("PageNumber", PageNumber - 1)
+                            }
+                        >
+                            <KeyboardArrowLeft className="arrow-icon" />
+                        </div>
+                    )}
+                    {PageNumber - 3 > 0 && (
+                        <div
+                            className={"page-inactive"}
+                            onClick={() =>
+                                this.onPagination("PageNumber", PageNumber - 3)
+                            }
+                        >
+                            {PageNumber - 3}
+                        </div>
+                    )}
+                    {PageNumber - 2 > 0 && (
+                        <div
+                            className={"page-inactive"}
+                            onClick={() =>
+                                this.onPagination("PageNumber", PageNumber - 2)
+                            }
+                        >
+                            {PageNumber - 2}
+                        </div>
+                    )}
+                    {PageNumber - 1 > 0 && (
+                        <div
+                            className={"page-inactive"}
+                            onClick={() =>
+                                this.onPagination("PageNumber", PageNumber - 1)
+                            }
+                        >
+                            {PageNumber - 1}
+                        </div>
+                    )}
+                    <div
+                        className={"page-active"}
+                        onClick={() => this.onPagination("PageNumber", PageNumber)}
+                    >
+                        {PageNumber}
+                    </div>
+                    {PageNumber + 1 <= totalPages && (
+                        <div
+                            className={"page-inactive"}
+                            onClick={() =>
+                                this.onPagination("PageNumber", PageNumber + 1)
+                            }
+                        >
+                            {PageNumber + 1}
+                        </div>
+                    )}
+                    {PageNumber + 2 < totalPages && (
+                        <div
+                            className={"page-inactive"}
+                            onClick={() =>
+                                this.onPagination("PageNumber", PageNumber + 2)
+                            }
+                        >
+                            {PageNumber + 2}
+                        </div>
+                    )}
+                    {PageNumber + 3 < totalPages && (
+                        <div
+                            className={"page-inactive"}
+                            onClick={() =>
+                                this.onPagination("PageNumber", PageNumber + 3)
+                            }
+                        >
+                            {PageNumber + 3}
+                        </div>
+                    )}
+                    {nextPage && (
+                        <div
+                            className={"next-page"}
+                            onClick={() =>
+                                this.onPagination("PageNumber", PageNumber + 1)
+                            }
+                        >
+                            <KeyboardArrowRight className="arrow-icon" />
+                        </div>
+                    )}
+                </div>
+            </div>
+        );
+
+
     }
     render() {
         if (this.props.isLoading) {
@@ -209,6 +313,7 @@ export default class Devices extends React.Component {
                 <button class="positive ui button" onClick={() => this.handleClickModal(null, 'create')}>Create Devices</button>
                 {this.renderTable()}
                 {this.renderModal()}
+                {this.renderPagination()}
             </div>
         )
     }

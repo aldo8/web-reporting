@@ -3,9 +3,9 @@ import {push} from 'connected-react-router';
 import User from './User';
 import {listUser, getUserDetail,updateUser,deleteUser,createUser} from 'action/user'
 import { createLoadingSelector } from 'utils/selector.helper';
-import { USER, DETAIL_USER } from 'action/actionTypes';
+import { USER, DETAIL_USER, UPDATE_USER, DELETE_USER, CREATE_USER } from 'action/actionTypes';
 
-const loadingSelector = createLoadingSelector([USER,DETAIL_USER])
+const loadingSelector = createLoadingSelector([USER,DETAIL_USER,UPDATE_USER,DELETE_USER,CREATE_USER])
 const mapStateToProps = (state) => ({
     isLoading:loadingSelector(state),
     dataListUser:state.user.listUser.data,

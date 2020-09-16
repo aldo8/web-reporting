@@ -7,7 +7,7 @@ import { history } from './route.config';
 
 function storeConfig (state) {
     const middlewares = []
-    if(process.env.NODE_ENV ==='development') {
+    if(process.env.NODE_ENV === 'development') {
         middlewares.push(logger)
     }
     const composeEnhance = (window).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Table } from 'semantic-ui-react';
 import moment from 'moment';
-import { Visibility} from '@material-ui/icons';
+import { Edit} from '@material-ui/icons';
 import { CircularProgress } from '@material-ui/core';
 
 export default class Setting extends React.Component {
@@ -36,7 +36,7 @@ export default class Setting extends React.Component {
                     <Table.Cell>{moment(data.created).format("DD-MM-YYYY")}</Table.Cell>
                     <Table.Cell>{data.name}</Table.Cell>
                     <Table.Cell>{data.value}</Table.Cell>
-                    {/* <Table.Cell><Visibility onClick={() => this.props.deleteOutlet(data, token)} /></Table.Cell> */}
+                    {/* <Table.Cell><Edit onClick={() => this.props.deleteOutlet(data, token)} /></Table.Cell> */}
                   </Table.Row>
                 ))}
               </Table.Body>

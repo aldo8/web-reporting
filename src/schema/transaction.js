@@ -1,6 +1,5 @@
 export const schemaListTransaction = {
     data: [
-        "type",
         "id",
         "created",
         "updated",
@@ -9,26 +8,24 @@ export const schemaListTransaction = {
         "deviceId",
         "date",
         "counterIn",
-        "counterIn1",
         "counterOut",
-        "counterOut1",
         "rate",
         "total",
-        "total1",
-        "location.type",
+        "tolerance",
+
         "location.id",
         "location.name",
         "location.createdBy",
         "location.created",
         "location.isActive",
-        "outlet.type",
+
         "outlet.id",
         "outlet.name",
         "outlet.rate",
         "outlet.createdBy",
         "outlet.created",
         "outlet.isActive",
-        "device.type",
+
         "device.id",
         "device.createdBy",
         "device.created",

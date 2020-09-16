@@ -2,8 +2,8 @@ import { CircularProgress, Modal } from '@material-ui/core';
 import React from 'react';
 import DeleteIcon from '@material-ui/icons/Delete';
 import "semantic-ui-css/semantic.min.css";
-import { Button, Table } from 'semantic-ui-react';
-import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
+import { Button, Input, Table } from 'semantic-ui-react';
+import { KeyboardArrowLeft, KeyboardArrowRight, Edit } from '@material-ui/icons';
 import DropdownComponent from 'components/DropdownComponent/DropdownComponent';
 
 export default class Lokasi extends React.Component {
@@ -14,7 +14,8 @@ export default class Lokasi extends React.Component {
       isOpenModal: false,
       locationId: null,
       locationName: 'Pilih Lokasi',
-      dataDetail:{}
+      dataDetail: {},
+      SearchValue:null
     }
   }
   componentDidMount = () => {
@@ -24,8 +25,8 @@ export default class Lokasi extends React.Component {
   componentDidUpdate = (prevProps, prevState) => {
 
   }
-  handleClickModal = async (data,key) => {
-    const {token} = this.props
+  handleClickModal = async (data, key) => {
+    const { token } = this.props
     const { isOpenModal } = this.state;
     if (key === 'create') {
       this.setState({
@@ -33,10 +34,10 @@ export default class Lokasi extends React.Component {
         isDetail: false
       });
     } else {
-      console.log('data detail',data)
-      await this.props.getLocationDetail(data.id,token);
+      console.log('data detail', data)
+      await this.props.getLocationDetail(data.id, token);
       this.setState({
-        dataDetail:this.props.detailLocation.data,
+        dataDetail: this.props.detailLocation.data,
         isOpenModal: true,
         isDetail: true
       });
@@ -46,15 +47,14 @@ export default class Lokasi extends React.Component {
   handleClickCreate = async (name) => {
     const { token } = this.props
     const { isOpenModal } = this.state;
-    this.props.createLocation({ name }, token)
-    this.setState({ isOpenModal: !isOpenModal });
+    await this.props.createLocation({ name }, token)
     await this.props.listLocation(null, token)
+    this.setState({ isOpenModal: !isOpenModal });
+
   }
-  handleFilter = (key, data) => {
-    console.log(data)
+  handleFilter = (event) => {
     this.setState({
-      locationId: data.id,
-      locationName: data.name
+      SearchValue:event.target.value
     })
   }
   handleClickSearch = () => {
@@ -66,27 +66,13 @@ export default class Lokasi extends React.Component {
     return this.props.listLocation({ Filters: `name==${locationName}` }, token)
   }
   renderFilter = () => {
-    const { dataLocation } = this.props;
-    const { locationName } = this.state;
-    let Location = [{ id: 1, name: 'Pilih Lokasi' }];
-    let Outlet = [];
-    dataLocation.data && dataLocation.data.map((data) => {
-      return Location.push({ id: data.id, name: data.name })
-    })
+    const {token} = this.props
+    const {SearchValue} = this.state
     return (
-      <>
-        <div className='filters-container'>
-          <div className='dropdowns-container' style={{ padding: 0 }}>
-            <DropdownComponent data={Location} selected={locationName} onSelectAction={(data) => this.handleFilter('locationId', data)} />
-          </div>
-
-          <div className='dropdowns-container'>
-            <div style={{ marginTop: '30px' }}>
-              <Button onClick={() => this.handleClickSearch()}>Cari</Button>
-            </div>
-          </div>
-        </div>
-      </>
+      <div style={{display:"flex",justifyContent:"flex-end"}}>
+          <Input placeholder='Search...'  onChange={(e) => this.handleFilter(e)} style={{marginRight:'10px'}}/>
+          <Button onClick={() => this.props.listLocation({SearchValue},token)}>Search</Button>
+      </div>
     )
   }
 
@@ -95,53 +81,53 @@ export default class Lokasi extends React.Component {
     this.props.listLocation({ PageNumber: pageNumber }, token)
   }
   renderCreate = () => {
-    const {name} = this.state;
+    const { name } = this.state;
     return (
-        <div class="ui form" style={{ backgroundColor: 'white', padding: "10px" }} >
-          <div class="field">
-            <label>Name</label>
-            <input type="text" name="first-name" placeholder="Name" value={this.state.name} onChange={(e) => this.setState({ name: e.target.value })} />
-          </div>
-          <button class="ui button" onClick={() => this.handleClickCreate(name)}>
+      <div class="ui form" style={{ backgroundColor: 'white', padding: "10px" }} >
+        <div class="field">
+          <label>Name</label>
+          <input type="text" name="first-name" placeholder="Name" value={this.state.name} onChange={(e) => this.setState({ name: e.target.value })} />
+        </div>
+        <button class="ui button" onClick={() => this.handleClickCreate(name)}>
           Create
           </button>
-        </div>
+      </div>
     )
   }
-  handleClickUpdate = async (isUpdate,data) => {
-    const {token} = this.props
-    const {isOpenModal} = this.state
-    if(isUpdate){
-      await this.props.updateLocation(data,token)
-      this.setState({isOpenModal:!isOpenModal})
-      this.props.listLocation(null,token)
+  handleClickUpdate = async (isUpdate, data) => {
+    const { token } = this.props
+    const { isOpenModal } = this.state
+    if (isUpdate) {
+      await this.props.updateLocation(data, token)
+      this.setState({ isOpenModal: !isOpenModal })
+      this.props.listLocation(null, token)
     } else {
-      await this.props.deleteLocation(data.id,token)
-      this.setState({isOpenModal:!isOpenModal})
-      this.props.listLocation(null,token)
+      await this.props.deleteLocation(data.id, token)
+      this.setState({ isOpenModal: !isOpenModal })
+      this.props.listLocation(null, token)
     }
-    
-    
+
+
   }
   renderDetail = () => {
-    const {dataDetail} = this.state;
-    console.log('detailLocation',dataDetail)
+    const { dataDetail } = this.state;
+    console.log('detailLocation', dataDetail)
     return (
       <>
         <div class="ui form" style={{ backgroundColor: 'white', padding: "10px" }} >
           <div class="field">
             <label>Name</label>
-            <input type="text" name="first-name" placeholder="Name" value={dataDetail.name} onChange={(e) => this.setState({ dataDetail:{...dataDetail,name:e.target.value }})} />
+            <input type="text" name="first-name" placeholder="Name" value={dataDetail.name} onChange={(e) => this.setState({ dataDetail: { ...dataDetail, name: e.target.value } })} />
           </div>
-          <button class="ui button" onClick={() => this.handleClickUpdate(true,dataDetail)}>
-          Update
+          <button class="ui button" onClick={() => this.handleClickUpdate(true, dataDetail)}>
+            Update
         </button>
 
-        <button class="ui button" onClick={() => this.handleClickUpdate(false,dataDetail.id)}>
-          Delete
+          <button class="ui button" onClick={() => this.handleClickUpdate(false, dataDetail.id)}>
+            Delete
         </button>
         </div>
-        
+
       </>
     )
   }
@@ -160,6 +146,16 @@ export default class Lokasi extends React.Component {
       </Modal>
     );
   };
+
+  handleActions = async (key, data) => {
+    const { token } = this.props;
+    if (key === 'detail') {
+
+    } else {
+      await this.props.deleteLocation(data, token)
+      this.props.listLocation(null, token)
+    }
+  }
   renderTable = () => {
     const { dataLocation, token } = this.props;
     const { isDetail } = this.state;
@@ -175,8 +171,11 @@ export default class Lokasi extends React.Component {
           <Table.Body>
             {dataLocation.data && dataLocation.data.map((data) => (
               <Table.Row>
-                <Table.Cell onClick={() => this.handleClickModal(data)}>{data.name}</Table.Cell>
-                <Table.Cell><DeleteIcon onClick={() => this.props.deleteLocation(data.id, token)} /></Table.Cell>
+                <Table.Cell>{data.name}</Table.Cell>
+                <Table.Cell>
+                  <Edit style={{ cursor: 'pointer' }} onClick={() => this.handleClickModal(data)} />
+                  <DeleteIcon style={{ cursor: 'pointer' }} onClick={() => this.handleActions(data.id)} />
+                </Table.Cell>
               </Table.Row>
             ))}
           </Table.Body>
@@ -284,14 +283,14 @@ export default class Lokasi extends React.Component {
     );
   }
   render() {
-    console.log('LOCATION',this.props)
+    console.log('LOCATION', this.props)
     const { isLoading } = this.props;
     if (isLoading) {
       return <CircularProgress className='circular-progress' size={100} />
     }
     return (
       <div className='container'>
-        <button class="positive ui button" onClick={() => this.handleClickModal(null,'create')}>Create Lokasi</button>
+        <button class="positive ui button" onClick={() => this.handleClickModal(null, 'create')}>Create Lokasi</button>
         {this.renderFilter()}
         {this.renderTable()}
         {this.renderPagination()}
