@@ -11,8 +11,8 @@ const mapStateToProps = (state) => ({
     token:state.auth.token,
     isLoading:loadingSelector(state),
     dataOutlet:state.outlet.listOutlet.data,
+    dataLocation:state.location.listLocation.data,
     detailOutlet:state.outlet.detailOutlet.data,
-    dataLocation:state.location.listLocation.data
 })
 const mapDispatchToProps = (dispatch) => ({
     navigateTo:(path) => dispatch(push(path)),

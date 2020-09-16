@@ -1,6 +1,5 @@
 export const schemaListDevice = {
     data: [
-        "type",
         "id",
         "createdBy",
         "created",
@@ -8,14 +7,30 @@ export const schemaListDevice = {
         "locationId",
         "outletId",
         "phoneNumber",
-        "outlet.type",
+
         "outlet.id",
         "outlet.name",
         "outlet.rate",
         "outlet.createdBy",
         "outlet.created",
         "outlet.isActive",
-    ],
+
+        "addBy.id",
+        "addBy.name",
+        "addBy.userName",
+        "addBy.role",
+        "addBy.createdBy",
+        "addBy.created",
+        "addBy.updatedBy",
+        "addBy.updated",
+        "addBy.isActive",
+
+        "location.id",
+        "location.name",
+        "location.createdBy",
+        "location.created",
+        "location.isActive"
+    ]
 };
 
 export const schemaDetailDevice = {

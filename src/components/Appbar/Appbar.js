@@ -20,7 +20,7 @@ import { getStorage, removeStorage } from "utils/storage.helper";
 import { USER_STORAGE } from "constants/storage";
 import { Person, Settings, Dashboard, LocationOn, Assessment, Store, PhoneAndroid,ExitToApp } from '@material-ui/icons'
 
-const drawerWidth = 240;
+const drawerWidth = 170;
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -139,17 +139,7 @@ export default function ApplicationBar(props) {
           })}
         >
           <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              edge="start"
-              className={clsx(classes.menuButton, {
-                [classes.hide]: open,
-              })}
-            >
-              <MenuIcon />
-            </IconButton>
+            
             <Typography variant="h6" noWrap>
               {`${props.user.userName} as ${props.user.role === 'SA' ? 'Super Admin' : props.user.role === 'A' ? 'Admin' : 'User'}`}
             </Typography>
@@ -158,13 +148,13 @@ export default function ApplicationBar(props) {
         <Drawer
           variant="permanent"
           className={clsx(classes.drawer, {
-            [classes.drawerOpen]: open,
-            [classes.drawerClose]: !open,
+            [classes.drawerOpen]: !open,
+            [classes.drawerClose]: open,
           })}
           classes={{
             paper: clsx({
-              [classes.drawerOpen]: open,
-              [classes.drawerClose]: !open,
+              [classes.drawerOpen]: !open,
+              [classes.drawerClose]: open,
             }),
           }}
         >

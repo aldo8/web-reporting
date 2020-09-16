@@ -8,6 +8,7 @@ import { outletReducer } from './outlet';
 import { locationReducer } from './location';
 import { transactionReducer } from './transaction';
 import { deviceReducer } from './device';
+import { settingReducer } from './setting';
 
 
 const appReducer = combineReducers({
@@ -18,7 +19,8 @@ const appReducer = combineReducers({
     location:locationReducer,
     outlet:outletReducer,
     device:deviceReducer,
-    transaction:transactionReducer
+    transaction:transactionReducer,
+    setting:settingReducer
     
 })
 export default appReducer;

@@ -16,9 +16,9 @@ export default class deviceApi extends baseApi {
         return this.axios.get(`/api/v1/devices/${data}`)
     }
     updateDevice = (data) => {
-        return this.axios.put(`/api/v1/devices/${data}`)
+        return this.axios.put(`/api/v1/devices/${data.id}`,data)
     }
-    deleteDevice = (data) => {
-        return this.axios.delete(`/api/v1/devices/${data}`)
+    deleteDevice = (id) => {
+        return this.axios.delete(`/api/v1/devices/${id}`)
     }
 }

@@ -10,7 +10,8 @@ const mapStateToProps = (state) => ({
     isLoading:loadingSelector(state),
     dataListUser:state.user.listUser.data,
     detailUser:state.user.detailUser.data,
-    updateResponse:state.user.updateUser.data
+    updateResponse:state.user.updateUser.data,
+    token:state.auth.token
 })
 const mapDispatchToProps = (dispatch) => ({
     navigateTo:(path) => dispatch(push(path)),
