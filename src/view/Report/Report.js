@@ -31,7 +31,7 @@ export default class Report extends React.Component {
     }
     componentDidMount = () => {
         const { token } = this.props;
-        this.props.getListTransaction(null, token)
+        this.props.getListTransaction({Sorts:`-created`}, token)
         this.props.getListLocation(null, token)
         this.props.getListOutlet(null, token)
     }

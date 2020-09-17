@@ -35,7 +35,12 @@ export const DELETE_DEVICES = 'DELETE_DEVICES';
 // Services Transaction
 export const GET_LIST_TRANSACTION = 'GET_LIST_TRANSACTION';
 export const ADD_TRANSACTION = 'ADD_TRANSACTION'; 
+export const DASHBOARD_LOCATION = 'DASHBOARD_LOCATION';
+export const DASHBOARD_OUTLET = 'DASHBOARD_OUTLET';
 
 // Services Setting
 export const DETAIL_SETTING = 'DETAIL_SETTING';
 export const UPDATE_SETTING = 'UPDATE_SETTING';
+
+// Dashboard Setting
+export const GET_DASHBOARD = 'GET_DASHBOARD';

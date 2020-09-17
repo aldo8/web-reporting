@@ -35,8 +35,23 @@ export const schemaListTransaction = {
         "device.phoneNumber",
     ]
 }
-export const schemaAddTransaction = {
+export const schemaLocationTransaction = {
     data: [
+            "id",
+            "name",
+            "createdBy",
+            "created",
+            "isActive",
+    ]
+}
 
+export const schemaOutletTransaction = {
+    data: [
+            "id",
+            "name",
+            "rate",
+            "createdBy",
+            "created",
+            "isActive",
     ]
 }
