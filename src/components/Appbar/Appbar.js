@@ -83,7 +83,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 export default function ApplicationBar(props) {
+  console.log('App Bar Menu',props)
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -95,7 +97,119 @@ export default function ApplicationBar(props) {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
+  const renderMenuUser = () => {
+    return (
+      <>
+        <List>
+            <ListItem
+              button
+              onClick={() => handleNavigation('DASHBOARD')}
+            >
+              <ListItemIcon>
+                <Dashboard />
+              </ListItemIcon>
+              <ListItemText primary='DASHBOARD' />
+            </ListItem>
+          </List>
+          
+          <List>
+            <ListItem
+              button
+              onClick={() => handleNavigation('REPORT')}
+            >
+              <ListItemIcon>
+                <Assessment />
+              </ListItemIcon>
+              <ListItemText primary='REPORT' />
+            </ListItem>
+          </List>
+        </>
+    )
+  }
+  const renderMenuAdmin = () => {
+    return (
+      <>
+      <List>
+            <ListItem
+              button
+              onClick={() => handleNavigation('DASHBOARD')}
+            >
+              <ListItemIcon>
+                <Dashboard />
+              </ListItemIcon>
+              <ListItemText primary='DASHBOARD' />
+            </ListItem>
+          </List>
+          
+          <List>
+            <ListItem
+              button
+              onClick={() => handleNavigation('REPORT')}
+            >
+              <ListItemIcon>
+                <Assessment />
+              </ListItemIcon>
+              <ListItemText primary='REPORT' />
+            </ListItem>
+          </List>
+          <List>
+            <ListItem
+              button
+              onClick={() => handleNavigation('USER')}
+            >
+              <ListItemIcon>
+                <Person />
+              </ListItemIcon>
+              <ListItemText primary='USER' />
+            </ListItem>
+          </List>
+          <List>
+            <ListItem
+              button
+              onClick={() => handleNavigation('LOKASI')}
+            >
+              <ListItemIcon>
+                <LocationOn />
+              </ListItemIcon>
+              <ListItemText primary={'LOKASI'} />
+            </ListItem>
+          </List>
+          <List>
+            <ListItem
+              button
+              onClick={() => handleNavigation('OUTLET')}
+            >
+              <ListItemIcon>
+                <Store />
+              </ListItemIcon>
+              <ListItemText primary={'OUTLET'} />
+            </ListItem>
+          </List>
+          <List>
+            <ListItem
+              button
+              onClick={() => handleNavigation('DEVICES')}
+            >
+              <ListItemIcon>
+                <PhoneAndroid />
+              </ListItemIcon>
+              <ListItemText primary={'DEVICES'} />
+            </ListItem>
+          </List>
+          <List>
+            <ListItem
+              button
+              onClick={() => handleNavigation('SETTING')}
+            >
+              <ListItemIcon>
+                <Settings />
+              </ListItemIcon>
+              <ListItemText primary='SETTING' />
+            </ListItem>
+          </List>
+          </>
+    )
+  }
   const handleNavigation = (key) => {
     switch (key) {
       case `DASHBOARD`:
@@ -168,83 +282,9 @@ export default function ApplicationBar(props) {
             </IconButton>
           </div>
           <Divider />
-          <List>
-            <ListItem
-              button
-              onClick={() => handleNavigation('DASHBOARD')}
-            >
-              <ListItemIcon>
-                <Dashboard />
-              </ListItemIcon>
-              <ListItemText primary='DASHBOARD' />
-            </ListItem>
-          </List>
-          <List>
-            <ListItem
-              button
-              onClick={() => handleNavigation('USER')}
-            >
-              <ListItemIcon>
-                <Person />
-              </ListItemIcon>
-              <ListItemText primary='USER' />
-            </ListItem>
-          </List>
-          <List>
-            <ListItem
-              button
-              onClick={() => handleNavigation('LOKASI')}
-            >
-              <ListItemIcon>
-                <LocationOn />
-              </ListItemIcon>
-              <ListItemText primary={'LOKASI'} />
-            </ListItem>
-          </List>
-          <List>
-            <ListItem
-              button
-              onClick={() => handleNavigation('OUTLET')}
-            >
-              <ListItemIcon>
-                <Store />
-              </ListItemIcon>
-              <ListItemText primary={'OUTLET'} />
-            </ListItem>
-          </List>
-          <List>
-            <ListItem
-              button
-              onClick={() => handleNavigation('DEVICES')}
-            >
-              <ListItemIcon>
-                <PhoneAndroid />
-              </ListItemIcon>
-              <ListItemText primary={'DEVICES'} />
-            </ListItem>
-          </List>
-          <List>
-            <ListItem
-              button
-              onClick={() => handleNavigation('SETTING')}
-            >
-              <ListItemIcon>
-                <Settings />
-              </ListItemIcon>
-              <ListItemText primary='SETTING' />
-            </ListItem>
-          </List>
-          <List>
-            <ListItem
-              button
-              onClick={() => handleNavigation('REPORT')}
-            >
-              <ListItemIcon>
-                <Assessment />
-              </ListItemIcon>
-              <ListItemText primary='REPORT' />
-            </ListItem>
-          </List>
+          
+          {props.user.role === 'U' ? renderMenuUser() : renderMenuAdmin()}
+          
           <List>
             <ListItem
               button
