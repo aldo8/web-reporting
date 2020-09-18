@@ -29,9 +29,58 @@ export default class Report extends React.Component {
 
         }
     }
+    RoundHalfDown(num) {
+        if (num % 1 != 0) {
+            return this.roundnegatif(num);
+        }
+        return this.roundpostif(num);
+
+    }
+    roundnegatif(x) {
+        var up = Math.ceil(x / 0.5) * 0.5;
+        if (up > x) {
+            if (x % 0.5 != 0
+            ) {
+                if (up % 1 == 0
+                ) {
+                    return up;
+                }
+
+                return Math.floor(x / 0.5) * 0.5;
+            }
+        }
+        if (up = x) {
+            if (up % 1 != 0
+            ) {
+                return Math.floor(x / 1) * 1;
+            }
+        }
+        return up;
+    }
+    roundpostif(x) {
+        var up = Math.ceil(x / 500) * 500;
+        if (up > x) {
+            if (x % 500 != 0
+            ) {
+                if (up % 1000 == 0
+                ) {
+                    return up;
+                }
+
+                return Math.floor(x / 500) * 500;
+            }
+        }
+        if (up = x) {
+            if (up % 1000 != 0
+            ) {
+                return Math.floor(x / 1000) * 1000;
+            }
+        }
+        return up;
+    }
     componentDidMount = () => {
         const { token } = this.props;
-        this.props.getListTransaction({Sorts:`-created`}, token)
+        this.props.getListTransaction({ Sorts: `-created` }, token)
         this.props.getListLocation(null, token)
         this.props.getListOutlet(null, token)
     }
@@ -287,7 +336,9 @@ export default class Report extends React.Component {
         const sumTotal = listTransaction.data && listTransaction?.data.reduce((accum, item) => accum + item.total, 0)
         const sumCounterIn = listTransaction.data && listTransaction?.data.reduce((accum, item) => accum + item.counterIn, 0)
         const sumCounterOut = listTransaction.data && listTransaction?.data.reduce((accum, item) => accum + item.counterOut, 0)
-
+        const summaryCounterIn = this.RoundHalfDown(sumCounterIn - (sumCounterIn * discount / 100))
+        const summaryCounterOut = this.RoundHalfDown(sumCounterOut - (sumCounterOut * discount / 100))
+        const summaryTotal = this.RoundHalfDown(sumTotal - (sumTotal * discount / 100))
         return (
             <PDFExport
                 ref={component => (this.pdfExportComponent = component)}
@@ -341,9 +392,9 @@ export default class Report extends React.Component {
                             <Table.Cell />
                             <Table.Cell />
                             <Table.Cell style={{ fontWeight: 'bold' }}>{`Grand Total Dari Kemungkinan Data Masuk Error ${discount}%`}</Table.Cell>
-                            <Table.Cell style={{ fontWeight: 'bold' }}>{sumCounterIn - (sumCounterIn * discount / 100)}</Table.Cell>
-                            <Table.Cell style={{ fontWeight: 'bold' }}>{sumCounterOut - (sumCounterOut * discount / 100)}</Table.Cell>
-                            <Table.Cell style={{ fontWeight: 'bold' }}>{formatter.format(sumTotal - (sumTotal * discount / 100))}</Table.Cell>
+                            <Table.Cell style={{ fontWeight: 'bold' }}>{summaryCounterIn}</Table.Cell>
+                            <Table.Cell style={{ fontWeight: 'bold' }}>{summaryCounterOut}</Table.Cell>
+                            <Table.Cell style={{ fontWeight: 'bold' }}>{formatter.format(summaryTotal)}</Table.Cell>
                         </Table.Row>
                     </Table.Body>
                 </Table>

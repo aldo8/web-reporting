@@ -262,8 +262,8 @@ export default function ApplicationBar(props) {
         <Drawer
           variant="permanent"
           className={clsx(classes.drawer, {
-            [classes.drawerOpen]: !open,
-            [classes.drawerClose]: open,
+            [classes.drawerOpen]: open,
+            [classes.drawerClose]: !open,
           })}
           classes={{
             paper: clsx({
