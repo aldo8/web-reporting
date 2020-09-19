@@ -7,6 +7,7 @@ export const schemaListDevice = {
         "locationId",
         "outletId",
         "phoneNumber",
+        "notes",
 
         "outlet.id",
         "outlet.name",

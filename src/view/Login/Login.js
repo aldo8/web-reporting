@@ -75,7 +75,7 @@ export default function Login(props) {
   };
   
   useEffect(() => {
-    console.log('asd PROPS',props) 
+    
     const {token,navigateTo} = props
     if(token !== null){
       navigateTo(MENU.DASHBOARD)
@@ -106,7 +106,7 @@ export default function Login(props) {
             {(props) =>  (
               
               <form className={classes.form} noValidate>
-                {console.log('data login',props)}
+                
                 <TextField
                   onChange={props.handleChange('username')}
                   variant="outlined"

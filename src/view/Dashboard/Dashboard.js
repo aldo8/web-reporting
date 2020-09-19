@@ -21,94 +21,15 @@ export default class Dashboard extends React.Component {
 
     renderDashboard = () => {
         const { dataDashboard } = this.props;
-        const dataMock = [{ 
-        outletName: "Loss Ayam Hidup",
-        total: "26000",
-        total1: "20800",
-        percent: "100",
-        percent1: "80",
-        isActive: true},
-        { 
-            outletName: "Loss Ayam Hidup",
-            total: "26000",
-            total1: "20800",
-            percent: "100",
-            percent1: "80",
-            isActive: true},
-            { 
-                outletName: "Loss Ayam Hidup",
-                total: "26000",
-                total1: "20800",
-                percent: "100",
-                percent1: "80",
-                isActive: true},
-                { 
-                    outletName: "Loss Ayam Hidup",
-                    total: "26000",
-                    total1: "20800",
-                    percent: "100",
-                    percent1: "80",
-                    isActive: true},
-                    { 
-                        outletName: "Loss Ayam Hidup",
-                        total: "26000",
-                        total1: "20800",
-                        percent: "100",
-                        percent1: "80",
-                        isActive: true},
-                        { 
-                            outletName: "Loss Ayam Hidup",
-                            total: "26000",
-                            total1: "20800",
-                            percent: "100",
-                            percent1: "80",
-                            isActive: true},
-                            { 
-                                outletName: "Loss Ayam Hidup",
-                                total: "26000",
-                                total1: "20800",
-                                percent: "100",
-                                percent1: "80",
-                                isActive: true},
-                                { 
-                                    outletName: "Loss Ayam Hidup",
-                                    total: "26000",
-                                    total1: "20800",
-                                    percent: "100",
-                                    percent1: "80",
-                                    isActive: true},
-                                    { 
-                                        outletName: "Loss Ayam Hidup",
-                                        total: "26000",
-                                        total1: "20800",
-                                        percent: "100",
-                                        percent1: "80",
-                                        isActive: true},
-                                        { 
-                                            outletName: "Loss Ayam Hidup",
-                                            total: "26000",
-                                            total1: "20800",
-                                            percent: "100",
-                                            percent1: "80",
-                                            isActive: true}
-
-    ]
-        const items = dataDashboard?.data && dataDashboard?.data
         if (dataDashboard?.data.length === 0){
-            return (
-            <div>
-                <p>No Data</p>
-            </div>
-                )
+            return <p style={{textAlign:'center'}}>No Data</p>
+                
         }
         return (
             <div className='card-dashboard'>
                 <div className='card-content'>
                 {
-                    // dataDashboard?.data && dataDashboard?.data.map((data) => (
-                      
-                        dataMock.map((data) => (
-                        
+                    dataDashboard?.data && dataDashboard?.data.map((data) => (
                         <Card>
                             <Card.Content>
                                 <Card.Header style={{ textAlign: 'center', color: data.isActive ? 'green' : 'red' }}>{data.outletName}</Card.Header>
@@ -169,8 +90,7 @@ export default class Dashboard extends React.Component {
     }
     
     render() {
-        const { isLoading,token } = this.props;
-        console.log('Ini halaman Dashboard', this.props)
+        const { isLoading } = this.props;
         if (isLoading) {
             return <CircularProgress className='circular-progress' size={100} />
         }

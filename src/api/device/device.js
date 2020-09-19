@@ -6,8 +6,8 @@ export default class deviceApi extends baseApi {
         if(!this.api) this.api = new deviceApi(apiConfig(token));
         return this.api;
     }
-    listDevice = (data) => {
-        return this.axios.get('/api/v1/devices',data)
+    listDevice = (params) => {
+        return this.axios.get('/api/v1/devices',{params})
     }
     createDevice = (data) => {
         return this.axios.post('/api/v1/devices',data)

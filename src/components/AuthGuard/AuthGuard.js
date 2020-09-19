@@ -19,7 +19,7 @@ export default function (ComposedComponent) {
 
         //private function for handling user
         _handleUser = () => {
-            console.log('handleUser',this.props)
+            
             const user = getStorage(USER_STORAGE);
             if( !user) {
                 return this.props.goToLogin();

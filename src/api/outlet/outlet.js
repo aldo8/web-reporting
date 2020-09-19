@@ -6,8 +6,8 @@ export default class outletApi extends baseApi {
         if(!this.api) this.api = new outletApi(apiConfig(token));
         return this.api;
     }
-    listOutlet = (data) => {
-        return this.axios.get('/api/v1/outlets',data)
+    listOutlet = (params) => {
+        return this.axios.get('/api/v1/outlets',{params})
     }
     createOutlet = (data) => {
         return this.axios.post('/api/v1/outlets',data)
@@ -18,7 +18,7 @@ export default class outletApi extends baseApi {
     updateOutlet = (data) => {
         return this.axios.put(`/api/v1/outlets/${data.id}`,data)
     }
-    deleteOutlet = (data) => {
-        return this.axios.delete(`/api/v1/outlets/${data.id}`)
+    deleteOutlet = (id) => {
+        return this.axios.delete(`/api/v1/outlets/${id}`)
     }
 }

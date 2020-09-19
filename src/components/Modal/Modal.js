@@ -77,7 +77,7 @@ export default class ModalComponent extends React.Component {
   }
   render (){
     const {isLoading } = this.props
-    console.log('update data',this.state)
+    
     if (isLoading) {
       return <CircularProgress className="circular-progress" size={100} />
     } else {

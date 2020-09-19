@@ -1,4 +1,4 @@
-import { SUCCESS_TYPE, GET_LIST_TRANSACTION, ADD_TRANSACTION,DASHBOARD_LOCATION,DASHBOARD_OUTLET } from "action/actionTypes";
+import { SUCCESS_TYPE, GET_LIST_TRANSACTION,DASHBOARD_LOCATION,DASHBOARD_OUTLET } from "action/actionTypes";
 import { combineReducers } from "redux";
 
 const initialStateTransaction = {

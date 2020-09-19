@@ -1,8 +1,9 @@
 import React from "react";
 import "semantic-ui-css/semantic.min.css";
-import { Button, CircularProgress, DialogContent, Modal } from "@material-ui/core";
+import { CircularProgress, Modal } from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
-import { Table } from "semantic-ui-react";
+import Edit from '@material-ui/icons/Edit'
+import { Input, Table,Button } from "semantic-ui-react";
 import moment from 'moment';
 import DropdownComponent from "components/DropdownComponent/DropdownComponent";
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
@@ -11,11 +12,14 @@ export default class Outlet extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      dataDetailOutlet:{},
+      id: null,
+      dataDetailOutlet: {},
       isOpenModal: false,
       isOpenDetail: false,
+      isConfirmModal: false,
       locationName: null,
-      isCreateOutlet:false,
+      SearchValue:null,
+      isCreateOutlet: false,
       createOutlet: {
         isActive: true,
         name: null,
@@ -33,23 +37,23 @@ export default class Outlet extends React.Component {
   onPagination = () => {
 
   }
-  handleClickModal = async (seeDetail,data) => {
-    const {token} = this.props;
-    const { isCreateOutlet,isOpenModal } = this.state;
-    if(seeDetail){
-      await this.props.getOutletDetail(data.id,token)
+  handleClickModal = async (seeDetail, data) => {
+    const { token } = this.props;
+    const {  isOpenModal } = this.state;
+    if (seeDetail) {
+      await this.props.getOutletDetail(data.id, token)
       this.setState({
         isOpenModal: !isOpenModal,
-        dataDetailOutlet:this.props.detailOutlet.data,
-        isCreateOutlet:false
+        dataDetailOutlet: this.props.detailOutlet.data,
+        isCreateOutlet: false
       });
     } else {
       this.setState({
-        isOpenModal:!isOpenModal,
-        isCreateOutlet:true
+        isOpenModal: !isOpenModal,
+        isCreateOutlet: true
       })
     }
-    
+
   };
 
   handleChangeData = (key, e) => {
@@ -63,24 +67,26 @@ export default class Outlet extends React.Component {
   }
   handleClick = async (data, key) => {
     const { token } = this.props
-    const {isOpenModal} = this.state
+    const { isOpenModal } = this.state
     switch (key) {
       case 'update':
         await this.props.updateOutlet(data, token)
-        this.props.listOutlet(null,token)
-        this.setState({isOpenModal:!isOpenModal})
+        this.props.listOutlet(null, token)
+        this.setState({ isOpenModal: !isOpenModal })
         break;
       case 'delete':
         await this.props.deleteOutlet(data, token)
-        this.props.listOutlet(null,token)
-        this.setState({isOpenModal:!isOpenModal})
+        this.props.listOutlet(null, token)
+        this.setState({ isOpenModal: !isOpenModal })
+        break;
       case 'create':
         await this.props.createOutlet(data, token)
         this.setState({
           isOpenModal: !this.state.isOpenModal
         })
         this.props.listOutlet(null, token)
-      // this.props.listLocation(data,token)
+        break;
+      
       default:
         break;
     }
@@ -92,7 +98,7 @@ export default class Outlet extends React.Component {
     this.setState({ isOpenDetail: !isOpenDetail })
   }
   handleChoose = (data) => {
-    console.log('ID', data)
+    
     const { createOutlet } = this.state;
     this.setState({
       createOutlet: {
@@ -103,12 +109,12 @@ export default class Outlet extends React.Component {
     })
   }
   renderCreateOutlet = () => {
-    const { locationName, isOpenModal, createOutlet } = this.state;
+    const { locationName, createOutlet } = this.state;
     const { dataLocation } = this.props;
     const Location = [];
-    
+
     dataLocation.data && dataLocation.data.map((data) => {
-      Location.push({ id: data.id, name: data.name })
+      return Location.push({ id: data.id, name: data.name })
     })
     return (
       <div class="ui form" style={{ backgroundColor: 'white', padding: "10px" }} >
@@ -132,31 +138,31 @@ export default class Outlet extends React.Component {
     )
   }
 
-  handleChangeDataDetail = (key,data) => {
-    const {dataDetailOutlet} = this.state;
-    if(key==='location'){
+  handleChangeDataDetail = (key, data) => {
+    const { dataDetailOutlet } = this.state;
+    if (key === 'location') {
       this.setState({
-        dataDetailOutlet:{
+        dataDetailOutlet: {
           ...dataDetailOutlet,
-          locationId:data.id
+          locationId: data.id
         },
-        locationName:data.name
+        locationName: data.name
       })
-    }else{
+    } else {
       this.setState({
-        dataDetailOutlet:{
+        dataDetailOutlet: {
           ...dataDetailOutlet,
-          [key]:data.target.value
+          [key]: data.target.value
         }
       })
     }
   }
   renderDetailOutlet = () => {
-    const { dataDetailOutlet,locationName, isOpenModal, createOutlet } = this.state;
+    const { dataDetailOutlet, locationName } = this.state;
     const { dataLocation } = this.props;
     const Location = [];
     dataLocation.data && dataLocation.data.map((data) => {
-      Location.push({ id: data.id, name: data.name })
+      return Location.push({ id: data.id, name: data.name })
     })
     return (
       <div class="ui form" style={{ backgroundColor: 'white', padding: "10px" }} >
@@ -170,7 +176,7 @@ export default class Outlet extends React.Component {
         </div>
         <div class="field">
           <label>Location</label>
-          <DropdownComponent data={Location} selected={locationName} onSelectAction={(data) => this.handleChangeDataDetail('location',data)} />
+          <DropdownComponent data={Location} selected={locationName} onSelectAction={(data) => this.handleChangeDataDetail('location', data)} />
         </div>
         <button disabled={dataDetailOutlet.locationId === null} class="ui button" onClick={() => this.handleClick(dataDetailOutlet, 'update')}>
           Update
@@ -179,7 +185,7 @@ export default class Outlet extends React.Component {
     )
   }
   renderModal = () => {
-    const { isCreateOutlet, isOpenModal, createOutlet } = this.state;
+    const { isCreateOutlet, isOpenModal } = this.state;
     return (
       <Modal
         open={isOpenModal}
@@ -192,6 +198,35 @@ export default class Outlet extends React.Component {
       </Modal>
     );
   };
+
+  handleActionDelete = async (data) => {
+    const { token } = this.props;
+    const {id} = this.state
+    await this.props.deleteOutlet(id, token)
+    this.setState({ isConfirmModal: !this.state.isConfirmModal })
+    this.props.listOutlet(null, token)
+  }
+  renderModalConfirmation = (data) => {
+    
+    const { isConfirmModal, id } = this.state;
+    return (
+      <Modal
+        open={isConfirmModal}
+        style={{ width: "400px", height: "fit-content", margin: "auto" }}
+      >
+        <div className='modal-container'>
+          <div className='modal-header'>Delete Your Outlet</div>
+          <div className='modal-content'>
+            <p>Are you sure want to delete your Outlet</p>
+          </div>
+          <div className='modal-action'>
+            <button className='button-action' onClick={() => this.setState({ isConfirmModal: !isConfirmModal })}>No</button>
+            <button className='button-action' onClick={() => this.handleActionDelete(id)}>Yes</button>
+          </div>
+        </div>
+      </Modal>
+    )
+  }
 
   renderPagination = () => {
     const { dataOutlet } = this.props;
@@ -327,9 +362,12 @@ export default class Outlet extends React.Component {
   }
 
   renderTable = () => {
-    const { dataOutlet, token } = this.props;
-    const { isDetail } = this.state;
-    const header = ['Created', 'Location', 'Outlet', 'Phone Number', 'Rate', 'Add By', 'Action']
+    const { dataOutlet } = this.props;
+    
+    const header = ['Created', 'Location', 'Outlet', 'Phone Number', 'Rate', 'Action']
+    if(dataOutlet.data && dataOutlet.data.length < 1) {
+      return <p style={{textAlign:'center'}}>No Data</p>
+  }
     return (
       <>
         <Table basic>
@@ -343,13 +381,15 @@ export default class Outlet extends React.Component {
           <Table.Body>
             {dataOutlet.data && dataOutlet.data.map((data) => (
               <Table.Row>
-                <Table.Cell onClick={() => this.handleClickModal(true,data)}>{moment(data.created).format("DD-MM-YYYY")}</Table.Cell>
-                <Table.Cell onClick={() => this.handleClickModal(true,data)}>{data.location.name}</Table.Cell>
-                <Table.Cell onClick={() => this.handleClickModal(true,data)}>{data.name}</Table.Cell>
-                <Table.Cell onClick={() => this.handleClickModal(true,data)}>{data.devices && data.devices.map((data) => data.phoneNumber)}</Table.Cell>
-                <Table.Cell onClick={() => this.handleClickModal(true,data)}>{data.rate}</Table.Cell>
-                <Table.Cell onClick={() => this.handleClickModal(true,data)}>{data.addBy.name}</Table.Cell>
-                <Table.Cell><DeleteIcon onClick={() => this.props.deleteOutlet(data, token)} /></Table.Cell>
+                <Table.Cell >{moment(data.created).format("DD-MM-YYYY")}</Table.Cell>
+                <Table.Cell >{data.location.name}</Table.Cell>
+                <Table.Cell >{data.name}</Table.Cell>
+                <Table.Cell >{data.devices && data.devices.map((data) => data.phoneNumber)}</Table.Cell>
+                <Table.Cell >{data.rate}</Table.Cell>
+                <Table.Cell>
+                  <Edit style={{ cursor: 'pointer',marginRight:'10px' }} onClick={() => this.handleClickModal(true, data)} />
+                  <DeleteIcon style={{ cursor: 'pointer' }} onClick={() => this.handleClickDelete(data.id)} />
+                </Table.Cell>
               </Table.Row>
             ))}
           </Table.Body>
@@ -357,17 +397,39 @@ export default class Outlet extends React.Component {
       </>
     )
   }
+  handleClickDelete = (id) => {
+    const { isConfirmModal} = this.state
+    this.setState({isConfirmModal:!isConfirmModal,id})
+  }
+  handleFilter = (event) => {
+    this.setState({
+      SearchValue:event.target.value
+    })
+  }
+renderFilter = () => {
+    const {token} = this.props
+    const {SearchValue} = this.state
+    return (
+      <div style={{display:"flex",justifyContent:"flex-end"}}>
+          <Input placeholder='Search...'  onChange={(e) => this.handleFilter(e)} style={{marginRight:'10px'}}/>
+          <Button onClick={() => this.props.listOutlet({SearchValue},token)}>Search</Button>
+      </div>
+    )
+  }
   render() {
-    const { dataOutlet, isLoading } = this.props;
+    
+    const {  isLoading } = this.props;
     if (isLoading) {
       return <CircularProgress size={100} className="circular-progress" />
     }
     return (
       <div className="container">
         <button class="positive ui button" onClick={() => this.handleClickModal(false)}>Create Outlet</button>
+        {this.renderFilter()}
         {this.renderTable()}
         {this.renderPagination()}
         {this.renderModal()}
+        {this.renderModalConfirmation()}
       </div>
     );
   }

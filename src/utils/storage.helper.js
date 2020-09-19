@@ -6,20 +6,25 @@ const getStorage = key => {
       }
       return {};
     } catch (err) {
-      console.log('getStorageError', err);
+      if (process.env.NODE_ENV === "development"){
+        console.log('getStorageError', err);
+      }
+      
       return {};
     }
   };
 
 const setStorage = async (key,payload) => {
-  console.log('storage',key,payload)
+  
     try {
         if (key && payload) {
             const data = JSON.stringify(payload);
             await localStorage.setItem(key,data);    
         }
     } catch (err) {
+      if (process.env.NODE_ENV === "development"){
         console.log('setStorageError:', err)
+      }
     }
 };
 
@@ -27,7 +32,9 @@ const removeStorage = async (key) => {
   try {
     await localStorage.removeItem(key);
   } catch (err) {
-    console.log('removeStorage', err);
+    if (process.env.NODE_ENV === "development"){
+    console.log('removeStorage', err)
+    }
   }
 }
 export {setStorage,getStorage,removeStorage};

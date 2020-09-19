@@ -8,7 +8,7 @@ export default class userApi extends baseApi {
     }
     listUser = (params) => {
         return this.axios.get('/api/v1/users',{params})
-    {}}
+    }
     createUser = (data) => {
         return this.axios.post('/api/v1/users',data)
     }

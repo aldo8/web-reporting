@@ -7,7 +7,7 @@ import { CREATE_DEVICES, DETAIL_DEVICES, GET_DEVICES, UPDATE_DEVICES,GET_LOCATIO
 import { listLocation } from 'action/location';
 import { listOutlet } from 'action/outlet';
 
-const loadingSelector = createLoadingSelector([GET_DEVICES,CREATE_DEVICES,UPDATE_DEVICES,DETAIL_DEVICES,,GET_LOCATION,GET_OUTLET])
+const loadingSelector = createLoadingSelector([GET_DEVICES,CREATE_DEVICES,UPDATE_DEVICES,DETAIL_DEVICES,GET_LOCATION,GET_OUTLET])
 const mapStateToProps = (state) => ({
     token:state.auth.token,
     isLoading:loadingSelector(state),

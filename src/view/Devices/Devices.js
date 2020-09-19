@@ -1,20 +1,21 @@
 import { CircularProgress, Modal } from '@material-ui/core';
 import React from 'react';
-import { Table } from 'semantic-ui-react';
-import moment from 'moment';
+import { Table, Input, Button } from 'semantic-ui-react';
 import { Edit, Delete } from '@material-ui/icons';
-import DropdownComponent from "components/DropdownComponent/DropdownComponent";
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
-import { createDevice } from 'action/device';
+
 export default class Devices extends React.Component {
     constructor(props) {
         super()
         this.state = {
             isOpenModal: false,
+            isConfirmModal: false,
             isDetail: false,
             location: null,
             outlet: null,
-            dataDetail:{},
+            SearchValue: null,
+            id: null,
+            dataDetail: {},
             createDevice: {
                 isActive: true,
                 notes: null,
@@ -26,87 +27,84 @@ export default class Devices extends React.Component {
     }
     componentDidMount = () => {
         const { token } = this.props
-        console.log('Devices Props', this.props)
         this.props.getDevice(null, token);
         this.props.listOutlet(null, token);
         this.props.listLocation(null, token);
     }
     handleClickModal = async (data, key) => {
         const { token } = this.props
-        const { isOpenModal } = this.state;
-        console.log('click modal', key)
         if (key === 'create') {
             this.setState({
                 isOpenModal: true,
                 isDetail: false
             });
         } else {
-            console.log('data detail', data)
             await this.props.getDeviceDetail(data.id, token);
             this.setState({
-                dataDetail: this.props.detailDevice.data,
+                dataDetail:data,
                 isOpenModal: true,
                 isDetail: true
             });
         }
     }
-
+    handleClickUpdate = async (data) => {
+        const {token} = this.props
+        await this.props.updateDevice(data,token)
+        this.setState({isOpenModal:!this.state.isOpenModal})
+        this.props.getDevice(null,token)
+        
+    }
     renderDetail = () => {
+
         const { dataDetail } = this.state;
-        console.log('detailLocation', dataDetail)
+        
         return (
             <>
                 <div class="ui form" style={{ backgroundColor: 'white', padding: "10px" }} >
                     <div class="field">
                         <label>Phone Number</label>
-                        <input type="text" name="first-name" placeholder="Name" value={dataDetail.name} onChange={(e) => this.setState({ dataDetail: { ...dataDetail, name: e.target.value } })} />
+                        <input type="text" name="first-name" maxLength='12' placeholder="Name" value={dataDetail.phoneNumber} onChange={(e) => this.setState({ dataDetail: { ...dataDetail, phoneNumber: e.target.value } })} />
                     </div>
-                    <button class="ui button" onClick={() => this.handleClickUpdate(true, dataDetail)}>
+                    <button class="ui button" onClick={() => this.handleClickUpdate(dataDetail)}>
                         Update
-            </button>
-
-                    <button class="ui button" onClick={() => this.handleClickUpdate(false, dataDetail.id)}>
-                        Delete
             </button>
                 </div>
 
             </>
         )
     }
-    handleSample = (key,event) => {
-        const {createDevice} = this.state;
-        console.log('changeValue',event.target.value)
-        const x  = this.props.dataOutlet.data.filter((data) => data.id === event.target.value)
-        console.log('X',)
+    handleSample = (key, event) => {
+        const { createDevice } = this.state;
+        
+        const x = this.props.dataOutlet.data.filter((data) => data.id === event.target.value)
+        
         this.setState({
-            createDevice:{
+            createDevice: {
                 ...createDevice,
-                [key]:event.target.value,
-                locationId:x[0].locationId
+                [key]: event.target.value,
+                locationId: x[0].locationId
             }
         })
     }
     handleClickCreate = async (data) => {
-        const {token} = this.props;
-        const {isOpenModal} = this.state;
-        await this.props.createDevice(data,token)
-        this.setState({isOpenModal:!isOpenModal})
+        const { token } = this.props;
+        const { isOpenModal } = this.state;
+        await this.props.createDevice(data, token)
+        this.setState({ isOpenModal: !isOpenModal })
     }
     renderCreate = () => {
         const { createDevice } = this.state;
-        const {dataLocation,dataOutlet} = this.props;
-        let  listLocation = []
+        const { dataOutlet } = this.props;
         let listOutlet = []
         dataOutlet.data && dataOutlet.data.map((data) => {
-            listOutlet.push({
-                outletId:data.id,
-                name:data.name,
-                locationId:data.locationId})
+            return listOutlet.push({
+                outletId: data.id,
+                name: data.name,
+                locationId: data.locationId
+            })
         })
-        // dataLocation.data && dataLocation.data.map((data) => {
-        //     listOutlet.push({id:data.id,name:data.name})
-        // })
-        console.log('Render Create',createDevice)
+
+        
         return (
             <div class="ui form" style={{ backgroundColor: 'white', padding: "10px" }} >
                 <div class="field">
@@ -119,17 +117,10 @@ export default class Devices extends React.Component {
                             }
                         })} />
                 </div>
-                {/* <div class="field">
-                    <label>Location</label>
-                    <select class="ui dropdown" onChange={(e) => this.handleSample('locationId',e)}>
-                        {listLocation.map((data) => (
-                            <option value={data.id}>{data.name}</option>
-                        ))}
-                    </select>
-                </div> */}
+
                 <div class="field">
                     <label>Outlet</label>
-                    <select class="ui dropdown" onChange={(e) => this.handleSample('outletId',e)}>
+                    <select class="ui dropdown" onChange={(e) => this.handleSample('outletId', e)}>
                         {listOutlet.map((data) => (
                             <option value={data.outletId}>{data.name}</option>
                         ))}
@@ -152,8 +143,8 @@ export default class Devices extends React.Component {
         )
     }
     renderModal = () => {
-        const { isDetail, isOpenModal, name } = this.state;
-        console.log('Modal Open')
+        const { isDetail, isOpenModal } = this.state;
+        
         return (
             <Modal
                 open={isOpenModal}
@@ -169,9 +160,12 @@ export default class Devices extends React.Component {
     };
 
     renderTable = () => {
-        const tableHeader = ['No', 'Phone Number', 'Outlet Name', 'Rate', 'Location', 'Detail'];
+        const tableHeader = ['No', 'Phone Number', 'Outlet Name', 'Rate', 'Location', 'Notes', 'Action'];
         const { dataListDevice } = this.props
-        console.log('dataListDevice', dataListDevice)
+        
+        if(dataListDevice.data && dataListDevice.data.length < 1) {
+            return <p style={{textAlign:'center'}}>No Data</p>
+        }
         return (
             <Table basic>
                 <Table.Header>
@@ -189,9 +183,10 @@ export default class Devices extends React.Component {
                             <Table.Cell>{data.outlet.name}</Table.Cell>
                             <Table.Cell>{data.outlet.rate}</Table.Cell>
                             <Table.Cell>{data.location.name}</Table.Cell>
-                            <Table.Cell onClick={() => this.handleClickModal(data)}>
-                                <Edit style={{ cursor: 'pointer' }} />
-                                <Delete style={{ marginLeft: '20px', cursor: 'pointer' }} />
+                            <Table.Cell>{data.notes ? data.notes : '-'}</Table.Cell>
+                            <Table.Cell >
+                                <Edit style={{ cursor: 'pointer' }} onClick={() => this.handleClickModal(data)} />
+                                <Delete style={{ marginLeft: '20px', cursor: 'pointer' }} onClick={() => this.handleClickDelete(data.id)} />
                             </Table.Cell>
                         </Table.Row>
                     ))}
@@ -199,9 +194,13 @@ export default class Devices extends React.Component {
             </Table>
         )
     }
-    onPagination = (key,PageNumber) => {
-        const {token} = this.props;
-        this.props.getDevice({PageNumber},token)
+    handleClickDelete = (id) => {
+        const { isConfirmModal } = this.state
+        this.setState({ isConfirmModal: !isConfirmModal, id })
+    }
+    onPagination = (key, PageNumber) => {
+        const { token } = this.props;
+        this.props.getDevice({ PageNumber }, token)
     }
     renderPagination = () => {
         const { dataListDevice } = this.props;
@@ -301,19 +300,64 @@ export default class Devices extends React.Component {
                 </div>
             </div>
         );
+    }
+    handleFilter = (event) => {
+        this.setState({
+            SearchValue: event.target.value
+        })
+    }
+    renderFilter = () => {
+        const { token } = this.props
+        const { SearchValue } = this.state
+        return (
+            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                <Input placeholder='Search...' onChange={(e) => this.handleFilter(e)} style={{ marginRight: '10px' }} />
+                <Button onClick={() => this.props.getDevice({ SearchValue }, token)}>Search</Button>
+            </div>
+        )
+    }
 
-
+    handleActionDelete = async (data) => {
+        const { token } = this.props
+        const { isConfirmModal } = this.state;
+        await this.props.deleteDevice(data, token);
+        this.setState({ isConfirmModal: !isConfirmModal })
+        this.props.getDevice(null, token)
+    }
+    renderModalConfirmation = (data) => {
+        
+        const { isConfirmModal, id } = this.state;
+        return (
+            <Modal
+                open={isConfirmModal}
+                style={{ width: "400px", height: "fit-content", margin: "auto" }}
+            >
+                <div className='modal-container'>
+                    <div className='modal-header'>Delete Your Devices</div>
+                    <div className='modal-content'>
+                        <p>Are you sure want to delete your Devices</p>
+                    </div>
+                    <div className='modal-action'>
+                        <button className='button-action' onClick={() => this.setState({ isConfirmModal: !isConfirmModal })}>No</button>
+                        <button className='button-action' onClick={() => this.handleActionDelete(id)}>Yes</button>
+                    </div>
+                </div>
+            </Modal>
+        )
     }
     render() {
+        
         if (this.props.isLoading) {
             return <CircularProgress className='circular-progress' size={100} />
         }
         return (
             <div className='container'>
                 <button class="positive ui button" onClick={() => this.handleClickModal(null, 'create')}>Create Devices</button>
+                {this.renderFilter()}
                 {this.renderTable()}
                 {this.renderModal()}
                 {this.renderPagination()}
+                {this.renderModalConfirmation()}
             </div>
         )
     }

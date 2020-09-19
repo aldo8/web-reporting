@@ -7,7 +7,7 @@ export default class transactionApi extends baseApi {
         return this.api;
     }
     listTransaction = (params) => {
-        console.log('param',params)
+        
         return this.axios.get('/api/v1/transactions',{params})
     }
     locationTransaction = (params) => {

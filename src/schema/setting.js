@@ -5,6 +5,7 @@ export const schemaSetting = {
         "value",
         "createdBy",
         "created",
+        "note",
         "isActive",
     ]
 }

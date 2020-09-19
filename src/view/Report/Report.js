@@ -1,14 +1,14 @@
 import { CircularProgress } from '@material-ui/core';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import DropdownComponent from 'components/DropdownComponent/DropdownComponent';
-import { isDate, isNull } from 'lodash';
+import { isNull } from 'lodash';
 import React from 'react';
 import { Button, Table, } from 'semantic-ui-react'
 import { PDFExport } from '@progress/kendo-react-pdf';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from 'moment'
-import SearchInput from 'components/SearchInput/SearchInput';
+
 
 
 
@@ -30,7 +30,7 @@ export default class Report extends React.Component {
         }
     }
     RoundHalfDown(num) {
-        if (num % 1 != 0) {
+        if (num % 1 !== 0) {
             return this.roundnegatif(num);
         }
         return this.roundpostif(num);
@@ -39,9 +39,9 @@ export default class Report extends React.Component {
     roundnegatif(x) {
         var up = Math.ceil(x / 0.5) * 0.5;
         if (up > x) {
-            if (x % 0.5 != 0
+            if (x % 0.5 !== 0
             ) {
-                if (up % 1 == 0
+                if (up % 1 === 0
                 ) {
                     return up;
                 }
@@ -49,8 +49,8 @@ export default class Report extends React.Component {
                 return Math.floor(x / 0.5) * 0.5;
             }
         }
-        if (up = x) {
-            if (up % 1 != 0
+        if (up === x) {
+            if (up % 1 !== 0
             ) {
                 return Math.floor(x / 1) * 1;
             }
@@ -60,9 +60,9 @@ export default class Report extends React.Component {
     roundpostif(x) {
         var up = Math.ceil(x / 500) * 500;
         if (up > x) {
-            if (x % 500 != 0
+            if (x % 500 !== 0
             ) {
-                if (up % 1000 == 0
+                if (up % 1000 === 0
                 ) {
                     return up;
                 }
@@ -70,8 +70,8 @@ export default class Report extends React.Component {
                 return Math.floor(x / 500) * 500;
             }
         }
-        if (up = x) {
-            if (up % 1000 != 0
+        if (up === x) {
+            if (up % 1000 !== 0
             ) {
                 return Math.floor(x / 1000) * 1000;
             }
@@ -102,8 +102,7 @@ export default class Report extends React.Component {
         const { currentFilter } = this.state;
         let temp = "";
         dataFilter.forEach((element, index) => {
-            console.log('element value', currentFilter[element])
-            console.log('element', element)
+            
             if (!isNull(currentFilter[element])) {
                 if (element === 'created') {
                     temp += `${element}>=${currentFilter[element]}`
@@ -119,7 +118,7 @@ export default class Report extends React.Component {
         return temp;
     }
     setQuery = (key) => {
-        const { token } = this.props;
+        
         const { currentFilter, SearchValue, PageNumber, sorting, startDate, endDate } = this.state;
         if (key === 'date') {
             let start = moment(startDate).format('YYYY-MM-DD')
@@ -157,10 +156,9 @@ export default class Report extends React.Component {
         this.setState({ endDate: value }, () => this.setQuery('date'))
     }
     handleFilterDate = () => {
-        const { currentFilter, startDate, endDate } = this.state;
+        
         const { token } = this.props;
-        console.log('Handle', this.queryTemp)
-        console.log('Tse', this.state)
+        
 
         this.props.getListTransaction({ ...this.queryTemp }, token)
     }
@@ -339,6 +337,9 @@ export default class Report extends React.Component {
         const summaryCounterIn = this.RoundHalfDown(sumCounterIn - (sumCounterIn * discount / 100))
         const summaryCounterOut = this.RoundHalfDown(sumCounterOut - (sumCounterOut * discount / 100))
         const summaryTotal = this.RoundHalfDown(sumTotal - (sumTotal * discount / 100))
+        if(listTransaction.data && listTransaction.data.length === 0){
+            return <p style={{textAlign:'center'}}>No Data</p>
+        }
         return (
             <PDFExport
                 ref={component => (this.pdfExportComponent = component)}
@@ -402,7 +403,6 @@ export default class Report extends React.Component {
         )
     }
     render() {
-        console.log('State', this.state)
         const { isLoading } = this.props;
         if (isLoading) {
             return <CircularProgress size={100} className='circular-progress' />

@@ -1,18 +1,17 @@
 import React from 'react';
 import { Edit, Delete, KeyboardArrowLeft,KeyboardArrowRight } from '@material-ui/icons';
-import { Button, Modal, DialogContent, CircularProgress } from '@material-ui/core';
+import { Modal, CircularProgress } from '@material-ui/core';
 import moment from 'moment';
-import ModalComponent from 'components/Modal/Modal'
-import { Table } from 'semantic-ui-react';
-import { createUser } from 'action/user';
-import { listUser } from 'reducers/user';
+import { Input,Button, Table } from 'semantic-ui-react';
 import { Formik } from 'formik';
 
 export default class User extends React.Component {
     constructor(props) {
         super()
         this.state = {
+            id:null,
             isOpenModal: false,
+            isConfirmModal:false,
             isDetail: false,
             createUser: {
                 name: null,
@@ -21,7 +20,8 @@ export default class User extends React.Component {
                 confirmPassword: null,
                 role: null
             },
-            dataDetail: {}
+            dataDetail: {},
+            SearchValue:null
         }
     }
     componentDidMount = () => {
@@ -29,11 +29,7 @@ export default class User extends React.Component {
 
         listUser(null, token);
     }
-    componentDidUpdate = (prevProps, prevState) => {
-        console.log('ini props', prevProps)
-        console.log('ini state', prevState)
-
-    }
+    
 
     handleClickModal = async (data, key) => {
         const { token } = this.props
@@ -44,7 +40,7 @@ export default class User extends React.Component {
                 isDetail: false
             });
         } else {
-            console.log('data detail', data)
+            
             await this.props.getUserDetail(data.id, token);
             this.setState({
                 dataDetail: this.props.detailUser.data,
@@ -59,20 +55,20 @@ export default class User extends React.Component {
         const { getUserDetail, token } = this.props;
         await getUserDetail(data.id, token)
         this.setState({ isOpenModal: !isOpenModal })
-        console.log('detailUser', this.props.detailUser)
+        
     }
     handleClickDelete = (id) => {
-        const { deleteUser, token } = this.props;
-        deleteUser(id, token);
-        this.props.listUser(null,token)
+        const {isConfirmModal} = this.state;
+        this.setState({isConfirmModal:!isConfirmModal,id})
+        
     }
     handleClickUpdate = async (data) => {
         const {isOpenModal} = this.state;
         const { updateUser, token } = this.props;
         await updateUser(data, token)
         this.setState({isOpenModal:!isOpenModal})
-        listUser(null,token);
-        console.log('Update ngapdet', data)
+        this.props.listUser(null,token);
+        
     }
     handleCreateUser = (data) => {
         const { token } = this.props
@@ -93,14 +89,6 @@ export default class User extends React.Component {
                         <input type="text" placeholder="Username" value={dataDetail.userName} onChange={(e) => this.setState({ dataDetail: { ...dataDetail, userName: e.target.value } })} />
                     </div>
                     <div class="field">
-                        <label>Password</label>
-                        <input type="password" placeholder="Password" value={dataDetail.password} onChange={(e) => this.setState({ dataDetail: { ...dataDetail, password: e.target.value } })} />
-                    </div>
-                    <div class="field">
-                        <label>Confirm Password</label>
-                        <input type="password" placeholder="Confirm Password" value={dataDetail.confirmPassword} onChange={(e) => this.setState({ dataDetail: { ...dataDetail, confirmPassword: e.target.value } })} />
-                    </div>
-                    <div class="field">
                         <label>Role</label>
                         <select class="ui dropdown" onChange={(e) => this.setState({ dataDetail: { ...dataDetail, role: e.target.value } })}>
                             {role.map((data) => (
@@ -118,7 +106,7 @@ export default class User extends React.Component {
         )
     }
     handleClickCreate = async (data) => {
-        console.log('create',data)
+        
         const { isOpenModal } = this.state;
         const { token } = this.props;
         await this.props.createUser(data, token)
@@ -142,7 +130,7 @@ export default class User extends React.Component {
             <Formik initialValues={createUser}>
                 {(props) => (
                     <div class="ui form" style={{ backgroundColor: 'white', padding: "10px" }} >
-                        {console.log('Data Form',props.values)}
+                        
                 <div class="field">
                     <label>Name</label>
                     <input type="text" placeholder="Name" value={this.state.name} onChange={(e) => props.setFieldValue('name',e.target.value)} />
@@ -176,7 +164,7 @@ export default class User extends React.Component {
         )
     }
     renderModal = () => {
-        const { isDetail, isOpenModal, name } = this.state;
+        const { isDetail, isOpenModal } = this.state;
         return (
             <Modal
                 open={isOpenModal}
@@ -192,9 +180,12 @@ export default class User extends React.Component {
     };
 
     renderTable = () => {
-        const { dataListUser, token } = this.props;
-        const { isDetail } = this.state;
+        const { dataListUser } = this.props;
+        
         const header = ['Created', 'Username', 'Role', 'Detail']
+        if(dataListUser.data && dataListUser.data.length < 1) {
+            return <p style={{textAlign:'center'}}>No Data</p>
+        }
         return (
             <>
                 <Table basic>
@@ -226,10 +217,45 @@ export default class User extends React.Component {
         const {token} = this.props;
         this.props.listUser({ PageNumber: pageNumber }, token)
     }
+    handleFilter = (event) => {
+        this.setState({
+          SearchValue:event.target.value
+        })
+      }
     renderFilter = () => {
-        return(
-            <>
-            </>
+        const {token} = this.props
+        const {SearchValue} = this.state
+        return (
+          <div style={{display:"flex",justifyContent:"flex-end"}}>
+              <Input placeholder='Search...'  onChange={(e) => this.handleFilter(e)} style={{marginRight:'10px'}}/>
+              <Button onClick={() => this.props.listUser({SearchValue},token)}>Search</Button>
+          </div>
+        )
+      }
+    handleActionDelete = async (data) => {
+        const {token} = this.props;
+        await this.props.deleteUser(data,token);
+        this.setState({isConfirmModal:!this.state.isConfirmModal})
+        this.props.listUser(null,token);
+    }
+    renderModalConfirmation = (data) => {
+        const {isConfirmModal,id} = this.state;
+        return (
+            <Modal
+            open={isConfirmModal}
+            style={{ width: "400px", height: "fit-content", margin: "auto" }}
+            >
+                <div className='modal-container'>
+                    <div className='modal-header'>Delete Your Account</div>
+                    <div className='modal-content'>
+                    <p>Are you sure want to delete your account</p>
+                    </div>
+                    <div className='modal-action'>
+                        <button className='button-action' onClick={() => this.setState({isConfirmModal:!isConfirmModal})}>No</button>
+                        <button className='button-action' onClick={() => this.handleActionDelete(id)}>Yes</button>
+                    </div>
+                </div>
+            </Modal>
         )
     }
     renderPagination = () => {
@@ -345,6 +371,7 @@ export default class User extends React.Component {
                 {this.renderTable()}
                 {this.renderPagination()}
                 {this.renderModal()}
+                {this.renderModalConfirmation()}
             </div>
 
         )
