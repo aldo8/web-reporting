@@ -5,7 +5,7 @@ import { login } from 'action/auth';
 
 const mapStateToProps = (state) => ({
     path:state.router.location.pathname,
-    user:state.auth
+    user:state.auth,
 })
 const mapDispatchToProps = (dispatch) => ({
     navigateTo:(path) => dispatch(push(path)),

@@ -18,6 +18,7 @@ import { MENU } from "constants/menu";
 import { getStorage, removeStorage } from "utils/storage.helper";
 import { USER_STORAGE } from "constants/storage";
 import { Person, Settings, Dashboard, LocationOn, Assessment, Store, PhoneAndroid,ExitToApp } from '@material-ui/icons'
+import { isEmpty } from "lodash";
 
 const drawerWidth = 170;
 const useStyles = makeStyles((theme) => ({
@@ -84,7 +85,6 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function ApplicationBar(props) {
-  
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -237,7 +237,9 @@ export default function ApplicationBar(props) {
     }
   };
   let appBar = null;
-  if (getStorage(USER_STORAGE)) {
+  if (!isEmpty(props.user)) {
+    getStorage(USER_STORAGE)
+    
     appBar = (
       <div className={classes.root}>
         <CssBaseline />
@@ -251,7 +253,7 @@ export default function ApplicationBar(props) {
           <Toolbar>
             
             <Typography variant="h6" noWrap>
-              {`${props.user.userName} as ${props.user.role === 'SA' ? 'Super Admin' : props.user.role === 'A' ? 'Admin' : 'User'}`}
+              {`Hallo ${props.user.userName}`}
             </Typography>
           </Toolbar>
         </AppBar>

@@ -11,7 +11,6 @@ export const listLocation = (data,token) => async (dispatch) => {
     try {
         let response
         response = await api(token).listLocation(data);
-        console.log('hasil',response)
         
         response = normalizeHelper(response.data,schemaListLocation);
         dispatch({

@@ -11,8 +11,8 @@ export default class Lokasi extends React.Component {
     this.state = {
       isDetail: false,
       isOpenModal: false,
-      isConfirmModal:null,
-      id:null,
+      isConfirmModal: null,
+      id: null,
       locationId: null,
       locationName: 'Pilih Lokasi',
       dataDetail: {},
@@ -23,9 +23,7 @@ export default class Lokasi extends React.Component {
     const { token } = this.props;
     this.props.listLocation('', token);
   }
-  componentDidUpdate = (prevProps, prevState) => {
 
-  }
   handleClickModal = async (data, key) => {
     const { token } = this.props
     const { isOpenModal } = this.state;
@@ -35,7 +33,7 @@ export default class Lokasi extends React.Component {
         isDetail: false
       });
     } else {
-      
+
       await this.props.getLocationDetail(data.id, token);
       this.setState({
         dataDetail: this.props.detailLocation.data,
@@ -48,8 +46,8 @@ export default class Lokasi extends React.Component {
   handleClickCreate = async (name) => {
     const { token } = this.props
     const { isOpenModal } = this.state;
-    await this.props.createLocation({ name }, token)
-    await this.props.listLocation(null, token)
+    this.props.createLocation({ name }, token)
+    this.props.listLocation(null, token)
     this.setState({ isOpenModal: !isOpenModal });
 
   }
@@ -108,11 +106,10 @@ export default class Lokasi extends React.Component {
       this.props.listLocation(null, token)
     }
 
-
   }
   renderDetail = () => {
     const { dataDetail } = this.state;
-    
+
     return (
       <>
         <div class="ui form" style={{ backgroundColor: 'white', padding: "10px" }} >
@@ -120,7 +117,7 @@ export default class Lokasi extends React.Component {
             <label>Name</label>
             <input type="text" name="first-name" placeholder="Name" value={dataDetail.name} onChange={(e) => this.setState({ dataDetail: { ...dataDetail, name: e.target.value } })} />
           </div>
-          <button class="ui button" onClick={() => this.handleClickUpdate(true, dataDetail)}>
+          <button class="ui button" disabled={dataDetail.name.length < 4} onClick={() => this.handleClickUpdate(true, dataDetail)}>
             Update
         </button>
         </div>
@@ -144,16 +141,15 @@ export default class Lokasi extends React.Component {
     );
   };
 
-  handleActions = async (key, data) => {
-    if (key === 'detail') {
-
-    } else {
-      this.setState({isConfirmModal:!this.state.isConfirmModal,id:data})
-    }
+  handleActions = async (data) => {
+    this.setState({
+      isConfirmModal: !this.state.isConfirmModal,
+      id: data
+    })
   }
   renderTable = () => {
     const { dataLocation } = this.props;
-    
+
     if (dataLocation.data && dataLocation.data.length < 1) {
       return <p style={{ textAlign: 'center' }}>No Data</p>
     }
@@ -171,7 +167,7 @@ export default class Lokasi extends React.Component {
               <Table.Row>
                 <Table.Cell>{data.name}</Table.Cell>
                 <Table.Cell>
-                  <Edit style={{ cursor: 'pointer',marginRight:'15px' }} onClick={() => this.handleClickModal(data)} />
+                  <Edit style={{ cursor: 'pointer', marginRight: '15px' }} onClick={() => this.handleClickModal(data)} />
                   <DeleteIcon style={{ cursor: 'pointer' }} onClick={() => this.handleActions(data.id)} />
                 </Table.Cell>
               </Table.Row>
@@ -182,33 +178,34 @@ export default class Lokasi extends React.Component {
     )
   }
   handleActionDelete = async (data) => {
-    const {token} = this.props;
-    await this.props.deleteLocation(data,token);
-    this.setState({isConfirmModal:!this.state.isConfirmModal})
-    this.props.listLocation(null,token);
-}
-renderModalConfirmation = (data) => {
-    
-    
-    const {isConfirmModal,id} = this.state;
+
+    const { token } = this.props;
+    await this.props.deleteLocation(data, token);
+    this.setState({ isConfirmModal: !this.state.isConfirmModal })
+    this.props.listLocation(null, token);
+  }
+  renderModalConfirmation = (data) => {
+
+
+    const { isConfirmModal, id } = this.state;
     return (
-        <Modal
+      <Modal
         open={isConfirmModal}
         style={{ width: "400px", height: "fit-content", margin: "auto" }}
-        >
-            <div className='modal-container'>
-                <div className='modal-header'>Delete Your Location</div>
-                <div className='modal-content'>
-                <p>Are you sure want to delete your Location</p>
-                </div>
-                <div className='modal-action'>
-                    <button className='button-action' onClick={() => this.setState({isConfirmModal:!isConfirmModal})}>No</button>
-                    <button className='button-action' onClick={() => this.handleActionDelete(id)}>Yes</button>
-                </div>
-            </div>
-        </Modal>
+      >
+        <div className='modal-container'>
+          <div className='modal-header'>Delete Your Location</div>
+          <div className='modal-content'>
+            <p>Are you sure want to delete your Location</p>
+          </div>
+          <div className='modal-action'>
+            <button className='button-action' onClick={() => this.setState({ isConfirmModal: !isConfirmModal })}>No</button>
+            <button className='button-action' onClick={() => this.handleActionDelete(id)}>Yes</button>
+          </div>
+        </div>
+      </Modal>
     )
-}
+  }
   renderPagination = () => {
     const { dataLocation } = this.props;
     const nextPage = dataLocation.meta?.hasNextPage;
@@ -309,7 +306,7 @@ renderModalConfirmation = (data) => {
     );
   }
   render() {
-    
+
     const { isLoading } = this.props;
     if (isLoading) {
       return <CircularProgress className='circular-progress' size={100} />

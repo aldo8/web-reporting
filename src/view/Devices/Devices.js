@@ -41,26 +41,51 @@ export default class Devices extends React.Component {
         } else {
             await this.props.getDeviceDetail(data.id, token);
             this.setState({
-                dataDetail:data,
+                dataDetail: data,
                 isOpenModal: true,
                 isDetail: true
             });
         }
     }
     handleClickUpdate = async (data) => {
-        const {token} = this.props
-        await this.props.updateDevice(data,token)
-        this.setState({isOpenModal:!this.state.isOpenModal})
-        this.props.getDevice(null,token)
-        
-    }
-    renderDetail = () => {
+        const { token } = this.props
+        await this.props.updateDevice(data, token)
+        this.setState({ isOpenModal: !this.state.isOpenModal })
+        this.props.getDevice(null, token)
 
+    }
+
+    renderDetail = () => {
         const { dataDetail } = this.state;
-        
+        let listOutlet = [];
+        this.props.dataOutlet.data && this.props.dataOutlet.data.map((data) => {
+            return listOutlet.push({
+                outletId: data.id,
+                name: data.name,
+                locationId: data.locationId
+            })
+        })
         return (
             <>
                 <div class="ui form" style={{ backgroundColor: 'white', padding: "10px" }} >
+                    <div class="field">
+                        <label>Outlet</label>
+                        <select class="ui dropdown" onChange={(e) => this.handleSample('detailOutlet', e)}>
+                            {listOutlet.map((data) => (
+                                <option value={data.outletId}>{data.name}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label>Notes</label>
+                        <input type="text" name="first-name" placeholder="Notes" value={dataDetail.notes}
+                            onChange={(e) => this.setState({
+                                dataDetail: {
+                                    ...dataDetail,
+                                    notes: e.target.value
+                                }
+                            })} />
+                    </div>
                     <div class="field">
                         <label>Phone Number</label>
                         <input type="text" name="first-name" maxLength='12' placeholder="Name" value={dataDetail.phoneNumber} onChange={(e) => this.setState({ dataDetail: { ...dataDetail, phoneNumber: e.target.value } })} />
@@ -74,17 +99,25 @@ export default class Devices extends React.Component {
         )
     }
     handleSample = (key, event) => {
-        const { createDevice } = this.state;
-        
-        const x = this.props.dataOutlet.data.filter((data) => data.id === event.target.value)
-        
-        this.setState({
-            createDevice: {
-                ...createDevice,
-                [key]: event.target.value,
-                locationId: x[0].locationId
-            }
-        })
+        const { createDevice,dataDetail } = this.state;
+        const tempLocation = this.props.dataOutlet.data.find((data) => data.id === event.target.value)
+        if (key === 'detailOutlet') {
+            this.setState({
+                dataDetail: {
+                    ...dataDetail,
+                    outletId: event.target.value,
+                    locationId: tempLocation.locationId
+                }
+            })
+        } else {
+            this.setState({
+                createDevice: {
+                    ...createDevice,
+                    [key]: event.target.value,
+                    locationId: tempLocation.locationId
+                }
+            })
+        }
     }
     handleClickCreate = async (data) => {
         const { token } = this.props;
@@ -104,7 +137,7 @@ export default class Devices extends React.Component {
             })
         })
 
-        
+
         return (
             <div class="ui form" style={{ backgroundColor: 'white', padding: "10px" }} >
                 <div class="field">
@@ -144,7 +177,7 @@ export default class Devices extends React.Component {
     }
     renderModal = () => {
         const { isDetail, isOpenModal } = this.state;
-        
+
         return (
             <Modal
                 open={isOpenModal}
@@ -162,9 +195,9 @@ export default class Devices extends React.Component {
     renderTable = () => {
         const tableHeader = ['No', 'Phone Number', 'Outlet Name', 'Rate', 'Location', 'Notes', 'Action'];
         const { dataListDevice } = this.props
-        
-        if(dataListDevice.data && dataListDevice.data.length < 1) {
-            return <p style={{textAlign:'center'}}>No Data</p>
+
+        if (dataListDevice.data && dataListDevice.data.length < 1) {
+            return <p style={{ textAlign: 'center' }}>No Data</p>
         }
         return (
             <Table basic>
@@ -325,7 +358,7 @@ export default class Devices extends React.Component {
         this.props.getDevice(null, token)
     }
     renderModalConfirmation = (data) => {
-        
+
         const { isConfirmModal, id } = this.state;
         return (
             <Modal
@@ -346,7 +379,7 @@ export default class Devices extends React.Component {
         )
     }
     render() {
-        
+
         if (this.props.isLoading) {
             return <CircularProgress className='circular-progress' size={100} />
         }

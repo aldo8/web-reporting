@@ -1,11 +1,13 @@
 import { CircularProgress } from '@material-ui/core';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import DropdownComponent from 'components/DropdownComponent/DropdownComponent';
-import { isNull } from 'lodash';
+import { isEmpty, isNull } from 'lodash';
 import React from 'react';
 import { Button, Table, } from 'semantic-ui-react'
 import { PDFExport } from '@progress/kendo-react-pdf';
 import DatePicker from "react-datepicker";
+import Calendar from 'react-calendar';
+
 import "react-datepicker/dist/react-datepicker.css";
 import moment from 'moment'
 
@@ -15,7 +17,9 @@ import moment from 'moment'
 export default class Report extends React.Component {
     constructor(props) {
         super()
+        this.setQuery = this.setQuery.bind(this)
         this.state = {
+            temp:{},
             currentFilter: {},
             displayFilter: {
                 locationId: 'Pilih Lokasi',
@@ -23,7 +27,7 @@ export default class Report extends React.Component {
             },
             SearchValue: null,
             PageNumber: null,
-            sorting: null,
+            Sorts: '-created',
             startDate: new Date(),
             endDate: new Date()
 
@@ -80,7 +84,7 @@ export default class Report extends React.Component {
     }
     componentDidMount = () => {
         const { token } = this.props;
-        this.props.getListTransaction({ Sorts: `-created` }, token)
+        // this.props.getListTransaction({ Sorts: `-created` }, token)
         this.props.getListLocation(null, token)
         this.props.getListOutlet(null, token)
     }
@@ -117,9 +121,9 @@ export default class Report extends React.Component {
         });
         return temp;
     }
+    
     setQuery = (key) => {
-        
-        const { currentFilter, SearchValue, PageNumber, sorting, startDate, endDate } = this.state;
+        const { currentFilter, SearchValue, PageNumber, Sorts, startDate, endDate } = this.state;
         if (key === 'date') {
             let start = moment(startDate).format('YYYY-MM-DD')
             let end = moment(endDate).format('YYYY-MM-DD')
@@ -131,22 +135,29 @@ export default class Report extends React.Component {
                 }
             })
         }
-        let queryTemp = {}
+        
+        this.queryTemp = {}
         const getFilter = this.setFilter(Object.keys(currentFilter))
         if (getFilter) {
-            queryTemp.Filters = getFilter;
+            this.queryTemp.Filters = getFilter;
         }
         if (!isNull(SearchValue)) {
-            queryTemp.SearchValue = SearchValue
+            this.queryTemp.SearchValue = SearchValue
         }
         if (!isNull(PageNumber)) {
 
         }
-        if (!isNull(sorting)) {
-
+        if (!isNull(Sorts)) {
+            this.queryTemp.Sorts = Sorts
         }
-        return this.queryTemp = queryTemp
+        
+        return this.setState({
+            temp:this.queryTemp
+        })
+        
+        
     }
+    
     handleChangeDate = value => {
         this.setState({
             startDate: value
@@ -155,12 +166,14 @@ export default class Report extends React.Component {
     handelChangeDate2 = value => {
         this.setState({ endDate: value }, () => this.setQuery('date'))
     }
-    handleFilterDate = () => {
-        
+    handleFilterDate = () => {  
+        if(isEmpty(this.state.currentFilter.locationId)){
+            return alert("Please choose location")
+        }else {
+        this.setQuery()
         const { token } = this.props;
-        
-
-        this.props.getListTransaction({ ...this.queryTemp }, token)
+        this.props.getListTransaction(this.state.temp , token)
+    }
     }
     handleSearch = (key, value) => {
         const { currentFilter } = this.state;
@@ -196,12 +209,12 @@ export default class Report extends React.Component {
                     </div>
                     <div className='dropdowns-container'>
                         <div style={{ marginTop: '25px' }}>
-                            Date Start <DatePicker selected={this.state.startDate} onChange={this.handleChangeDate} />
+                            Date Start <DatePicker selected={this.state.startDate} onChange={this.handleChangeDate.bind(this)} />
                         </div>
                     </div>
                     <div className='dropdowns-container'>
                         <div style={{ marginTop: '25px' }}>
-                            Date End <DatePicker selected={this.state.endDate} onChange={this.handelChangeDate2} />
+                            Date End <DatePicker selected={this.state.endDate} onChange={this.handelChangeDate2.bind(this)} />
                         </div>
                     </div>
                     <div className='dropdowns-container'>
@@ -337,7 +350,7 @@ export default class Report extends React.Component {
         const summaryCounterIn = this.RoundHalfDown(sumCounterIn - (sumCounterIn * discount / 100))
         const summaryCounterOut = this.RoundHalfDown(sumCounterOut - (sumCounterOut * discount / 100))
         const summaryTotal = this.RoundHalfDown(sumTotal - (sumTotal * discount / 100))
-        if(listTransaction.data && listTransaction.data.length === 0){
+        if(listTransaction.data && listTransaction.data.length === 0 || Object.entries(listTransaction).length === 0){
             return <p style={{textAlign:'center'}}>No Data</p>
         }
         return (

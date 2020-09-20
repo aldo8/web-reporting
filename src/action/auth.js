@@ -14,7 +14,7 @@ export const login = (data,token) => async (dispatch) => {
         let response
         response = await api(token).login(data);
         response = normalizeHelper(response.data,schemaAuth);
-        console.log('data payload:',response.data)
+        
         setStorage(USER_STORAGE,response.data)
         dispatch({
             type:`${LOGIN}${SUCCESS_TYPE}`,

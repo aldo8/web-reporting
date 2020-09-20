@@ -246,9 +246,9 @@ export default class User extends React.Component {
             style={{ width: "400px", height: "fit-content", margin: "auto" }}
             >
                 <div className='modal-container'>
-                    <div className='modal-header'>Delete Your Account</div>
+                    <div className='modal-header'>Delete User</div>
                     <div className='modal-content'>
-                    <p>Are you sure want to delete your account</p>
+                    <p>Are you sure want to delete this user</p>
                     </div>
                     <div className='modal-action'>
                         <button className='button-action' onClick={() => this.setState({isConfirmModal:!isConfirmModal})}>No</button>

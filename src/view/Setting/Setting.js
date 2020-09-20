@@ -98,7 +98,7 @@ export default class Setting extends React.Component {
           <Table.Body>
             { isDetail.map((data) => (
               <Table.Row>
-                <Table.Cell ><Input id={data.id} value={data.name} onChange={this.handleChange}/></Table.Cell>
+                <Table.Cell >{data.name}</Table.Cell>
                 <Table.Cell ><Input id={data.id} value={data.value} onChange={this.handleChangeValue}/></Table.Cell>
               </Table.Row>
             ))}
