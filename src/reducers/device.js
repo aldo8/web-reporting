@@ -17,6 +17,7 @@ export const detailDevice = (state ={},action) => {
     const {payload,type} = action
     switch (type) {
         case `${DETAIL_DEVICES}${SUCCESS_TYPE}`:
+            console.log('detail devices',payload)
             return {...state,data:payload.response}
         default:
             return state;

@@ -2,7 +2,7 @@ import { CircularProgress, Modal } from '@material-ui/core';
 import React from 'react';
 import DeleteIcon from '@material-ui/icons/Delete';
 import "semantic-ui-css/semantic.min.css";
-import { Button, Input, Table } from 'semantic-ui-react';
+import { Checkbox,Button, Input, Table } from 'semantic-ui-react';
 import { KeyboardArrowLeft, KeyboardArrowRight, Edit } from '@material-ui/icons';
 
 export default class Lokasi extends React.Component {
@@ -120,6 +120,7 @@ export default class Lokasi extends React.Component {
           <button class="ui button" disabled={dataDetail.name.length < 4} onClick={() => this.handleClickUpdate(true, dataDetail)}>
             Update
         </button>
+        <Checkbox label='isActive' style={{marginLeft:'10px'}} checked={dataDetail.isActive} onClick={e => this.setState({dataDetail:{...dataDetail,isActive:!dataDetail.isActive}})}/>
         </div>
 
       </>

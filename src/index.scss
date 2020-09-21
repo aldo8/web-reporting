@@ -161,6 +161,10 @@ display: grid;
   }
 }
 
+.error-text{
+  color: red;
+  font-size: small;
+}
 @media (min-width:600px) and (max-width:1025px) {
   .container {
     padding-left: 30vw;

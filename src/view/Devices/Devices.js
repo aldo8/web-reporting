@@ -41,7 +41,7 @@ export default class Devices extends React.Component {
         } else {
             await this.props.getDeviceDetail(data.id, token);
             this.setState({
-                dataDetail: data,
+                dataDetail: this.props.detailDevice?.data,
                 isOpenModal: true,
                 isDetail: true
             });
@@ -54,9 +54,18 @@ export default class Devices extends React.Component {
         this.props.getDevice(null, token)
 
     }
-
+    
+    changeValueId = (id) => {
+    const { dataLocation,dataListDevice } = this.props;
+    console.log('Id',id)
+    
+    
+    const tempOutlet = this.props.dataListDevice.data && this.props.dataListDevice.data.find((data) => data.outlet.id === id)
+    return tempOutlet?.outlet?.name
+    }
     renderDetail = () => {
         const { dataDetail } = this.state;
+        console.log('KL',dataDetail)
         let listOutlet = [];
         this.props.dataOutlet.data && this.props.dataOutlet.data.map((data) => {
             return listOutlet.push({
@@ -70,9 +79,9 @@ export default class Devices extends React.Component {
                 <div class="ui form" style={{ backgroundColor: 'white', padding: "10px" }} >
                     <div class="field">
                         <label>Outlet</label>
-                        <select class="ui dropdown" onChange={(e) => this.handleSample('detailOutlet', e)}>
+                        <select class="ui dropdown" value={this.changeValueId(dataDetail.outletId)}  onChange={(e) => this.handleSample('detailOutlet', e)}>
                             {listOutlet.map((data) => (
-                                <option value={data.outletId}>{data.name}</option>
+                                <option value={listOutlet.outletId} selected={data.outletId}>{data.name}</option>
                             ))}
                         </select>
                     </div>

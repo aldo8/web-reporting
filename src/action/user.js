@@ -33,11 +33,12 @@ export const createUser = (data,token) => async  (dispatch) => {
     try {
         dispatch({
             type:`${CREATE_USER}${SUCCESS_TYPE}`,
-            payload:{response}
+            payload:{data:true}
         })
     } catch (error) {
         dispatch({
-            type:`${CREATE_USER}${FAILURE_TYPE}`
+            type:`${CREATE_USER}${FAILURE_TYPE}`,
+            payload:{data:false}
         })
     }
 }

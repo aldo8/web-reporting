@@ -11,6 +11,8 @@ const mapStateToProps = (state) => ({
     dataListUser:state.user.listUser.data,
     detailUser:state.user.detailUser.data,
     updateResponse:state.user.updateUser.data,
+    userCreated:state.user.createUser.response,
+    userDeleted:state.user.deleteUser.response,
     token:state.auth.token
 })
 const mapDispatchToProps = (dispatch) => ({

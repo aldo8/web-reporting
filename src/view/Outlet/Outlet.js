@@ -3,7 +3,7 @@ import "semantic-ui-css/semantic.min.css";
 import { CircularProgress, Modal } from "@material-ui/core";
 import DeleteIcon from '@material-ui/icons/Delete';
 import Edit from '@material-ui/icons/Edit'
-import { Input, Table,Button } from "semantic-ui-react";
+import { Checkbox,Input, Table,Button } from "semantic-ui-react";
 import moment from 'moment';
 import DropdownComponent from "components/DropdownComponent/DropdownComponent";
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
@@ -34,8 +34,9 @@ export default class Outlet extends React.Component {
     this.props.listLocation("", token);
   };
 
-  onPagination = () => {
-
+  onPagination = (key,pageNumber) => {
+    const {token} = this.props;
+    this.props.listOutlet({ PageNumber: pageNumber }, token)
   }
   handleClickModal = async (seeDetail, data) => {
     const { token } = this.props;
@@ -128,7 +129,7 @@ export default class Outlet extends React.Component {
         </div>
         <div class="field">
           <label>Location</label>
-          {}
+          
           <DropdownComponent data={Location} selected={locationName} onSelectAction={(data) => this.handleChoose(data)} />
         </div>
         <button disabled={createOutlet.locationId === null} class="ui button" onClick={() => this.handleClick(createOutlet, 'create')}>
@@ -157,6 +158,19 @@ export default class Outlet extends React.Component {
       })
     }
   }
+  changeValueId = (id) => {
+    const { dataLocation } = this.props;
+    console.log('Id',id)
+    
+    
+    const tempOutlet = this.props.dataOutlet.data && this.props.dataOutlet.data.find((data) => data.id === id)
+    const x = dataLocation.data && dataLocation.data.find((data) => data.id === tempOutlet?.locationId)
+    // console.log('dataLocation',x)
+    // const tempLocation = dataLocation.data && dataLocation.data.find((data) => data.locationId === tempOutlet.id)
+    console.log('Result',x)
+    return x?.name
+    // return console.log('tempLocation',tempLocation)
+  }
   renderDetailOutlet = () => {
     const { dataDetailOutlet, locationName } = this.state;
     const { dataLocation } = this.props;
@@ -164,6 +178,7 @@ export default class Outlet extends React.Component {
     dataLocation.data && dataLocation.data.map((data) => {
       return Location.push({ id: data.id, name: data.name })
     })
+    console.log('XYZ',dataDetailOutlet)
     return (
       <div class="ui form" style={{ backgroundColor: 'white', padding: "10px" }} >
         <div class="field">
@@ -176,11 +191,16 @@ export default class Outlet extends React.Component {
         </div>
         <div class="field">
           <label>Location</label>
-          <DropdownComponent data={Location} selected={locationName} onSelectAction={(data) => this.handleChangeDataDetail('location', data)} />
+          <select class="ui dropdown" value={this.changeValueId(dataDetailOutlet.id)} onChange={(e) => this.setState({ dataDetailOutlet: { ...dataDetailOutlet, locationId: e.target.value } })}>
+              {Location.map((data) => (
+                  <option value={Location.id} selected={data.id}> {data.name}</option>
+              ))}
+          </select>
         </div>
         <button disabled={dataDetailOutlet.locationId === null} class="ui button" onClick={() => this.handleClick(dataDetailOutlet, 'update')}>
           Update
         </button>
+        <Checkbox label='isActive' style={{marginLeft:'10px'}} checked={dataDetailOutlet.isActive} onClick={e => this.setState({dataDetailOutlet:{...dataDetailOutlet,isActive:!dataDetailOutlet.isActive}})}/>
       </div>
     )
   }

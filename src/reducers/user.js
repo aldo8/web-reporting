@@ -1,4 +1,4 @@
-import { SUCCESS_TYPE, USER, DETAIL_USER, UPDATE_USER, DELETE_USER } from "action/actionTypes";
+import { SUCCESS_TYPE, USER, DETAIL_USER, UPDATE_USER, DELETE_USER, CREATE_USER, FAILURE_TYPE } from "action/actionTypes";
 import { combineReducers } from "redux";
 
 const initialStateUser = {
@@ -31,11 +31,26 @@ export const updateUser = (state ={},action) => {
             return state;
     }
 }
-export const deleteUser = (state={},action) => {
+const initialStateDelete = {
+    response:false
+}
+export const deleteUser = (state={...initialStateDelete},action) => {
     const {payload,type} = action
     switch (type) {
         case `${DELETE_USER}${SUCCESS_TYPE}`:
-            return {...state,...payload.response}
+            return {...state,response:true}
+        default:
+            return state;
+    }
+}
+
+export const createUser = (state={response:false},action) => {
+    const {payload,type} = action;
+    switch (type) {
+        case `${CREATE_USER}${SUCCESS_TYPE}`:
+            return {...state,response:true}
+        case `${CREATE_USER}${FAILURE_TYPE}`:
+            return {...state,response:false}
         default:
             return state;
     }
@@ -44,6 +59,7 @@ const userReducer = combineReducers({
     listUser,
     detailUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    createUser
 })
 export {userReducer}
