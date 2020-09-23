@@ -29,15 +29,16 @@ export const createOutlet = (data,token) => async  (dispatch) => {
     dispatch({
         type:`${CREATE_OUTLET}${REQUEST_TYPE}`
     })
-    const response = await api(data).createOutlet(data)
+    await api(token).createOutlet(data)
     try {
         dispatch({
             type:`${CREATE_OUTLET}${SUCCESS_TYPE}`,
-            payload:{response}
+            payload:{response:true}
         })
     } catch (error) {
         dispatch({
-            type:`${CREATE_OUTLET}${FAILURE_TYPE}`
+            type:`${CREATE_OUTLET}${FAILURE_TYPE}`,
+            payload:{response:false}
         })
     }
 }
@@ -64,14 +65,15 @@ export const updateOutlet = (data,token) => async (dispatch) => {
         type:`${UPDATE_OUTLET}${REQUEST_TYPE}`
     })
     try {
-        const response = await api(token).updateOutlet(data)
+        await api(token).updateOutlet(data)
         dispatch({
             type:`${UPDATE_OUTLET}${SUCCESS_TYPE}`,
-            payload:{response}
+            payload:{response:true}
         })
     } catch (error) {
         dispatch({
-            type:`${UPDATE_OUTLET}${FAILURE_TYPE}`
+            type:`${UPDATE_OUTLET}${FAILURE_TYPE}`,
+            payload:{response:false}
         })
     }
 }
@@ -80,14 +82,15 @@ export const deleteOutlet = (data,token) => async (dispatch) => {
         type:`${DELETE_OUTLET}${REQUEST_TYPE}`
     })
     try {
-        const response = await api(token).deleteOutlet(data)
+        await api(token).deleteOutlet(data)
         dispatch({
             type:`${DELETE_OUTLET}${SUCCESS_TYPE}`,
-            payload:{response}
+            payload:{response:true}
         })
     } catch (error) {
         dispatch({
-            type:`${DELETE_OUTLET}${FAILURE_TYPE}`
+            type:`${DELETE_OUTLET}${FAILURE_TYPE}`,
+            payload:{response:false}
         })
     }
 }

@@ -6,7 +6,6 @@ import { Checkbox, Input, Button, Table } from 'semantic-ui-react';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { isEmpty } from 'lodash';
-import { Alert } from '@material-ui/lab';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -35,8 +34,8 @@ export default class User extends React.Component {
         listUser(null, token);
     }
 
-    notifyCreate = () => {
-        toast.success('User Successfuly Created!', {
+    notifyCreate = (message) => {
+        toast.success(`${message}`, {
             position: "top-right",
             autoClose: 2000,
             hideProgressBar: false,
@@ -49,6 +48,18 @@ export default class User extends React.Component {
 
     notifyDelete = () => {
         toast.success('User Successfuly Deleted!', {
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            });
+    }
+
+    notifyError = (message) => {
+        toast.error(`${message}!`, {
             position: "top-right",
             autoClose: 2000,
             hideProgressBar: false,
@@ -96,6 +107,9 @@ export default class User extends React.Component {
         await updateUser(data, token)
         this.setState({ isOpenModal: !isOpenModal })
         this.props.listUser(null, token);
+        if(this.props.updateResponse){
+            this.notifyCreate('User successfully updated!')
+        }
 
     }
     handleCreateUser = (data) => {
@@ -139,12 +153,14 @@ export default class User extends React.Component {
     handleClickCreate = async (data) => {
         const { isOpenModal } = this.state;
         const { token } = this.props;
-        await this.props.createUser(data, token)
         this.setState({ isOpenModal: !isOpenModal })
+        await this.props.createUser(data, token)
         this.props.listUser(null, token)
-        if (this.props.userCreated) {
-            return this.notifyCreate()
+        if (this.props.userCreated.response) {
+            return this.notifyCreate('User successfuly created!')
 
+        }else{
+            return this.notifyError(`Cannot create user already exist!`)
         }
 
     }
@@ -442,14 +458,12 @@ export default class User extends React.Component {
 
     }
     render() {
+        console.log('HASIL',this.props)
         const { isLoading } = this.state;
-        if (isLoading) {
-            return <CircularProgress className='circular-progress' size={100} />
-        }
         return (
             <div className='container'>
                 
-                
+                {isLoading && <CircularProgress className='circular-progress' size={100} /> }        
                 <button class="positive ui button" onClick={() => this.handleClickModal(null, 'create')}>Create User</button>
                 {this.renderFilter()}
                 {this.renderTable()}

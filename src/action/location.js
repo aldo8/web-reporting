@@ -30,15 +30,16 @@ export const createLocation = (data,token) => async  (dispatch) => {
     dispatch({
         type:`${CREATE_LOCATION}${REQUEST_TYPE}`
     })
-    const response = await api(data).createLocation(data)
+    await api(data).createLocation(data)
     try {
         dispatch({
             type:`${CREATE_LOCATION}${SUCCESS_TYPE}`,
-            payload:{response}
+            payload:{response:true}
         })
     } catch (error) {
         dispatch({
-            type:`${CREATE_LOCATION}${FAILURE_TYPE}`
+            type:`${CREATE_LOCATION}${FAILURE_TYPE}`,
+            payload:{response:false}
         })
     }
 }
@@ -65,14 +66,15 @@ export const updateLocation = (data,token) => async (dispatch) => {
         type:`${UPDATE_LOCATION}${REQUEST_TYPE}`
     })
     try {
-        const response = await api(token).updateLocation(data)
+        await api(token).updateLocation(data)
         dispatch({
             type:`${UPDATE_LOCATION}${SUCCESS_TYPE}`,
-            payload:{response}
+            payload:{response:true}
         })
     } catch (error) {
         dispatch({
-            type:`${UPDATE_LOCATION}${FAILURE_TYPE}`
+            type:`${UPDATE_LOCATION}${FAILURE_TYPE}`,
+            payload:{response:false}
         })
     }
 }
@@ -88,7 +90,8 @@ export const deleteLocation = (data,token) => async (dispatch) => {
         })
     } catch (error) {
         dispatch({
-            type:`${DELETE_LOCATION}${FAILURE_TYPE}`
+            type:`${DELETE_LOCATION}${FAILURE_TYPE}`,
+            payload:{response:false}
         })
     }
 }

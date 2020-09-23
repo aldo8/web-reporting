@@ -85,6 +85,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function ApplicationBar(props) {
+  console.log('APP BAR',props)
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -229,8 +230,8 @@ export default function ApplicationBar(props) {
         props.navigateTo(MENU.REPORT);
         break;
       case 'EXIT':
+        props.navigateTo(MENU.LOGIN);
         removeStorage(USER_STORAGE);
-        props.navigateTo(MENU.LOGIN)
         break;
       default:
         break;

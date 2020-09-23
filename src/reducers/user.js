@@ -22,11 +22,13 @@ export const detailUser = (state ={},action) => {
             return state;
     }
 }
-export const updateUser = (state ={},action) => {
+export const updateUser = (state ={response:false},action) => {
     const {payload,type} = action
     switch (type) {
         case `${UPDATE_USER}${SUCCESS_TYPE}`:
-            return {...state,...payload.response}
+            return {...state,response:true}
+        case `${UPDATE_USER}${SUCCESS_TYPE}`:
+            return {...state,response:false}
         default:
             return state;
     }
@@ -43,14 +45,17 @@ export const deleteUser = (state={...initialStateDelete},action) => {
             return state;
     }
 }
-
-export const createUser = (state={response:false},action) => {
+const initialCreate = {
+    response:false,
+    message:null
+}
+export const createUser = (state={...initialCreate},action) => {
     const {payload,type} = action;
     switch (type) {
         case `${CREATE_USER}${SUCCESS_TYPE}`:
             return {...state,response:true}
         case `${CREATE_USER}${FAILURE_TYPE}`:
-            return {...state,response:false}
+            return {...state,message:payload.message}
         default:
             return state;
     }

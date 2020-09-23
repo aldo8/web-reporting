@@ -30,15 +30,17 @@ export const createUser = (data,token) => async  (dispatch) => {
         type:`${CREATE_USER}${REQUEST_TYPE}`
     })
     const response = await api(data).createUser(data)
+    console.log('error Create',response)
     try {
         dispatch({
             type:`${CREATE_USER}${SUCCESS_TYPE}`,
             payload:{data:true}
         })
     } catch (error) {
+        
         dispatch({
             type:`${CREATE_USER}${FAILURE_TYPE}`,
-            payload:{data:false}
+            payload:{message:error}
         })
     }
 }
@@ -68,11 +70,12 @@ export const updateUser = (data,token) => async (dispatch) => {
         const response = await api(token).updateUser(data)
         dispatch({
             type:`${UPDATE_USER}${SUCCESS_TYPE}`,
-            payload:{response}
+            payload:{response:true}
         })
     } catch (error) {
         dispatch({
-            type:`${UPDATE_USER}${FAILURE_TYPE}`
+            type:`${UPDATE_USER}${FAILURE_TYPE}`,
+            payload:{response:false}
         })
     }
 }

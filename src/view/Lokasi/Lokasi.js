@@ -2,8 +2,10 @@ import { CircularProgress, Modal } from '@material-ui/core';
 import React from 'react';
 import DeleteIcon from '@material-ui/icons/Delete';
 import "semantic-ui-css/semantic.min.css";
-import { Checkbox,Button, Input, Table } from 'semantic-ui-react';
+import { Checkbox, Button, Input, Table } from 'semantic-ui-react';
 import { KeyboardArrowLeft, KeyboardArrowRight, Edit } from '@material-ui/icons';
+import { toast } from 'react-toastify';
+import moment from 'moment'
 
 export default class Lokasi extends React.Component {
   constructor(props) {
@@ -36,21 +38,34 @@ export default class Lokasi extends React.Component {
 
       await this.props.getLocationDetail(data.id, token);
       this.setState({
-        dataDetail: this.props.detailLocation.data,
+        dataDetail: this.props.detailLocation?.data,
         isOpenModal: true,
         isDetail: true
       });
     }
 
   };
-  handleClickCreate = async (name) => {
-    const { token } = this.props
-    const { isOpenModal } = this.state;
-    this.props.createLocation({ name }, token)
-    this.props.listLocation(null, token)
-    this.setState({ isOpenModal: !isOpenModal });
-
+  notifySuccess = (message) => {
+    toast.success(`${message}`, {
+      position: "top-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
   }
+
+  handleClickCreate = async (name) => {
+    const { token, createLocationResponse } = this.props
+    const { isOpenModal } = this.state;
+    this.setState({ isOpenModal: !isOpenModal });
+    await this.props.createLocation({ name }, token)
+    this.props.listLocation(null, token)
+    { this.props.createLocationResponse && this.notifySuccess('Location successfuly created!') }
+  }
+
   handleFilter = (event) => {
     this.setState({
       SearchValue: event.target.value
@@ -93,20 +108,15 @@ export default class Lokasi extends React.Component {
       </div>
     )
   }
-  handleClickUpdate = async (isUpdate, data) => {
+  handleClickUpdate = async (data) => {
     const { token } = this.props
     const { isOpenModal } = this.state
-    if (isUpdate) {
-      await this.props.updateLocation(data, token)
-      this.setState({ isOpenModal: !isOpenModal })
-      this.props.listLocation(null, token)
-    } else {
-      await this.props.deleteLocation(data.id, token)
-      this.setState({ isOpenModal: !isOpenModal })
-      this.props.listLocation(null, token)
-    }
-
+    this.setState({ isOpenModal: !isOpenModal })
+    await this.props.updateLocation(data, token)
+    this.props.listLocation(null, token)
+    { this.props.updateLocatoinResponse && this.notifySuccess('Location successfuly updated!') }
   }
+
   renderDetail = () => {
     const { dataDetail } = this.state;
 
@@ -115,12 +125,13 @@ export default class Lokasi extends React.Component {
         <div class="ui form" style={{ backgroundColor: 'white', padding: "10px" }} >
           <div class="field">
             <label>Name</label>
-            <input type="text" name="first-name" placeholder="Name" value={dataDetail.name} onChange={(e) => this.setState({ dataDetail: { ...dataDetail, name: e.target.value } })} />
+            <input type="text" name="first-name" placeholder="Name" value={dataDetail?.name} onChange={(e) => this.setState({ dataDetail: { ...dataDetail, name: e.target.value } })} />
+            {dataDetail.name.lengh < 3}
           </div>
-          <button class="ui button" disabled={dataDetail.name.length < 4} onClick={() => this.handleClickUpdate(true, dataDetail)}>
+          <button class="ui button" disabled={dataDetail.name.length < 4} onClick={() => this.handleClickUpdate(dataDetail)}>
             Update
         </button>
-        <Checkbox label='isActive' style={{marginLeft:'10px'}} checked={dataDetail.isActive} onClick={e => this.setState({dataDetail:{...dataDetail,isActive:!dataDetail.isActive}})}/>
+          <Checkbox label='isActive' style={{ marginLeft: '10px' }} checked={dataDetail.isActive} onClick={e => this.setState({ dataDetail: { ...dataDetail, isActive: !dataDetail.isActive } })} />
         </div>
 
       </>
@@ -143,6 +154,7 @@ export default class Lokasi extends React.Component {
   };
 
   handleActions = async (data) => {
+    console.log('Entity',data)
     this.setState({
       isConfirmModal: !this.state.isConfirmModal,
       id: data
@@ -159,6 +171,7 @@ export default class Lokasi extends React.Component {
         <Table basic>
           <Table.Header>
             <Table.Row>
+              <Table.HeaderCell>Updated</Table.HeaderCell>
               <Table.HeaderCell>Nama Lokasi</Table.HeaderCell>
               <Table.HeaderCell>Action</Table.HeaderCell>
             </Table.Row>
@@ -166,6 +179,7 @@ export default class Lokasi extends React.Component {
           <Table.Body>
             {dataLocation.data && dataLocation.data.map((data) => (
               <Table.Row>
+                <Table.Cell >{moment(data.updated).format("DD-MM-YYYY")}</Table.Cell>
                 <Table.Cell>{data.name}</Table.Cell>
                 <Table.Cell>
                   <Edit style={{ cursor: 'pointer', marginRight: '15px' }} onClick={() => this.handleClickModal(data)} />
@@ -179,11 +193,11 @@ export default class Lokasi extends React.Component {
     )
   }
   handleActionDelete = async (data) => {
-
     const { token } = this.props;
-    await this.props.deleteLocation(data, token);
     this.setState({ isConfirmModal: !this.state.isConfirmModal })
+    await this.props.deleteLocation(data, token);
     this.props.listLocation(null, token);
+    { this.props.deleteLocationResponse && this.notifySuccess('Location successfuly deleted!') }
   }
   renderModalConfirmation = (data) => {
 
@@ -307,14 +321,12 @@ export default class Lokasi extends React.Component {
     );
   }
   render() {
-
+    console.log('Lokasi', this.props)
     const { isLoading } = this.props;
-    if (isLoading) {
-      return <CircularProgress className='circular-progress' size={100} />
-    }
     return (
       <div className='container'>
         <button class="positive ui button" onClick={() => this.handleClickModal(null, 'create')}>Create Lokasi</button>
+        {isLoading && <CircularProgress className='circular-progress' size={100} />}
         {this.renderFilter()}
         {this.renderTable()}
         {this.renderPagination()}

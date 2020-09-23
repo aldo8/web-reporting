@@ -69,7 +69,7 @@ const validationSchema = Yup.object().shape({
   password: Yup.string()
 });
 export default function Login(props) {
-  
+  console.log('LOGIN X',props)
   const _handleSubmit = (value) => {    
     props.login(value);
   };

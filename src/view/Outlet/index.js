@@ -13,6 +13,9 @@ const mapStateToProps = (state) => ({
     dataOutlet:state.outlet.listOutlet.data,
     dataLocation:state.location.listLocation.data,
     detailOutlet:state.outlet.detailOutlet.data,
+    deleteOutletReponse:state.outlet.deleteOutlet.response,
+    updateOutletReponse:state.outlet.updateOutlet.response,
+    createOutletReponse:state.outlet.createOutlet.response
 })
 const mapDispatchToProps = (dispatch) => ({
     navigateTo:(path) => dispatch(push(path)),
