@@ -3,6 +3,7 @@ import React from 'react';
 import { Table, Input, Button } from 'semantic-ui-react';
 import { Edit, Delete } from '@material-ui/icons';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
+import { Formik } from 'formik';
 
 export default class Devices extends React.Component {
     constructor(props) {
@@ -66,45 +67,44 @@ export default class Devices extends React.Component {
     renderDetail = () => {
         const { dataDetail } = this.state;
         console.log('KL',dataDetail)
-        let listOutlet = [];
+        this.listOutlet = [];
         this.props.dataOutlet.data && this.props.dataOutlet.data.map((data) => {
-            return listOutlet.push({
+            return this.listOutlet.push({
                 outletId: data.id,
                 name: data.name,
                 locationId: data.locationId
             })
         })
         return (
-            <>
+            <Formik
+                initialValues={dataDetail}
+            >
+                {(props) => (
                 <div class="ui form" style={{ backgroundColor: 'white', padding: "10px" }} >
+                    {(console.log('Detail Devicess',props.values))}
                     <div class="field">
                         <label>Outlet</label>
-                        <select class="ui dropdown" value={this.changeValueId(dataDetail.outletId)}  onChange={(e) => this.handleSample('detailOutlet', e)}>
-                            {listOutlet.map((data) => (
-                                <option value={listOutlet.outletId} selected={data.outletId}>{data.name}</option>
+                        <select class="ui dropdown" value={this.changeValueId(props.values.outletId)}  onChange={(e) => this.handleChangeDetail(props,e)}>
+                            {this.listOutlet.map((data) => (
+                                <option value={data.outletId} selected={data.outletId}>{data.name}</option>
                             ))}
                         </select>
                     </div>
                     <div class="field">
                         <label>Notes</label>
-                        <input type="text" name="first-name" placeholder="Notes" value={dataDetail.notes}
-                            onChange={(e) => this.setState({
-                                dataDetail: {
-                                    ...dataDetail,
-                                    notes: e.target.value
-                                }
-                            })} />
+                        <input type="text" name="first-name" placeholder="Notes" value={props.values.notes}
+                            onChange={(e) => props.setFieldValue('notes',e.target.value)} />
                     </div>
                     <div class="field">
                         <label>Phone Number</label>
-                        <input type="text" name="first-name" maxLength='12' placeholder="Name" value={dataDetail.phoneNumber} onChange={(e) => this.setState({ dataDetail: { ...dataDetail, phoneNumber: e.target.value } })} />
+                        <input type="text" name="first-name" maxLength='12' placeholder="Name" value={props.values.phoneNumber} onChange={(e) => props.setFieldValue('phoneNumber',e.target.value)} />
                     </div>
-                    <button class="ui button" onClick={() => this.handleClickUpdate(dataDetail)}>
+                    <button class="ui button" onClick={() => this.handleClickUpdate(props.values)}>
                         Update
             </button>
                 </div>
-
-            </>
+                )}
+            </Formik>
         )
     }
     handleSample = (key, event) => {
@@ -127,6 +127,11 @@ export default class Devices extends React.Component {
                 }
             })
         }
+    }
+    handleChangeDetail = (props,event) => {
+        const tempOutlet = this.listOutlet.find((data) => data.outletId === event.target.value)
+        console.log('tempOutlet',tempOutlet)
+        return props.setFieldValue('outletId',tempOutlet.outletId)
     }
     handleClickCreate = async (data) => {
         const { token } = this.props;

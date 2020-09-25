@@ -33,12 +33,10 @@ export const schemaListOutlet = {
 
 export const schemaDetailOutlet = {
   data:[
-      "type",
       "id",
       "name",
       "rate",
-      "createdBy",
-      "created",
       "isActive",
+      "locationId"
   ]
 }

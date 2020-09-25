@@ -48,7 +48,13 @@ export default class Outlet extends React.Component {
       await this.props.getOutletDetail(data.id, token)
       this.setState({
         isOpenModal: !isOpenModal,
-        dataDetailOutlet: this.props.detailOutlet.data,
+        dataDetailOutlet:{
+          name:data.name,
+          rate:data.rate,
+          id:data.id,
+          locationId:data.locationId,
+          isActive:data.isActive
+        }, 
         isCreateOutlet: false
       });
     } else {
@@ -95,7 +101,8 @@ export default class Outlet extends React.Component {
     });
   }
   handleClick = async (data, key) => {
-    const { token} = this.props
+
+    const { token } = this.props
     const { isOpenModal } = this.state
     switch (key) {
       case 'update':
@@ -104,12 +111,12 @@ export default class Outlet extends React.Component {
         this.props.listOutlet(null, token)
         if (this.props.updateOutletReponse) {
           return this.notifySuccess('Outlet successfuly updated!')
-          
-        }else{
+
+        } else {
           console.log('Hai Outlet')
           return this.notifyFailed('Something went wrong!')
         }
-        
+
       case 'delete':
         this.setState({ isOpenModal: !isOpenModal })
         await this.props.deleteOutlet(data, token)
@@ -121,7 +128,7 @@ export default class Outlet extends React.Component {
         this.props.listOutlet(null, token)
         if (this.props.createOutletReponse) {
           this.notifySuccess('Outlet successfuly created!')
-          
+
         }
         break;
 
@@ -165,6 +172,8 @@ export default class Outlet extends React.Component {
 
 
     })
+
+
     dataLocation.data && dataLocation.data.map((data) => {
       return Location.push({ id: data.id, name: data.name })
     })
@@ -177,7 +186,7 @@ export default class Outlet extends React.Component {
           <div class="ui form" style={{ backgroundColor: 'white', padding: "10px" }} >
             {console.log('createOut', props)}
             <div class="field">
-              <label>Name</label>
+              <label>Name Outlet</label>
               <input type="text" name="first-name" placeholder="Name Outlet" value={props.values.name} onChange={(e) => props.setFieldValue('name', e.target.value)} />
               {props.errors.name ?
                 (<div className='error-text'>{props.errors.name}</div>) : null
@@ -210,69 +219,63 @@ export default class Outlet extends React.Component {
     )
   }
 
-  handleChangeDataDetail = (key, data) => {
+  handleChangeDataDetail = (props, event) => {
     const { dataDetailOutlet } = this.state;
-    if (key === 'location') {
-      this.setState({
-        dataDetailOutlet: {
-          ...dataDetailOutlet,
-          locationId: data.id
-        },
-        locationName: data.name
-      })
-    } else {
-      this.setState({
-        dataDetailOutlet: {
-          ...dataDetailOutlet,
-          [key]: data.target.value
-        }
-      })
-    }
+    const temp = this.Location.find((x) => x.id === event.target.value)
+    console.log('hasil balikan', temp)
+    console.log('list lokasi', temp)
+    return props.setFieldValue('locationId', temp.id)
   }
-  changeValueId = (id) => {
+  changeValueId = (id, props) => {
+    console.log('id dari detail', id)
     const { dataLocation } = this.props;
-    console.log('Id', id)
-
-
     const tempOutlet = this.props.dataOutlet.data && this.props.dataOutlet.data.find((data) => data.id === id)
     const x = dataLocation.data && dataLocation.data.find((data) => data.id === tempOutlet?.locationId)
-    // console.log('dataLocation',x)
-    // const tempLocation = dataLocation.data && dataLocation.data.find((data) => data.locationId === tempOutlet.id)
-    console.log('Result', x)
-    return x?.name
-    // return console.log('tempLocation',tempLocation)
+    console.log('TEMPTMP', tempOutlet)
+    console.log('hasil lokasi', x)
+    console.log('locationId', props)
+    return x?.id
   }
   renderDetailOutlet = () => {
     const { dataDetailOutlet, locationName } = this.state;
     const { dataLocation } = this.props;
-    const Location = [];
+    this.Location = [];
+
     dataLocation.data && dataLocation.data.map((data) => {
-      return Location.push({ id: data.id, name: data.name })
+      return this.Location.push({ locationId: data.id, name: data.name })
     })
-    console.log('XYZ', dataDetailOutlet)
+
     return (
-      <div class="ui form" style={{ backgroundColor: 'white', padding: "10px" }} >
-        <div class="field">
-          <label>Name</label>
-          <input type="text" name="first-name" placeholder="Name Outlet" value={dataDetailOutlet.name} onChange={e => this.handleChangeDataDetail('name', e)} />
-        </div>
-        <div class="field">
-          <label>Rate</label>
-          <input type="text" name="last-name" placeholder="Rate" value={dataDetailOutlet.rate} onChange={e => this.handleChangeDataDetail('rate', e)} />
-        </div>
-        <div class="field">
-          <label>Location</label>
-          <select class="ui dropdown" value={this.changeValueId(dataDetailOutlet.id)} onChange={(e) => this.setState({ dataDetailOutlet: { ...dataDetailOutlet, locationId: e.target.value } })}>
-            {Location.map((data) => (
-              <option value={Location.id} selected={data.id}> {data.name}</option>
-            ))}
-          </select>
-        </div>
-        <button disabled={dataDetailOutlet.locationId === null} class="ui button" onClick={() => this.handleClick(dataDetailOutlet, 'update')}>
-          Update
+      <Formik
+        initialValues={dataDetailOutlet}
+      >
+        {(props) => (
+          <div class="ui form" style={{ backgroundColor: 'white', padding: "10px" }} >
+            {console.log('data form', props)}
+            <div class="field">
+              <label>Name Outlet</label>
+              <input type="text" name="first-name" placeholder="Name Outlet" value={props.values.name} onChange={e => props.setFieldValue('name', e.target.value)} />
+            </div>
+            <div class="field">
+              <label>Rate</label>
+              <input type="text" name="last-name" placeholder="Rate" value={props.values.rate} onChange={e => props.setFieldValue('rate', e.target.value)} />
+            </div>
+            <div class="field">
+              <label>Location</label>
+              {console.log('Data Locaton', this.Location)}
+              <select class="ui dropdown" value={props.values.locationId} onChange={(e) => props.setFieldValue('locationId',e.target.value)}>
+                {this.Location.map((data) => (
+                  <option value={data.locationId} selected={data.locationId}> {data.name}</option>
+                ))}
+              </select>
+            </div>
+            <button disabled={props.values.locationId === null} class="ui button" onClick={() => this.handleClick(props.values, 'update')}>
+              Update
         </button>
-        <Checkbox label='isActive' style={{ marginLeft: '10px' }} checked={dataDetailOutlet.isActive} onClick={e => this.setState({ dataDetailOutlet: { ...dataDetailOutlet, isActive: !dataDetailOutlet.isActive } })} />
-      </div>
+            <Checkbox label='isActive' style={{ marginLeft: '10px' }} checked={props.values.isActive} onClick={e => props.setFieldValue('isActive', !props.values.isActive)} />
+          </div>
+        )}
+      </Formik>
     )
   }
   renderModal = () => {
@@ -508,8 +511,8 @@ export default class Outlet extends React.Component {
     )
   }
   render() {
-    console.log('ASD', this.props)
-    const { isLoading,updateOutletReponse } = this.props;
+    console.log('ASD', this.Location)
+    const { isLoading, updateOutletReponse } = this.props;
     return (
       <div className="container">
         <button class="positive ui button" onClick={() => this.handleClickModal(false)}>Create Outlet</button>
