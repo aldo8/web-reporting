@@ -1,9 +1,12 @@
 import { CircularProgress, Modal } from '@material-ui/core';
 import React from 'react';
-import { Table, Input, Button } from 'semantic-ui-react';
+import { Table, Input, Button, Checkbox } from 'semantic-ui-react';
 import { Edit, Delete } from '@material-ui/icons';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import { Formik } from 'formik';
+import * as Yup from 'yup';
+import { isEmpty } from 'lodash';
+import { toast } from 'react-toastify';
 
 export default class Devices extends React.Component {
     constructor(props) {
@@ -19,10 +22,10 @@ export default class Devices extends React.Component {
             dataDetail: {},
             createDevice: {
                 isActive: true,
-                notes: null,
-                phoneNumber: null,
-                locationId: null,
-                outletId: null
+                notes: '',
+                phoneNumber: '',
+                locationId: '',
+                outletId: ''
             }
         }
     }
@@ -32,6 +35,30 @@ export default class Devices extends React.Component {
         this.props.listOutlet(null, token);
         this.props.listLocation(null, token);
     }
+
+    notifySuccess = (message) => {
+        toast.success(`${message}`, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+      notifyFailed = (message) => {
+        toast.error(`${message}`, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+
     handleClickModal = async (data, key) => {
         const { token } = this.props
         if (key === 'create') {
@@ -42,7 +69,7 @@ export default class Devices extends React.Component {
         } else {
             await this.props.getDeviceDetail(data.id, token);
             this.setState({
-                dataDetail: this.props.detailDevice?.data,
+                dataDetail: data,
                 isOpenModal: true,
                 isDetail: true
             });
@@ -55,18 +82,22 @@ export default class Devices extends React.Component {
         this.props.getDevice(null, token)
 
     }
-    
+
     changeValueId = (id) => {
-    const { dataLocation,dataListDevice } = this.props;
-    console.log('Id',id)
-    
-    
-    const tempOutlet = this.props.dataListDevice.data && this.props.dataListDevice.data.find((data) => data.outlet.id === id)
-    return tempOutlet?.outlet?.name
+        const { dataLocation, dataListDevice } = this.props;
+        console.log('Id', id)
+
+
+        const tempOutlet = this.props.dataListDevice.data && this.props.dataListDevice.data.find((data) => data.outlet.id === id)
+        return tempOutlet?.outlet?.name
     }
     renderDetail = () => {
         const { dataDetail } = this.state;
-        console.log('KL',dataDetail)
+        console.log('KL', dataDetail)
+        let listLocation = []
+        this.props.dataLocation.data && this.props.dataLocation.data.map((data) => {
+            return listLocation.push({ locationId: data.id, name: data.name })
+        })
         this.listOutlet = [];
         this.props.dataOutlet.data && this.props.dataOutlet.data.map((data) => {
             return this.listOutlet.push({
@@ -75,73 +106,93 @@ export default class Devices extends React.Component {
                 locationId: data.locationId
             })
         })
+        const schemaDetailValidation =
+            Yup.object().shape({
+                phoneNumber: Yup.string()
+                    .min(12, 'Please fill phone number correctly!')
+                    .max(12, 'Please fill phone number correctly, 12 digit!')
+                    .required('Required'),
+
+                outletId: Yup.string()
+                    .required('Required'),
+
+                notes: Yup.string()
+                    .min(5, 'Too Short! minimum 5 character')
+                    .max(50, 'Too Long!')
+                    .required('Required'),
+            })
+
         return (
             <Formik
                 initialValues={dataDetail}
+                validationSchema={schemaDetailValidation}
             >
                 {(props) => (
-                <div class="ui form" style={{ backgroundColor: 'white', padding: "10px" }} >
-                    {(console.log('Detail Devicess',props.values))}
-                    <div class="field">
-                        <label>Outlet</label>
-                        <select class="ui dropdown" value={this.changeValueId(props.values.outletId)}  onChange={(e) => this.handleChangeDetail(props,e)}>
-                            {this.listOutlet.map((data) => (
-                                <option value={data.outletId} selected={data.outletId}>{data.name}</option>
-                            ))}
-                        </select>
+                    <div class="ui form" style={{ backgroundColor: 'white', padding: "10px" }} >
+                        {(console.log('Detail Devicess', props.values))}
+                        {/* <div class="field">
+                            <label>Location</label>
+                            <select class="ui dropdown" value={props.values.locationId} onChange={(e) => props.setFieldValue('locationId', e.target.value)}>
+                                {listLocation.map((data) => (
+                                    <option value={data.locationId} selected={data.locationId}>{data.name}</option>
+                                ))}
+                            </select>
+                            {props.errors.locationId ?
+                                (<div className='error-text'>{props.errors.outletId}</div>) : null
+                            }
+                        </div> */}
+                        <div class="field">
+                            <label>Outlet</label>
+                            <select class="ui dropdown" value={props.values.outletId} onChange={(e) => props.setFieldValue('outletId', e.target.value)}>
+                                {this.listOutlet.map((data) => (
+                                    <option value={data.outletId} selected={data.outletId}>{data.name}</option>
+                                ))}
+                            </select>
+                            {props.errors.outletId ?
+                                (<div className='error-text'>{props.errors.outletId}</div>) : null
+                            }
+                        </div>
+                        <div class="field">
+                            <label>Notes</label>
+                            <input type="text" placeholder="Notes" value={props.values.notes} onChange={(e) => props.setFieldValue('notes', e.target.value)} />
+                            {props.errors.notes ?
+                                (<div className='error-text'>{props.errors.notes}</div>) : null
+                            }
+                        </div>
+                        <div class="field">
+                            <label>Phone Number</label>
+                            <input type="number" maxLength='12' placeholder="Name" value={props.values.phoneNumber} onChange={(e) => props.setFieldValue('phoneNumber', e.target.value)} />
+                            {props.errors.phoneNumber ?
+                                (<div className='error-text'>{props.errors.phoneNumber}</div>) : null
+                            }
+                        </div>
+                        <button disabled={!isEmpty(props.errors)} class="ui button" onClick={() => this.handleClickUpdate(props.values)}>
+                            Update
+                        </button>
+                        <Checkbox label='isActive' style={{ marginLeft: '10px' }} checked={props.values.isActive} onClick={e => props.setFieldValue('isActive', !props.values.isActive)} />
                     </div>
-                    <div class="field">
-                        <label>Notes</label>
-                        <input type="text" name="first-name" placeholder="Notes" value={props.values.notes}
-                            onChange={(e) => props.setFieldValue('notes',e.target.value)} />
-                    </div>
-                    <div class="field">
-                        <label>Phone Number</label>
-                        <input type="text" name="first-name" maxLength='12' placeholder="Name" value={props.values.phoneNumber} onChange={(e) => props.setFieldValue('phoneNumber',e.target.value)} />
-                    </div>
-                    <button class="ui button" onClick={() => this.handleClickUpdate(props.values)}>
-                        Update
-            </button>
-                </div>
                 )}
             </Formik>
         )
     }
-    handleSample = (key, event) => {
-        const { createDevice,dataDetail } = this.state;
-        const tempLocation = this.props.dataOutlet.data.find((data) => data.id === event.target.value)
-        if (key === 'detailOutlet') {
-            this.setState({
-                dataDetail: {
-                    ...dataDetail,
-                    outletId: event.target.value,
-                    locationId: tempLocation.locationId
-                }
-            })
-        } else {
-            this.setState({
-                createDevice: {
-                    ...createDevice,
-                    [key]: event.target.value,
-                    locationId: tempLocation.locationId
-                }
-            })
-        }
-    }
-    handleChangeDetail = (props,event) => {
-        const tempOutlet = this.listOutlet.find((data) => data.outletId === event.target.value)
-        console.log('tempOutlet',tempOutlet)
-        return props.setFieldValue('outletId',tempOutlet.outletId)
-    }
+
     handleClickCreate = async (data) => {
         const { token } = this.props;
         const { isOpenModal } = this.state;
-        await this.props.createDevice(data, token)
         this.setState({ isOpenModal: !isOpenModal })
+        await this.props.createDevice(data, token)
+        this.props.getDevice(null,token)
+        if(this.props.createResponse){
+            return this.notifySuccess('Devices successfuly created!')
+        }else{
+            return this.notifyFailed('Devices unsuccessful created!')
+        }
+        
     }
     renderCreate = () => {
         const { createDevice } = this.state;
-        const { dataOutlet } = this.props;
+        const { dataOutlet,dataLocation } = this.props;
+        let listLocation = []
         let listOutlet = []
         dataOutlet.data && dataOutlet.data.map((data) => {
             return listOutlet.push({
@@ -151,42 +202,88 @@ export default class Devices extends React.Component {
             })
         })
 
+        dataLocation.data && dataLocation.data.filter((el) => el.isActive === true).map((data) => {
+            return listLocation.push({
+                name: data.name,
+                locationId: data.id
+            })
+        })
+
+        const createSchemaValidation =
+            Yup.object().shape({
+                phoneNumber: Yup.string()
+                    .min(12, 'Please fill phone number correctly, 12 digit!')
+                    .max(12, 'Please fill phone number correctly, 12 digit!')
+                    .required('Required'),
+
+                outletId: Yup.string()
+                    .required('Required'),
+                locationId: Yup.string()
+                    .required('Required'),
+                notes: Yup.string()
+                    .min(5, 'Too Short! minimum 5 character')
+                    .max(50, 'Too Long!')
+                    .required('Required'),
+            })
 
         return (
-            <div class="ui form" style={{ backgroundColor: 'white', padding: "10px" }} >
-                <div class="field">
-                    <label>Phone Number</label>
-                    <input type="tel" id="phone" maxLength='12' name="first-name" placeholder="Phone Number" value={createDevice.phoneNumber}
-                        onChange={(e) => this.setState({
-                            createDevice: {
-                                ...createDevice,
-                                phoneNumber: e.target.value
-                            }
-                        })} />
-                </div>
+            <Formik
+                validationSchema={createSchemaValidation}
+                initialValues={createDevice}
+            >
+                {(props) => (
 
-                <div class="field">
-                    <label>Outlet</label>
-                    <select class="ui dropdown" onChange={(e) => this.handleSample('outletId', e)}>
-                        {listOutlet.map((data) => (
-                            <option value={data.outletId}>{data.name}</option>
-                        ))}
-                    </select>
-                </div>
-                <div class="field">
-                    <label>Notes</label>
-                    <input type="text" name="first-name" placeholder="Notes" value={createDevice.notes}
-                        onChange={(e) => this.setState({
-                            createDevice: {
-                                ...createDevice,
-                                notes: e.target.value
+
+                    <div class="ui form" style={{ backgroundColor: 'white', padding: "10px" }} >
+                        <div class="field">
+                            <label>Phone Number</label>
+                            <input type="tel" id="phone" maxLength='12' placeholder="Phone Number" value={props.values.phoneNumber}
+                                onChange={(e) => props.setFieldValue('phoneNumber', e.target.value)} />
+                            {props.errors.phoneNumber ?
+                                (<div className='error-text'>{props.errors.phoneNumber}</div>) : null}
+                        </div>
+
+                        {console.log('list Lokasi', listLocation)}
+                        {console.log('list outlet', listOutlet)}
+                        {console.log('XYZ', props)}
+                        <div class="field">
+                            <label>Location</label>
+                            <select class="ui dropdown" onChange={(e) => props.setFieldValue('locationId',e.target.value)}>
+                                {listLocation.map((data) => (
+                                    <option value={data.locationId}>{data.name}</option>
+                                ))}
+                            </select>
+                            {props.errors.locationId ?
+                                (<div className='error-text'>{props.errors.locationId}</div>) : null
                             }
-                        })} />
-                </div>
-                <button class="ui button" onClick={() => this.handleClickCreate(createDevice)}>
-                    Create
-          </button>
-            </div>
+                        </div>
+
+                        <div class="field">
+                            <label>Outlet</label>
+                            <select disabled={isEmpty(props.values.locationId)} class="ui dropdown" onChange={(e) => props.setFieldValue('outletId', e.target.value)}>
+                                {props.values.locationId && listOutlet.filter((temp) => temp.locationId === props.values.locationId).map((data) => (
+                                    <option value={data.outletId}>{data.name}</option>
+                                ))}
+                            </select>
+                            {props.errors.outletId ?
+                                (<div className='error-text'>{props.errors.outletId}</div>) : null
+                            }
+                        </div>
+
+                        <div class="field">
+                            <label>Notes</label>
+                            <input type="text" placeholder="Notes" value={props.values.notes}
+                                onChange={(e) => props.setFieldValue('notes', e.target.value)} />
+                            {props.errors.notes ?
+                                (<div className='error-text'>{props.errors.notes}</div>) : null
+                            }
+                        </div>
+                        {props.values.phoneNumber && <button disabled={!isEmpty(props.errors)} class="ui button" onClick={() => this.handleClickCreate(props.values)}>
+                            Create
+                    </button>}
+                    </div>
+                )}
+            </Formik>
         )
     }
     renderModal = () => {

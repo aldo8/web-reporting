@@ -1,4 +1,4 @@
-import { SUCCESS_TYPE, GET_DEVICES, DETAIL_DEVICES, UPDATE_DEVICES, DELETE_DEVICES } from "action/actionTypes";
+import { SUCCESS_TYPE, GET_DEVICES, DETAIL_DEVICES, UPDATE_DEVICES, DELETE_DEVICES, CREATE_DEVICES, FAILURE_TYPE } from "action/actionTypes";
 import { combineReducers } from "redux";
 
 const initialStateDevice = {
@@ -41,10 +41,25 @@ export const deleteDevice = (state={},action) => {
             return state;
     }
 }
+const initialCreate = {
+    response:false
+}
+export const createDevice = (state={...initialCreate},action) => {
+    const {payload,type} = action
+    switch (type) {
+        case `${CREATE_DEVICES}${SUCCESS_TYPE}`:
+            return {...state,response:payload.response}
+        case `${CREATE_DEVICES}${FAILURE_TYPE}`:
+                return {...state,response:payload.response}
+        default:
+            return state;
+    }
+}
 const deviceReducer = combineReducers({
     listDevice,
     detailDevice,
     updateDevice,
-    deleteDevice
+    deleteDevice,
+    createDevice
 })
 export {deviceReducer}

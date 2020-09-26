@@ -29,15 +29,16 @@ export const createDevice = (data,token) => async  (dispatch) => {
     dispatch({
         type:`${CREATE_DEVICES}${REQUEST_TYPE}`
     })
-    const response = await api(data).createDevice(data)
+    await api(data).createDevice(data)
     try {
         dispatch({
             type:`${CREATE_DEVICES}${SUCCESS_TYPE}`,
-            payload:{response}
+            payload:{response:true}
         })
     } catch (error) {
         dispatch({
-            type:`${CREATE_DEVICES}${FAILURE_TYPE}`
+            type:`${CREATE_DEVICES}${FAILURE_TYPE}`,
+            payload:{response:false}
         })
     }
 }
