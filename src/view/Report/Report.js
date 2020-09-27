@@ -89,22 +89,42 @@ export default class Report extends React.Component {
         this.props.getListOutlet(null, token)
     }
     handleFilter = (key, value) => {
-        const { currentFilter, displayFilter } = this.state;
-        this.setState({
-            displayFilter: {
-                ...displayFilter,
-                [key]: value.name
-            },
-            currentFilter: {
-                ...currentFilter,
-                [key]: value.id
-            }
-        }, () => this.setQuery())
-
+        const { currentFilter, displayFilter,startDate,endDate } = this.state;
+        let start = moment(startDate).format('YYYY-MM-DD')
+        let end = moment(endDate).format('YYYY-MM-DD')
+        const created = `${start} 00:00:01,created<=${end} 23:59:59`
+        if(value.name === 'Pilih Lokasi'){
+            console.log('Hai')
+            this.setState({
+                displayFilter: {
+                    ...displayFilter,
+                    [key]: value.name
+                },
+                currentFilter: {
+                    ...currentFilter,
+                    [key]:null
+                    
+                }
+            }, () => this.setQuery())    
+        }else{
+            this.setState({
+                displayFilter: {
+                    ...displayFilter,
+                    [key]: value.name
+                },
+                currentFilter: {
+                    ...currentFilter,
+                    [key]: value.id,
+                    created:created
+                }
+            }, () => this.setQuery())
+        }
     }
     setFilter = (dataFilter) => {
         const { currentFilter } = this.state;
         let temp = "";
+        console.log('dataFilter',dataFilter)
+        console.log('State data nya',this.state)
         dataFilter.forEach((element, index) => {
             
             if (!isNull(currentFilter[element])) {
@@ -119,12 +139,29 @@ export default class Report extends React.Component {
                 }
             }
         });
+        console.log('message sd',temp)
         return temp;
     }
-    
+    handleChangeDate = async value => {
+        await this.setState({
+            
+            startDate: value,
+            currentFilter:{
+                ...this.state.currentFilter,
+                created:`${moment(value).format('YYYY-MM-DD')} 00:00:01,created<=${moment(this.state.endDate).format('YYYY-MM-DD')} 23:59:59`
+            }
+            
+        }, () => this.setQuery('date'))
+    }
+    handelChangeDate2 = async value => {
+        await this.setState({
+            ...this.state.currentFilter, 
+            endDate: value 
+        }, () => this.setQuery('date'))
+    }
     setQuery = (key) => {
         const { currentFilter, SearchValue, PageNumber, Sorts, startDate, endDate } = this.state;
-        if (key === 'date') {
+            if(key === 'date'){
             let start = moment(startDate).format('YYYY-MM-DD')
             let end = moment(endDate).format('YYYY-MM-DD')
             const created = `${start} 00:00:01,created<=${end} 23:59:59`
@@ -152,28 +189,13 @@ export default class Report extends React.Component {
         }
         
         return this.setState({
+            ...this.queryTemp,
             temp:this.queryTemp
         })
-        
-        
-    }
-    
-    handleChangeDate = value => {
-        this.setState({
-            startDate: value
-        }, () => this.setQuery('date'))
-    }
-    handelChangeDate2 = value => {
-        this.setState({ endDate: value }, () => this.setQuery('date'))
     }
     handleFilterDate = () => {  
-        if(isEmpty(this.state.currentFilter.locationId)){
-            return alert("Please choose location")
-        }else {
-        this.setQuery()
         const { token } = this.props;
         this.props.getListTransaction(this.state.temp , token)
-    }
     }
     handleSearch = (key, value) => {
         const { currentFilter } = this.state;
@@ -186,11 +208,22 @@ export default class Report extends React.Component {
             SearchValue: value
         }, () => this.setQuery())
     }
+
+    handleResetFilter = () => {
+        this.setState({
+            currentFilter:{},
+            displayFilter:{},
+            temp:{}
+        })
+        this.props.getListTransaction(null,this.props.token)
+    }
     renderFilter = () => {
         const { listLocation, listOutlet } = this.props;
         const { displayFilter } = this.state;
         let Location = [];
         let Outlet = [];
+        Location.unshift({id:null,name:'Pilih Semua Lokasi'})
+        Outlet.unshift({id:null,name:'Pilih Semua Outlet'})
         listLocation.data && listLocation.data.map((data) => {
             return Location.push({ id: data.id, name: data.name })
         })
@@ -228,7 +261,7 @@ export default class Report extends React.Component {
     }
     onPagination = (key, pageNumber) => {
         const { token } = this.props;
-        this.props.getListTransaction({ PageNumber: pageNumber }, token)
+        this.props.getListTransaction({...this.state.temp,PageNumber: pageNumber }, token)
     }
     onSearch = () => {
 
@@ -416,7 +449,8 @@ export default class Report extends React.Component {
         )
     }
     render() {
-        const { isLoading } = this.props;
+        console.log('Current Filter',this.state.currentFilter)
+        const { isLoading,listTransaction } = this.props;
         if (isLoading) {
             return <CircularProgress size={100} className='circular-progress' />
         }
@@ -424,7 +458,7 @@ export default class Report extends React.Component {
             <div className='container'>
                 {this.renderFilter()}
                 {this.renderContent()}
-                {this.renderPagination()}
+                {listTransaction.data && listTransaction.data.length > 0 && this.renderPagination()}
             </div>
         )
     }

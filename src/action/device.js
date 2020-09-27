@@ -65,14 +65,15 @@ export const updateDevice = (data,token) => async (dispatch) => {
         type:`${UPDATE_DEVICES}${REQUEST_TYPE}`
     })
     try {
-        const response = await api(token).updateDevice(data)
+        await api(token).updateDevice(data)
         dispatch({
             type:`${UPDATE_DEVICES}${SUCCESS_TYPE}`,
-            payload:{response}
+            payload:{response:true}
         })
     } catch (error) {
         dispatch({
-            type:`${UPDATE_DEVICES}${FAILURE_TYPE}`
+            type:`${UPDATE_DEVICES}${FAILURE_TYPE}`,
+            payload:{response:false}
         })
     }
 }
@@ -81,14 +82,15 @@ export const deleteDevice = (data,token) => async (dispatch) => {
         type:`${DELETE_DEVICES}${REQUEST_TYPE}`
     })
     try {
-        const response = await api(token).deleteDevice(data)
+        await api(token).deleteDevice(data)
         dispatch({
             type:`${DELETE_DEVICES}${SUCCESS_TYPE}`,
-            payload:{response}
+            payload:{response:true}
         })
     } catch (error) {
         dispatch({
-            type:`${DELETE_DEVICES}${FAILURE_TYPE}`
+            type:`${DELETE_DEVICES}${FAILURE_TYPE}`,
+            payload:{response:false}
         })
     }
 }

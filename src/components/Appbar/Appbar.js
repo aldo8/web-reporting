@@ -19,6 +19,7 @@ import { getStorage, removeStorage } from "utils/storage.helper";
 import { USER_STORAGE } from "constants/storage";
 import { Person, Settings, Dashboard, LocationOn, Assessment, Store, PhoneAndroid,ExitToApp } from '@material-ui/icons'
 import { isEmpty } from "lodash";
+import MenuIcon from '@material-ui/icons/Menu';
 
 const drawerWidth = 170;
 const useStyles = makeStyles((theme) => ({
@@ -89,6 +90,10 @@ export default function ApplicationBar(props) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
 
   const handleDrawerClose = () => {
     setOpen(false);
@@ -230,8 +235,11 @@ export default function ApplicationBar(props) {
         props.navigateTo(MENU.REPORT);
         break;
       case 'EXIT':
-        props.navigateTo(MENU.LOGIN);
         removeStorage(USER_STORAGE);
+        props.navigateTo(MENU.LOGIN);
+        window.location.reload()
+        
+        
         break;
       default:
         break;
@@ -252,7 +260,17 @@ export default function ApplicationBar(props) {
           })}
         >
           <Toolbar>
-            
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            className={clsx(classes.menuButton, {
+              [classes.hide]: open,
+            })}
+          >
+            <MenuIcon />
+          </IconButton>
             <Typography variant="h6" noWrap>
               {`Hallo ${props.user.userName}`}
             </Typography>
@@ -266,8 +284,8 @@ export default function ApplicationBar(props) {
           })}
           classes={{
             paper: clsx({
-              [classes.drawerOpen]: !open,
-              [classes.drawerClose]: open,
+              [classes.drawerOpen]: open,
+              [classes.drawerClose]: !open,
             }),
           }}
         >

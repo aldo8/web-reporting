@@ -23,20 +23,32 @@ export const detailDevice = (state ={},action) => {
             return state;
     }
 }
-export const updateDevice = (state ={},action) => {
+
+const initialUpdate = {
+    response:false
+}
+export const updateDevice = (state ={...initialUpdate},action) => {
     const {payload,type} = action
     switch (type) {
         case `${UPDATE_DEVICES}${SUCCESS_TYPE}`:
-            return {...state,...payload.response}
+            return {...state,response:payload.response}
+        case `${UPDATE_DEVICES}${FAILURE_TYPE}`:
+            return {...state,response:payload.response}
         default:
             return state;
     }
 }
-export const deleteDevice = (state={},action) => {
+
+const initialDelete = {
+    response:false
+}
+export const deleteDevice = (state={...initialDelete},action) => {
     const {payload,type} = action
     switch (type) {
         case `${DELETE_DEVICES}${SUCCESS_TYPE}`:
-            return {...state,...payload.response}
+            return {...state,response:payload.response}
+        case `${DELETE_DEVICES}${FAILURE_TYPE}`:
+            return {...state,response:payload.response}
         default:
             return state;
     }

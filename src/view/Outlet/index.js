@@ -3,10 +3,10 @@ import {push} from 'connected-react-router';
 import Outlet from './Outlet';
 import { listOutlet,createOutlet,getOutletDetail, updateOutlet, deleteOutlet} from 'action/outlet';
 import { createLoadingSelector } from 'utils/selector.helper';
-import { DETAIL_OUTLET, GET_OUTLET } from 'action/actionTypes';
+import { DELETE_DEVICES, DETAIL_OUTLET, GET_OUTLET, UPDATE_DEVICES } from 'action/actionTypes';
 import { listLocation } from 'action/location';
 
-const loadingSelector = createLoadingSelector([GET_OUTLET,DETAIL_OUTLET])
+const loadingSelector = createLoadingSelector([GET_OUTLET,DETAIL_OUTLET,DELETE_DEVICES,UPDATE_DEVICES])
 const mapStateToProps = (state) => ({
     token:state.auth.token,
     isLoading:loadingSelector(state),

@@ -15,7 +15,9 @@ const mapStateToProps = (state) => ({
     dataOutlet:state.outlet.listOutlet.data,
     dataLocation:state.location.listLocation.data,
     detailDevice:state.device.detailDevice.data,
-    createResponse:state.device.createDevice.response
+    createResponse:state.device.createDevice.response,
+    updateDevicesResponse:state.device.updateDevice.response,
+    deleteDevicesResponse:state.device.deleteDevice.response
 })
 const mapDispatchToProps = (dispatch) => ({
     navigateTo: (path) => dispatch(push(path)),

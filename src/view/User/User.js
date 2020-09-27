@@ -265,7 +265,7 @@ export default class User extends React.Component {
                 onClose={() => {
                     this.setState({ isOpenModal: !isOpenModal });
                 }}
-                style={{ width: "500px", height: "fit-content", margin: "auto" }}
+                className={'modal-pop-up'}
             >
                 { isDetail ? this.renderDetail() : this.renderCreate()}
 
@@ -321,7 +321,7 @@ export default class User extends React.Component {
         const { token } = this.props
         const { SearchValue } = this.state
         return (
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <div className='filtering-container'>
                 <Input placeholder='Search...' onChange={(e) => this.handleFilter(e)} style={{ marginRight: '10px' }} />
                 <Button onClick={() => this.props.listUser({ SearchValue }, token)}>Search</Button>
             </div>
@@ -341,7 +341,7 @@ export default class User extends React.Component {
         return (
             <Modal
                 open={isConfirmModal}
-                style={{ width: "400px", height: "fit-content", margin: "auto" }}
+                className='modal-pop-up'
             >
                 <div className='modal-container'>
                     <div className='modal-header'>Delete User</div>

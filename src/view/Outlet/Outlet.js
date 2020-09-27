@@ -286,7 +286,7 @@ export default class Outlet extends React.Component {
         onClose={() => {
           this.setState({ isOpenModal: !isOpenModal });
         }}
-        style={{ width: "500px", height: "fit-content", margin: "auto" }}
+        className='modal-pop-up'
       >
         {isCreateOutlet ? this.renderCreateOutlet() : this.renderDetailOutlet()}
       </Modal>
@@ -306,7 +306,7 @@ export default class Outlet extends React.Component {
     return (
       <Modal
         open={isConfirmModal}
-        style={{ width: "400px", height: "fit-content", margin: "auto" }}
+        className='modal-pop-up'
       >
         <div className='modal-container'>
           <div className='modal-header'>Delete Your Outlet</div>
@@ -478,7 +478,7 @@ export default class Outlet extends React.Component {
                 <Table.Cell >{moment(data.updated).format("DD-MM-YYYY")}</Table.Cell>
                 <Table.Cell >{data.location.name}</Table.Cell>
                 <Table.Cell >{data.name}</Table.Cell>
-                <Table.Cell >{data.devices && data.devices.map((data) => data.phoneNumber)}</Table.Cell>
+                <Table.Cell >{data.devices && data.devices.map((data) => `${data.phoneNumber}\n`)}</Table.Cell>
                 <Table.Cell >{data.rate}</Table.Cell>
                 <Table.Cell>
                   <Edit style={{ cursor: 'pointer', marginRight: '10px' }} onClick={() => this.handleClickModal(true, data)} />
@@ -504,7 +504,7 @@ export default class Outlet extends React.Component {
     const { token } = this.props
     const { SearchValue } = this.state
     return (
-      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+      <div className='filtering-container'>
         <Input placeholder='Search...' onChange={(e) => this.handleFilter(e)} style={{ marginRight: '10px' }} />
         <Button onClick={() => this.props.listOutlet({ SearchValue }, token)}>Search</Button>
       </div>

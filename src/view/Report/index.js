@@ -3,11 +3,11 @@ import { push } from 'connected-react-router';
 import Report from './Report';
 import { getListTransaction } from 'action/transaction';
 import { createLoadingSelector } from 'utils/selector.helper';
-import { GET_LIST_TRANSACTION } from 'action/actionTypes';
+import { GET_LIST_TRANSACTION, GET_LOCATION, GET_OUTLET } from 'action/actionTypes';
 import { listLocation } from 'action/location';
 import { listOutlet } from 'action/outlet';
 
-const loadingSelector = createLoadingSelector([GET_LIST_TRANSACTION])
+const loadingSelector = createLoadingSelector([GET_LIST_TRANSACTION,GET_LOCATION,GET_OUTLET])
 const mapStateToProps = (state) => ({
     isLoading: loadingSelector(state),
     token: state.auth.token,

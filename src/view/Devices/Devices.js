@@ -38,26 +38,26 @@ export default class Devices extends React.Component {
 
     notifySuccess = (message) => {
         toast.success(`${message}`, {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
         });
-      }
-      notifyFailed = (message) => {
+    }
+    notifyFailed = (message) => {
         toast.error(`${message}`, {
-          position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
+            position: "top-right",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
         });
-      }
+    }
 
     handleClickModal = async (data, key) => {
         const { token } = this.props
@@ -77,9 +77,14 @@ export default class Devices extends React.Component {
     }
     handleClickUpdate = async (data) => {
         const { token } = this.props
-        await this.props.updateDevice(data, token)
         this.setState({ isOpenModal: !this.state.isOpenModal })
+        await this.props.updateDevice(data, token)
         this.props.getDevice(null, token)
+        if (this.props.updateDevicesResponse) {
+            this.notifySuccess('Devices Successfully updated!')
+        } else {
+            this.notifyFailed('Devices Unsuccessful Updated!')
+        }
 
     }
 
@@ -116,6 +121,9 @@ export default class Devices extends React.Component {
                 outletId: Yup.string()
                     .required('Required'),
 
+                locationId: Yup.string()
+                    .required('Required'),
+
                 notes: Yup.string()
                     .min(5, 'Too Short! minimum 5 character')
                     .max(50, 'Too Long!')
@@ -129,8 +137,8 @@ export default class Devices extends React.Component {
             >
                 {(props) => (
                     <div class="ui form" style={{ backgroundColor: 'white', padding: "10px" }} >
-                        {(console.log('Detail Devicess', props.values))}
-                        {/* <div class="field">
+                        {(console.log('Detail Devicess', props))}
+                        <div class="field">
                             <label>Location</label>
                             <select class="ui dropdown" value={props.values.locationId} onChange={(e) => props.setFieldValue('locationId', e.target.value)}>
                                 {listLocation.map((data) => (
@@ -138,13 +146,14 @@ export default class Devices extends React.Component {
                                 ))}
                             </select>
                             {props.errors.locationId ?
-                                (<div className='error-text'>{props.errors.outletId}</div>) : null
+                                (<div className='error-text'>{props.errors.locationId}</div>) : null
                             }
-                        </div> */}
+                        </div>
+
                         <div class="field">
                             <label>Outlet</label>
                             <select class="ui dropdown" value={props.values.outletId} onChange={(e) => props.setFieldValue('outletId', e.target.value)}>
-                                {this.listOutlet.map((data) => (
+                                {props.values.locationId && this.listOutlet.filter((temp) => temp.locationId === props.values.locationId).map((data) => (
                                     <option value={data.outletId} selected={data.outletId}>{data.name}</option>
                                 ))}
                             </select>
@@ -181,17 +190,17 @@ export default class Devices extends React.Component {
         const { isOpenModal } = this.state;
         this.setState({ isOpenModal: !isOpenModal })
         await this.props.createDevice(data, token)
-        this.props.getDevice(null,token)
-        if(this.props.createResponse){
+        this.props.getDevice(null, token)
+        if (this.props.createResponse) {
             return this.notifySuccess('Devices successfuly created!')
-        }else{
+        } else {
             return this.notifyFailed('Devices unsuccessful created!')
         }
-        
+
     }
     renderCreate = () => {
         const { createDevice } = this.state;
-        const { dataOutlet,dataLocation } = this.props;
+        const { dataOutlet, dataLocation } = this.props;
         let listLocation = []
         let listOutlet = []
         dataOutlet.data && dataOutlet.data.map((data) => {
@@ -248,7 +257,7 @@ export default class Devices extends React.Component {
                         {console.log('XYZ', props)}
                         <div class="field">
                             <label>Location</label>
-                            <select class="ui dropdown" onChange={(e) => props.setFieldValue('locationId',e.target.value)}>
+                            <select class="ui dropdown" onChange={(e) => props.setFieldValue('locationId', e.target.value)}>
                                 {listLocation.map((data) => (
                                     <option value={data.locationId}>{data.name}</option>
                                 ))}
@@ -260,7 +269,7 @@ export default class Devices extends React.Component {
 
                         <div class="field">
                             <label>Outlet</label>
-                            <select disabled={isEmpty(props.values.locationId)} class="ui dropdown" onChange={(e) => props.setFieldValue('outletId', e.target.value)}>
+                            <select disabled={isEmpty(props.values.locationId)} class="ui dropdown" onClick={(e) => props.setFieldValue('outletId', e.target.value)}>
                                 {props.values.locationId && listOutlet.filter((temp) => temp.locationId === props.values.locationId).map((data) => (
                                     <option value={data.outletId}>{data.name}</option>
                                 ))}
@@ -295,7 +304,7 @@ export default class Devices extends React.Component {
                 onClose={() => {
                     this.setState({ isOpenModal: !isOpenModal });
                 }}
-                style={{ width: "500px", height: "fit-content", margin: "auto" }}
+                className='modal-pop-up'
             >
                 { isDetail ? this.renderDetail() : this.renderCreate()}
 
@@ -454,7 +463,7 @@ export default class Devices extends React.Component {
         const { token } = this.props
         const { SearchValue } = this.state
         return (
-            <div style={{ display: "flex", justifyContent: "flex-end" }}>
+            <div className='filtering-container'>
                 <Input placeholder='Search...' onChange={(e) => this.handleFilter(e)} style={{ marginRight: '10px' }} />
                 <Button onClick={() => this.props.getDevice({ SearchValue }, token)}>Search</Button>
             </div>
@@ -464,9 +473,14 @@ export default class Devices extends React.Component {
     handleActionDelete = async (data) => {
         const { token } = this.props
         const { isConfirmModal } = this.state;
-        await this.props.deleteDevice(data, token);
         this.setState({ isConfirmModal: !isConfirmModal })
+        await this.props.deleteDevice(data, token);
         this.props.getDevice(null, token)
+        if(this.props.deleteDevicesResponse){
+            this.notifySuccess('Device successfully deleted!')
+        } else {
+            this.notifyFailed('Device unsuccessful deleted!')
+        }
     }
     renderModalConfirmation = (data) => {
 
@@ -474,7 +488,7 @@ export default class Devices extends React.Component {
         return (
             <Modal
                 open={isConfirmModal}
-                style={{ width: "400px", height: "fit-content", margin: "auto" }}
+                className='modal-pop-up'
             >
                 <div className='modal-container'>
                     <div className='modal-header'>Delete Your Devices</div>
