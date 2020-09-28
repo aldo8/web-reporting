@@ -82,7 +82,7 @@ export default class Dashboard extends React.Component {
                         <DropdownComponent data={Location} selected={this.state.location.name} onSelectAction={(data) => this.handleFilter(data)} />
                     </div>
                     <div className='dropdowns-container' style={{ paddingTop:'30px' }}>
-                    <Button onClick={() => this.props.getDashboard(this.state.location.id,token)} style={{marginLeft:'20px'}}>Search</Button>
+                    <Button onClick={() => this.props.getDashboard(this.state.location.id,token)}>Search</Button>
                     </div>
                 </div>
             </>

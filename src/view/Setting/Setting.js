@@ -21,7 +21,6 @@ export default class Setting extends React.Component {
   }
   renderTable = () => {
     const header = ['Name', 'Value']
-    
     return (
       <>
         <Table basic>
@@ -83,6 +82,8 @@ export default class Setting extends React.Component {
   }
   renderEdit = () => {
     const { isDetail } = this.state;
+    const obj = {...isDetail}
+    console.log('text detail',obj)
     const header = ['Name', 'Value']
     return (
           <>

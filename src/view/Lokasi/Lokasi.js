@@ -6,6 +6,7 @@ import { Checkbox, Button, Input, Table } from 'semantic-ui-react';
 import { KeyboardArrowLeft, KeyboardArrowRight, Edit } from '@material-ui/icons';
 import { toast } from 'react-toastify';
 import moment from 'moment'
+import {Check,Clear} from '@material-ui/icons/';
 
 export default class Lokasi extends React.Component {
   constructor(props) {
@@ -57,6 +58,18 @@ export default class Lokasi extends React.Component {
     });
   }
 
+  notifyError = (message) => {
+    toast.error(`${message}!`, {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        });
+}
+
   handleClickCreate = async (name) => {
     const { token, createLocationResponse } = this.props
     const { isOpenModal } = this.state;
@@ -83,7 +96,7 @@ export default class Lokasi extends React.Component {
     const { token } = this.props
     const { SearchValue } = this.state
     return (
-      <div style={{ display: "flex", justifyContent: "flex-end" }}>
+      <div className='filtering-container'>
         <Input placeholder='Search...' onChange={(e) => this.handleFilter(e)} style={{ marginRight: '10px' }} />
         <Button onClick={() => this.props.listLocation({ SearchValue }, token)}>Search</Button>
       </div>
@@ -145,7 +158,7 @@ export default class Lokasi extends React.Component {
         onClose={() => {
           this.setState({ isOpenModal: !isOpenModal });
         }}
-        style={{ width: "500px", height: "fit-content", margin: "auto" }}
+        className='modal-pop-up'
       >
         { isDetail ? this.renderDetail() : this.renderCreate()}
 
@@ -171,16 +184,20 @@ export default class Lokasi extends React.Component {
         <Table basic>
           <Table.Header>
             <Table.Row>
+              <Table.HeaderCell>No</Table.HeaderCell>
               <Table.HeaderCell>Updated</Table.HeaderCell>
               <Table.HeaderCell>Nama Lokasi</Table.HeaderCell>
+              <Table.HeaderCell>Is Active</Table.HeaderCell>
               <Table.HeaderCell>Action</Table.HeaderCell>
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {dataLocation.data && dataLocation.data.map((data) => (
+            {dataLocation.data && dataLocation.data.map((data,index) => (
               <Table.Row>
+                <Table.Cell>{index + 1}</Table.Cell>
                 <Table.Cell >{moment(data.updated).format("DD-MM-YYYY")}</Table.Cell>
                 <Table.Cell>{data.name}</Table.Cell>
+                <Table.Cell>{data.isActive ? <Check/> : <Clear/>}</Table.Cell>
                 <Table.Cell>
                   <Edit style={{ cursor: 'pointer', marginRight: '15px' }} onClick={() => this.handleClickModal(data)} />
                   <DeleteIcon style={{ cursor: 'pointer' }} onClick={() => this.handleActions(data.id)} />
@@ -197,7 +214,11 @@ export default class Lokasi extends React.Component {
     this.setState({ isConfirmModal: !this.state.isConfirmModal })
     await this.props.deleteLocation(data, token);
     this.props.listLocation(null, token);
-    { this.props.deleteLocationResponse && this.notifySuccess('Location successfuly deleted!') }
+    if(this.props.deleteLocationResponse){
+      return this.notifySuccess('Location successfuly deleted!') 
+    }else{
+      return this.notifyError('Location unsuccessful deleted!')
+    }
   }
   renderModalConfirmation = (data) => {
 
@@ -206,7 +227,7 @@ export default class Lokasi extends React.Component {
     return (
       <Modal
         open={isConfirmModal}
-        style={{ width: "400px", height: "fit-content", margin: "auto" }}
+        className='modal-pop-up'
       >
         <div className='modal-container'>
           <div className='modal-header'>Delete Your Location</div>

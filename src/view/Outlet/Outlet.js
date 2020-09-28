@@ -7,7 +7,7 @@ import Edit from '@material-ui/icons/Edit'
 import { Checkbox, Input, Table, Button } from "semantic-ui-react";
 import moment from 'moment';
 import { toast } from 'react-toastify';
-import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
+import {Check,Clear,KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import { Formik } from "formik";
 import { isEmpty } from "lodash";
 
@@ -296,9 +296,14 @@ export default class Outlet extends React.Component {
   handleActionDelete = async (data) => {
     const { token } = this.props;
     const { id } = this.state
-    await this.props.deleteOutlet(id, token)
     this.setState({ isConfirmModal: !this.state.isConfirmModal })
+    await this.props.deleteOutlet(id, token)
     this.props.listOutlet(null, token)
+    if(this.props.deleteOutletReponse){
+      return this.notifySuccess('Outlet successfuly deleted!')
+    }else{
+      return this.notifyFailed('Outlet unsuccessful deleted!')
+    }
   }
   renderModalConfirmation = (data) => {
 
@@ -458,7 +463,7 @@ export default class Outlet extends React.Component {
   renderTable = () => {
     const { dataOutlet } = this.props;
 
-    const header = ['Updated', 'Location', 'Outlet', 'Phone Number', 'Rate', 'Action']
+    const header = ['No','Updated', 'Location', 'Outlet', 'Phone Number', 'Rate','Is Active', 'Action']
     if (dataOutlet.data && dataOutlet.data.length < 1) {
       return <p style={{ textAlign: 'center' }}>No Data</p>
     }
@@ -473,13 +478,15 @@ export default class Outlet extends React.Component {
             </Table.Row>
           </Table.Header>
           <Table.Body>
-            {dataOutlet.data && dataOutlet.data.map((data) => (
+            {dataOutlet.data && dataOutlet.data.map((data,index) => (
               <Table.Row>
+                <Table.Cell>{index + 1}</Table.Cell>
                 <Table.Cell >{moment(data.updated).format("DD-MM-YYYY")}</Table.Cell>
                 <Table.Cell >{data.location.name}</Table.Cell>
                 <Table.Cell >{data.name}</Table.Cell>
                 <Table.Cell >{data.devices && data.devices.map((data) => `${data.phoneNumber}\n`)}</Table.Cell>
                 <Table.Cell >{data.rate}</Table.Cell>
+                <Table.Cell >{data.isActive ? <Check/> : <Clear/>}</Table.Cell>
                 <Table.Cell>
                   <Edit style={{ cursor: 'pointer', marginRight: '10px' }} onClick={() => this.handleClickModal(true, data)} />
                   <DeleteIcon style={{ cursor: 'pointer' }} onClick={() => this.handleClickDelete(data.id)} />

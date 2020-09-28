@@ -80,6 +80,9 @@ export default function Login(props) {
     if(token !== null){
       navigateTo(MENU.DASHBOARD)
     }
+    if(props.isLoading){
+      return <CircularProgress className='circular-progress' size={100}/>
+    }
   
   })
   const classes = useStyles();

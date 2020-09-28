@@ -2,7 +2,7 @@ import { CircularProgress, Modal } from '@material-ui/core';
 import React from 'react';
 import { Table, Input, Button, Checkbox } from 'semantic-ui-react';
 import { Edit, Delete } from '@material-ui/icons';
-import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
+import { KeyboardArrowLeft, KeyboardArrowRight,Check,Clear } from '@material-ui/icons';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { isEmpty } from 'lodash';
@@ -313,7 +313,7 @@ export default class Devices extends React.Component {
     };
 
     renderTable = () => {
-        const tableHeader = ['No', 'Phone Number', 'Outlet Name', 'Rate', 'Location', 'Notes', 'Action'];
+        const tableHeader = ['No', 'Phone Number', 'Outlet Name', 'Rate', 'Location', 'Notes','Is Active', 'Action'];
         const { dataListDevice } = this.props
 
         if (dataListDevice.data && dataListDevice.data.length < 1) {
@@ -337,6 +337,7 @@ export default class Devices extends React.Component {
                             <Table.Cell>{data.outlet.rate}</Table.Cell>
                             <Table.Cell>{data.location.name}</Table.Cell>
                             <Table.Cell>{data.notes ? data.notes : '-'}</Table.Cell>
+                            <Table.Cell>{data.isActive ? <Check/> : <Clear/>}</Table.Cell>
                             <Table.Cell >
                                 <Edit style={{ cursor: 'pointer' }} onClick={() => this.handleClickModal(data)} />
                                 <Delete style={{ marginLeft: '20px', cursor: 'pointer' }} onClick={() => this.handleClickDelete(data.id)} />
@@ -477,9 +478,9 @@ export default class Devices extends React.Component {
         await this.props.deleteDevice(data, token);
         this.props.getDevice(null, token)
         if(this.props.deleteDevicesResponse){
-            this.notifySuccess('Device successfully deleted!')
+            return this.notifySuccess('Device successfully deleted!')
         } else {
-            this.notifyFailed('Device unsuccessful deleted!')
+            return this.notifyFailed('Device unsuccessful deleted!')
         }
     }
     renderModalConfirmation = (data) => {

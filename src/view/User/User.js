@@ -8,6 +8,7 @@ import * as Yup from 'yup';
 import { isEmpty } from 'lodash';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {Check,Clear} from '@material-ui/icons/';
 
 export default class User extends React.Component {
     constructor(props) {
@@ -96,10 +97,9 @@ export default class User extends React.Component {
         this.setState({ isOpenModal: !isOpenModal })
 
     }
-    handleClickDelete = (id) => {
+    handleClickDelete = async (id) => {
         const { isConfirmModal } = this.state;
         this.setState({ isConfirmModal: !isConfirmModal, id })
-
     }
     handleClickUpdate = async (data) => {
         const { isOpenModal } = this.state;
@@ -265,7 +265,7 @@ export default class User extends React.Component {
                 onClose={() => {
                     this.setState({ isOpenModal: !isOpenModal });
                 }}
-                className={'modal-pop-up'}
+                className='modal-pop-up'
             >
                 { isDetail ? this.renderDetail() : this.renderCreate()}
 
@@ -276,7 +276,7 @@ export default class User extends React.Component {
     renderTable = () => {
         const { dataListUser } = this.props;
 
-        const header = ['Updated', 'Name', 'Username', 'Role', 'Detail']
+        const header = ['No','Updated', 'Name', 'Username', 'Role','Is Active','Detail']
         if (dataListUser.data && dataListUser.data.length < 1) {
             return <p style={{ textAlign: 'center' }}>No Data</p>
         }
@@ -293,10 +293,12 @@ export default class User extends React.Component {
                     <Table.Body>
                         {dataListUser.data && dataListUser.data.map((data, index) => (
                             <Table.Row>
+                                <Table.Cell>{index + 1}</Table.Cell>
                                 <Table.Cell>{moment(data.updated).format("DD-MM-YYYY")}</Table.Cell>
                                 <Table.Cell>{data.name}</Table.Cell>
                                 <Table.Cell>{data.userName}</Table.Cell>
                                 <Table.Cell>{data.role === 'SA' ? 'Super Admin' : data.role === 'A' ? 'Admin' : 'User'}</Table.Cell>
+                                <Table.Cell>{data.isActive ? <Check/> : <Clear/>}</Table.Cell>
                                 <Table.Cell >
                                     <Edit style={{ cursor: 'pointer' }} onClick={() => this.handleClickModal(data)} />
                                     <Delete style={{ marginLeft: '20px', cursor: 'pointer' }} onClick={() => this.handleClickDelete(data.id)} />
@@ -329,11 +331,13 @@ export default class User extends React.Component {
     }
     handleActionDelete = async (data) => {
         const { token,userDeleted } = this.props;
+        this.setState({ isConfirmModal: !this.state.isConfirmModal })
         await this.props.deleteUser(data, token);
+        this.props.listUser(null, token);
         if(this.props.userDeleted){
-            this.setState({ isConfirmModal: !this.state.isConfirmModal })
-            this.props.listUser(null, token);
             return this.notifyDelete()
+        }else{
+            return this.notifyError(`Cannot delete user!`)
         }
     }
     renderModalConfirmation = (data) => {
