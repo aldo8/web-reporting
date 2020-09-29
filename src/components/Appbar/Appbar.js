@@ -86,7 +86,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 export default function ApplicationBar(props) {
-  console.log('APP BAR',props)
+  
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);

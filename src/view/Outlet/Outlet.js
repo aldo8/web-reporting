@@ -38,8 +38,9 @@ export default class Outlet extends React.Component {
   };
 
   onPagination = (key, pageNumber) => {
+    const {SearchValue} = this.state;
     const { token } = this.props;
-    this.props.listOutlet({ PageNumber: pageNumber }, token)
+    this.props.listOutlet({ SearchValue,PageNumber: pageNumber }, token)
   }
   handleClickModal = async (seeDetail, data) => {
     const { token } = this.props;
@@ -67,8 +68,7 @@ export default class Outlet extends React.Component {
   };
 
   handleChangeData = (key, e) => {
-    console.log('Keyss', key, e.target.value)
-    console.log('Logs', e.target.name)
+    
     const { createOutlet } = this.state;
     this.setState({
       createOutlet: {
@@ -113,7 +113,7 @@ export default class Outlet extends React.Component {
           return this.notifySuccess('Outlet successfuly updated!')
 
         } else {
-          console.log('Hai Outlet')
+          
           return this.notifyFailed('Something went wrong!')
         }
 
@@ -154,7 +154,6 @@ export default class Outlet extends React.Component {
     })
   }
   renderCreateOutlet = () => {
-    const { locationName, createOutlet } = this.state;
     const { dataLocation } = this.props;
     const Location = [];
     const createOutletSchema = Yup.object().shape({
@@ -184,7 +183,7 @@ export default class Outlet extends React.Component {
       >
         {(props) => (
           <div class="ui form" style={{ backgroundColor: 'white', padding: "10px" }} >
-            {console.log('createOut', props)}
+            
             <div class="field">
               <label>Name Outlet</label>
               <input type="text" name="first-name" placeholder="Name Outlet" value={props.values.name} onChange={(e) => props.setFieldValue('name', e.target.value)} />
@@ -220,24 +219,17 @@ export default class Outlet extends React.Component {
   }
 
   handleChangeDataDetail = (props, event) => {
-    const { dataDetailOutlet } = this.state;
     const temp = this.Location.find((x) => x.id === event.target.value)
-    console.log('hasil balikan', temp)
-    console.log('list lokasi', temp)
     return props.setFieldValue('locationId', temp.id)
   }
   changeValueId = (id, props) => {
-    console.log('id dari detail', id)
     const { dataLocation } = this.props;
     const tempOutlet = this.props.dataOutlet.data && this.props.dataOutlet.data.find((data) => data.id === id)
     const x = dataLocation.data && dataLocation.data.find((data) => data.id === tempOutlet?.locationId)
-    console.log('TEMPTMP', tempOutlet)
-    console.log('hasil lokasi', x)
-    console.log('locationId', props)
     return x?.id
   }
   renderDetailOutlet = () => {
-    const { dataDetailOutlet, locationName } = this.state;
+    const { dataDetailOutlet } = this.state;
     const { dataLocation } = this.props;
     this.Location = [];
 
@@ -251,7 +243,7 @@ export default class Outlet extends React.Component {
       >
         {(props) => (
           <div class="ui form" style={{ backgroundColor: 'white', padding: "10px" }} >
-            {console.log('data form', props)}
+            
             <div class="field">
               <label>Name Outlet</label>
               <input type="text" name="first-name" placeholder="Name Outlet" value={props.values.name} onChange={e => props.setFieldValue('name', e.target.value)} />
@@ -262,7 +254,7 @@ export default class Outlet extends React.Component {
             </div>
             <div class="field">
               <label>Location</label>
-              {console.log('Data Locaton', this.Location)}
+              
               <select class="ui dropdown" value={props.values.locationId} onChange={(e) => props.setFieldValue('locationId',e.target.value)}>
                 {this.Location.map((data) => (
                   <option value={data.locationId} selected={data.locationId}> {data.name}</option>
@@ -518,8 +510,7 @@ export default class Outlet extends React.Component {
     )
   }
   render() {
-    console.log('ASD', this.Location)
-    const { isLoading, updateOutletReponse } = this.props;
+    const { isLoading } = this.props;
     return (
       <div className="container">
         <button class="positive ui button" onClick={() => this.handleClickModal(false)}>Create Outlet</button>

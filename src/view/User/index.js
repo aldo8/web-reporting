@@ -13,7 +13,9 @@ const mapStateToProps = (state) => ({
     updateResponse:state.user.updateUser.response,
     userCreated:state.user.createUser,
     userDeleted:state.user.deleteUser.response,
-    token:state.auth.token
+    token:state.auth.token,
+    userRole:state.auth,
+    errorMessageUser:state.user.errorMessage.message
 })
 const mapDispatchToProps = (dispatch) => ({
     navigateTo:(path) => dispatch(push(path)),

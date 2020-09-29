@@ -1,6 +1,6 @@
 import React from 'react';
 import { Edit, Delete, KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
-import { Modal, CircularProgress, Snackbar } from '@material-ui/core';
+import { Modal, CircularProgress, } from '@material-ui/core';
 import moment from 'moment';
 import { Checkbox, Input, Button, Table } from 'semantic-ui-react';
 import { Formik } from 'formik';
@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 import { isEmpty } from 'lodash';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {Check,Clear} from '@material-ui/icons/';
+import { Check, Clear } from '@material-ui/icons/';
 
 export default class User extends React.Component {
     constructor(props) {
@@ -44,7 +44,7 @@ export default class User extends React.Component {
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-            });
+        });
     }
 
     notifyDelete = () => {
@@ -56,7 +56,7 @@ export default class User extends React.Component {
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-            });
+        });
     }
 
     notifyError = (message) => {
@@ -68,7 +68,7 @@ export default class User extends React.Component {
             pauseOnHover: true,
             draggable: true,
             progress: undefined,
-            });
+        });
     }
 
     handleClickModal = async (data, key) => {
@@ -82,11 +82,17 @@ export default class User extends React.Component {
         } else {
 
             await this.props.getUserDetail(data.id, token);
-            this.setState({
-                dataDetail: this.props.detailUser.data,
-                isOpenModal: true,
-                isDetail: true
-            });
+            
+            if(this.props.errorMessageUser){
+                alert('Sorry Data Not Found')
+            }else{
+                this.setState({
+                    dataDetail: this.props.detailUser?.data,
+                    isOpenModal: true,
+                    isDetail: true
+                });
+            }
+            
         }
 
     };
@@ -107,7 +113,7 @@ export default class User extends React.Component {
         await updateUser(data, token)
         this.setState({ isOpenModal: !isOpenModal })
         this.props.listUser(null, token);
-        if(this.props.updateResponse){
+        if (this.props.updateResponse) {
             this.notifyCreate('User successfully updated!')
         }
 
@@ -118,8 +124,9 @@ export default class User extends React.Component {
     }
     renderDetail = () => {
         const { dataDetail } = this.state;
-        console.log('DATA DETAIL', dataDetail)
-        let role = [{ role: 'SA', name: 'Super Admin' }, { role: 'A', name: 'Admin' }, { role: 'U', name: 'User' }]
+        
+        let role =
+            this.props.userRole === 'SA' ? [{ role: 'SA', name: 'Super Admin' }, { role: 'A', name: 'Admin' }, { role: 'U', name: 'User' }] : [{ role: 'A', name: 'Admin' }, { role: 'U', name: 'User' }]
         return (
             <>
                 <div class="ui form" style={{ backgroundColor: 'white', padding: "10px" }} >
@@ -159,7 +166,7 @@ export default class User extends React.Component {
         if (this.props.userCreated.response) {
             return this.notifyCreate('User successfuly created!')
 
-        }else{
+        } else {
             return this.notifyError(`Cannot create user already exist!`)
         }
 
@@ -177,7 +184,7 @@ export default class User extends React.Component {
 
     renderCreate = () => {
         const { createUser } = this.state;
-        let role = [{ role: 'SA', name: 'Super Admin' }, { role: 'A', name: 'Admin' }, { role: 'U', name: 'User' }]
+        let role = this.props.userRole === 'SA' ? [{ role: 'SA', name: 'Super Admin' }, { role: 'A', name: 'Admin' }, { role: 'U', name: 'User' }] : [{ role: 'A', name: 'Admin' }, { role: 'U', name: 'User' }]
         const createUserSchema = Yup.object().shape({
             name: Yup.string()
                 .min(3, 'Too Short minimum 3 character!')
@@ -209,7 +216,7 @@ export default class User extends React.Component {
             >
                 {(props) => (
                     <div class="ui form" style={{ backgroundColor: 'white', padding: "10px" }} >
-                        {console.log('Erorr', props)}
+                        
                         <div class="field">
                             <label>Name</label>
                             <input type="text" placeholder="Name" value={props.values.name} onChange={(e) => props.setFieldValue('name', e.target.value)} />
@@ -276,7 +283,7 @@ export default class User extends React.Component {
     renderTable = () => {
         const { dataListUser } = this.props;
 
-        const header = ['No','Updated', 'Name', 'Username', 'Role','Is Active','Detail']
+        const header = ['No', 'Updated', 'Name', 'Username', 'Role', 'Is Active', 'Detail']
         if (dataListUser.data && dataListUser.data.length < 1) {
             return <p style={{ textAlign: 'center' }}>No Data</p>
         }
@@ -298,7 +305,7 @@ export default class User extends React.Component {
                                 <Table.Cell>{data.name}</Table.Cell>
                                 <Table.Cell>{data.userName}</Table.Cell>
                                 <Table.Cell>{data.role === 'SA' ? 'Super Admin' : data.role === 'A' ? 'Admin' : 'User'}</Table.Cell>
-                                <Table.Cell>{data.isActive ? <Check/> : <Clear/>}</Table.Cell>
+                                <Table.Cell>{data.isActive ? <Check /> : <Clear />}</Table.Cell>
                                 <Table.Cell >
                                     <Edit style={{ cursor: 'pointer' }} onClick={() => this.handleClickModal(data)} />
                                     <Delete style={{ marginLeft: '20px', cursor: 'pointer' }} onClick={() => this.handleClickDelete(data.id)} />
@@ -311,8 +318,9 @@ export default class User extends React.Component {
         )
     }
     onPagination = (key, pageNumber) => {
+        const {SearchValue} = this.state;
         const { token } = this.props;
-        this.props.listUser({ PageNumber: pageNumber }, token)
+        this.props.listUser({SearchValue,PageNumber: pageNumber }, token)
     }
     handleFilter = (event) => {
         this.setState({
@@ -330,13 +338,13 @@ export default class User extends React.Component {
         )
     }
     handleActionDelete = async (data) => {
-        const { token,userDeleted } = this.props;
+        const { token } = this.props;
         this.setState({ isConfirmModal: !this.state.isConfirmModal })
         await this.props.deleteUser(data, token);
         this.props.listUser(null, token);
-        if(this.props.userDeleted){
+        if (this.props.userDeleted) {
             return this.notifyDelete()
-        }else{
+        } else {
             return this.notifyError(`Cannot delete user!`)
         }
     }
@@ -462,13 +470,12 @@ export default class User extends React.Component {
 
     }
     render() {
-        console.log('HASIL',this.props)
-        const { isLoading } = this.state;
+        
+        const { isLoading } = this.props;
         return (
             <div className='container'>
-                
-                {isLoading && <CircularProgress className='circular-progress' size={100} /> }        
                 <button class="positive ui button" onClick={() => this.handleClickModal(null, 'create')}>Create User</button>
+                {isLoading && <CircularProgress className='circular-progress' size={100} />}
                 {this.renderFilter()}
                 {this.renderTable()}
                 {this.renderPagination()}

@@ -58,7 +58,8 @@ export const getUserDetail = (data,token) => async (dispatch) => {
         })
     } catch (error) {
         dispatch({
-            type:`${DETAIL_USER}${FAILURE_TYPE}`
+            type:`${DETAIL_USER}${FAILURE_TYPE}`,
+            payload:{message:true}
         })
     }
 }
@@ -67,7 +68,7 @@ export const updateUser = (data,token) => async (dispatch) => {
         type:`${UPDATE_USER}${REQUEST_TYPE}`
     })
     try {
-        const response = await api(token).updateUser(data)
+        await api(token).updateUser(data)
         dispatch({
             type:`${UPDATE_USER}${SUCCESS_TYPE}`,
             payload:{response:true}

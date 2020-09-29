@@ -40,7 +40,7 @@ export default class DropdownComponent extends React.Component {
     }
 
     selectItem = (item) => {
-        console.log('item',item)
+        
         return this.props.onSelectAction(item);   
     }
     renderDropdownList = () => {
@@ -49,7 +49,6 @@ export default class DropdownComponent extends React.Component {
             {this.props.data
             && this.props.data.map((item, index) => (item && 
             <div className="list-item" onClick={() => this.selectItem(item)} key={index}>
-                {/* {this._handleJobType(item,this.props.itemKey)} */}
                 {item.name}
             </div>
             ))}

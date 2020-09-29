@@ -23,7 +23,7 @@ export const detailLocation = (state ={},action) => {
     }
 }
 export const updateLocation = (state ={response:false},action) => {
-    const {payload,type} = action
+    const {type} = action
     switch (type) {
         case `${UPDATE_LOCATION}${SUCCESS_TYPE}`:
             return {...state,response:true}
@@ -37,7 +37,7 @@ const initialDelete = {
     response:false
 }
 export const deleteLocation = (state={...initialDelete},action) => {
-    const {payload,type} = action
+    const {type} = action
     switch (type) {
         case `${DELETE_LOCATION}${SUCCESS_TYPE}`:
             return {...state,response:true}

@@ -23,11 +23,11 @@ export const detailUser = (state ={},action) => {
     }
 }
 export const updateUser = (state ={response:false},action) => {
-    const {payload,type} = action
+    const {type} = action
     switch (type) {
         case `${UPDATE_USER}${SUCCESS_TYPE}`:
             return {...state,response:true}
-        case `${UPDATE_USER}${SUCCESS_TYPE}`:
+        case `${UPDATE_USER}${FAILURE_TYPE}`:
             return {...state,response:false}
         default:
             return state;
@@ -37,7 +37,7 @@ const initialStateDelete = {
     response:false
 }
 export const deleteUser = (state={...initialStateDelete},action) => {
-    const {payload,type} = action
+    const {type} = action
     switch (type) {
         case `${DELETE_USER}${SUCCESS_TYPE}`:
             return {...state,response:true}
@@ -60,11 +60,24 @@ export const createUser = (state={...initialCreate},action) => {
             return state;
     }
 }
+const initialError = {
+    message:false
+}
+export const errorMessage = (state={...initialError},action) => {
+    const {payload,type} = action;
+    switch (type) {
+        case `${DETAIL_USER}${FAILURE_TYPE}`:
+            return {...state,message:payload.message}
+        default:
+            return state;
+    }
+}
 const userReducer = combineReducers({
     listUser,
     detailUser,
     updateUser,
     deleteUser,
-    createUser
+    createUser,
+    errorMessage
 })
 export {userReducer}

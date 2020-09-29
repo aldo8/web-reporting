@@ -1,25 +1,20 @@
 import { CircularProgress } from '@material-ui/core';
 import { KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import DropdownComponent from 'components/DropdownComponent/DropdownComponent';
-import { isEmpty, isNull } from 'lodash';
+import { isNull } from 'lodash';
 import React from 'react';
 import { Button, Table, } from 'semantic-ui-react'
 import { PDFExport } from '@progress/kendo-react-pdf';
 import DatePicker from "react-datepicker";
-import Calendar from 'react-calendar';
-
 import "react-datepicker/dist/react-datepicker.css";
 import moment from 'moment'
-
-
-
 
 export default class Report extends React.Component {
     constructor(props) {
         super()
         this.setQuery = this.setQuery.bind(this)
         this.state = {
-            temp:{},
+            temp: {},
             currentFilter: {},
             displayFilter: {
                 locationId: 'Pilih Lokasi',
@@ -89,12 +84,12 @@ export default class Report extends React.Component {
         this.props.getListOutlet(null, token)
     }
     handleFilter = (key, value) => {
-        const { currentFilter, displayFilter,startDate,endDate } = this.state;
+        const { currentFilter, displayFilter, startDate, endDate } = this.state;
         let start = moment(startDate).format('YYYY-MM-DD')
         let end = moment(endDate).format('YYYY-MM-DD')
         const created = `${start} 00:00:01,created<=${end} 23:59:59`
-        if(value.name === 'Pilih Lokasi'){
-            console.log('Hai')
+        if (value.name === 'Pilih Lokasi') {
+            
             this.setState({
                 displayFilter: {
                     ...displayFilter,
@@ -102,11 +97,11 @@ export default class Report extends React.Component {
                 },
                 currentFilter: {
                     ...currentFilter,
-                    [key]:null
-                    
+                    [key]: null
+
                 }
-            }, () => this.setQuery())    
-        }else{
+            }, () => this.setQuery())
+        } else {
             this.setState({
                 displayFilter: {
                     ...displayFilter,
@@ -115,7 +110,7 @@ export default class Report extends React.Component {
                 currentFilter: {
                     ...currentFilter,
                     [key]: value.id,
-                    created:created
+                    created: created
                 }
             }, () => this.setQuery())
         }
@@ -123,10 +118,9 @@ export default class Report extends React.Component {
     setFilter = (dataFilter) => {
         const { currentFilter } = this.state;
         let temp = "";
-        console.log('dataFilter',dataFilter)
-        console.log('State data nya',this.state)
+        
         dataFilter.forEach((element, index) => {
-            
+
             if (!isNull(currentFilter[element])) {
                 if (element === 'created') {
                     temp += `${element}>=${currentFilter[element]}`
@@ -139,29 +133,32 @@ export default class Report extends React.Component {
                 }
             }
         });
-        console.log('message sd',temp)
+        
         return temp;
     }
     handleChangeDate = async value => {
         await this.setState({
-            
+
             startDate: value,
-            currentFilter:{
+            currentFilter: {
                 ...this.state.currentFilter,
-                created:`${moment(value).format('YYYY-MM-DD')} 00:00:01,created<=${moment(this.state.endDate).format('YYYY-MM-DD')} 23:59:59`
+                created: `${moment(value).format('YYYY-MM-DD')} 00:00:01,created<=${moment(this.state.endDate).format('YYYY-MM-DD')} 23:59:59`
             }
-            
+
         }, () => this.setQuery('date'))
     }
     handelChangeDate2 = async value => {
         await this.setState({
-            ...this.state.currentFilter, 
-            endDate: value 
+            endDate: value,
+            currentFilter: {
+                ...this.state.currentFilter,
+                created: `${moment(this.state.startDate).format('YYYY-MM-DD')} 00:00:01,created<=${moment(value).format('YYYY-MM-DD')} 23:59:59`
+            }
         }, () => this.setQuery('date'))
     }
     setQuery = (key) => {
         const { currentFilter, SearchValue, PageNumber, Sorts, startDate, endDate } = this.state;
-            if(key === 'date'){
+        if (key === 'date') {
             let start = moment(startDate).format('YYYY-MM-DD')
             let end = moment(endDate).format('YYYY-MM-DD')
             const created = `${start} 00:00:01,created<=${end} 23:59:59`
@@ -172,7 +169,7 @@ export default class Report extends React.Component {
                 }
             })
         }
-        
+
         this.queryTemp = {}
         const getFilter = this.setFilter(Object.keys(currentFilter))
         if (getFilter) {
@@ -187,15 +184,20 @@ export default class Report extends React.Component {
         if (!isNull(Sorts)) {
             this.queryTemp.Sorts = Sorts
         }
-        
+
         return this.setState({
             ...this.queryTemp,
-            temp:this.queryTemp
+            temp: this.queryTemp
         })
     }
-    handleFilterDate = () => {  
+    handleFilterDate = () => {
         const { token } = this.props;
-        this.props.getListTransaction(this.state.temp , token)
+        if(this.state.displayFilter.locationId === 'Pilih Lokasi'){
+            alert('Pilih Lokasi')
+        }else{
+            this.props.getListTransaction(this.state.temp, token)
+        }
+        
     }
     handleSearch = (key, value) => {
         const { currentFilter } = this.state;
@@ -211,19 +213,19 @@ export default class Report extends React.Component {
 
     handleResetFilter = () => {
         this.setState({
-            currentFilter:{},
-            displayFilter:{},
-            temp:{}
+            currentFilter: {},
+            displayFilter: {},
+            temp: {}
         })
-        this.props.getListTransaction(null,this.props.token)
+        this.props.getListTransaction(null, this.props.token)
     }
     renderFilter = () => {
         const { listLocation, listOutlet } = this.props;
         const { displayFilter } = this.state;
         let Location = [];
         let Outlet = [];
-        Location.unshift({id:null,name:'Pilih Semua Lokasi'})
-        Outlet.unshift({id:null,name:'Pilih Semua Outlet'})
+        Location.unshift({ id: null, name: 'Pilih Semua Lokasi' })
+        Outlet.unshift({ id: null, name: 'Pilih Semua Outlet' })
         listLocation.data && listLocation.data.map((data) => {
             return Location.push({ id: data.id, name: data.name })
         })
@@ -232,9 +234,9 @@ export default class Report extends React.Component {
         })
         return (
             <>
-                <Button onClick={() => this.pdfExportComponent.save()}>Download Report</Button>
+                <Button style={{ marginLeft: '1.9vw' }} onClick={() => this.pdfExportComponent.save()}>Download Report</Button>
                 <div className='filters-container'>
-                    <div className='dropdowns-container' style={{ padding: 0 }}>
+                    <div className='dropdowns-container'>
                         <DropdownComponent data={Location} selected={displayFilter.locationId} onSelectAction={(data) => this.handleFilter('locationId', data)} />
                     </div>
                     <div className='dropdowns-container'>
@@ -261,7 +263,7 @@ export default class Report extends React.Component {
     }
     onPagination = (key, pageNumber) => {
         const { token } = this.props;
-        this.props.getListTransaction({...this.state.temp,PageNumber: pageNumber }, token)
+        this.props.getListTransaction({ ...this.state.temp, PageNumber: pageNumber }, token)
     }
     onSearch = () => {
 
@@ -383,8 +385,8 @@ export default class Report extends React.Component {
         const summaryCounterIn = this.RoundHalfDown(sumCounterIn - (sumCounterIn * discount / 100))
         const summaryCounterOut = this.RoundHalfDown(sumCounterOut - (sumCounterOut * discount / 100))
         const summaryTotal = this.RoundHalfDown(sumTotal - (sumTotal * discount / 100))
-        if(listTransaction.data && listTransaction.data.length === 0 || Object.entries(listTransaction).length === 0){
-            return <p style={{textAlign:'center'}}>No Data</p>
+        if (listTransaction?.data?.length === 0 || Object.entries(listTransaction).length === 0) {
+            return <p style={{ textAlign: 'center', fontWeight: 'bold' }}>No Data</p>
         }
         return (
             <PDFExport
@@ -449,8 +451,8 @@ export default class Report extends React.Component {
         )
     }
     render() {
-        console.log('Current Filter',this.state.currentFilter)
-        const { isLoading,listTransaction } = this.props;
+        
+        const { isLoading, listTransaction } = this.props;
         if (isLoading) {
             return <CircularProgress size={100} className='circular-progress' />
         }

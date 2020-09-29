@@ -89,16 +89,12 @@ export default class Devices extends React.Component {
     }
 
     changeValueId = (id) => {
-        const { dataLocation, dataListDevice } = this.props;
-        console.log('Id', id)
-
-
         const tempOutlet = this.props.dataListDevice.data && this.props.dataListDevice.data.find((data) => data.outlet.id === id)
         return tempOutlet?.outlet?.name
     }
     renderDetail = () => {
         const { dataDetail } = this.state;
-        console.log('KL', dataDetail)
+        
         let listLocation = []
         this.props.dataLocation.data && this.props.dataLocation.data.map((data) => {
             return listLocation.push({ locationId: data.id, name: data.name })
@@ -137,7 +133,7 @@ export default class Devices extends React.Component {
             >
                 {(props) => (
                     <div class="ui form" style={{ backgroundColor: 'white', padding: "10px" }} >
-                        {(console.log('Detail Devicess', props))}
+                        
                         <div class="field">
                             <label>Location</label>
                             <select class="ui dropdown" value={props.values.locationId} onChange={(e) => props.setFieldValue('locationId', e.target.value)}>
@@ -251,10 +247,6 @@ export default class Devices extends React.Component {
                             {props.errors.phoneNumber ?
                                 (<div className='error-text'>{props.errors.phoneNumber}</div>) : null}
                         </div>
-
-                        {console.log('list Lokasi', listLocation)}
-                        {console.log('list outlet', listOutlet)}
-                        {console.log('XYZ', props)}
                         <div class="field">
                             <label>Location</label>
                             <select class="ui dropdown" onChange={(e) => props.setFieldValue('locationId', e.target.value)}>
@@ -354,7 +346,8 @@ export default class Devices extends React.Component {
     }
     onPagination = (key, PageNumber) => {
         const { token } = this.props;
-        this.props.getDevice({ PageNumber }, token)
+        const {SearchValue} = this.state;
+        this.props.getDevice({ SearchValue,PageNumber }, token)
     }
     renderPagination = () => {
         const { dataListDevice } = this.props;

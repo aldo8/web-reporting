@@ -11,14 +11,13 @@ export const detailSetting = (token) => async (dispatch) => {
     try {
         let response
         response = await api(token).detailSetting();
-        console.log('response Detail',response)
         response = normalizeHelper(response.data,schemaSetting);
         dispatch({
             type:`${DETAIL_SETTING}${SUCCESS_TYPE}`,
             payload:{response}
         })
     } catch (error) {
-        console.log('error request:',error)
+        
         dispatch({
             type:`${DETAIL_SETTING}${FAILURE_TYPE}`
         })

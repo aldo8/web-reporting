@@ -5,7 +5,7 @@ import { getLocationDetail,createLocation,deleteLocation,listLocation,updateLoca
 import { createLoadingSelector } from 'utils/selector.helper';
 import { CREATE_LOCATION, DELETE_LOCATION, DETAIL_LOCATION, GET_LOCATION, UPDATE_LOCATION } from 'action/actionTypes';
 
-const loadingSelector = createLoadingSelector([GET_LOCATION,UPDATE_LOCATION,DELETE_LOCATION,DETAIL_LOCATION])
+const loadingSelector = createLoadingSelector([CREATE_LOCATION,GET_LOCATION,UPDATE_LOCATION,DELETE_LOCATION,DETAIL_LOCATION])
 const mapStateToProps = (state) => ({
     isLoading:loadingSelector(state),
     dataLocation:state.location.listLocation.data,

@@ -71,12 +71,16 @@ export default class Lokasi extends React.Component {
 }
 
   handleClickCreate = async (name) => {
-    const { token, createLocationResponse } = this.props
+    const { token } = this.props
     const { isOpenModal } = this.state;
     this.setState({ isOpenModal: !isOpenModal });
     await this.props.createLocation({ name }, token)
     this.props.listLocation(null, token)
-    { this.props.createLocationResponse && this.notifySuccess('Location successfuly created!') }
+    if(this.props.createLocationResponse){
+      return this.notifySuccess('Location successfuly created!') 
+    }else{
+      return this.notifyError('Location unsuccessful created!')
+    }
   }
 
   handleFilter = (event) => {
@@ -104,8 +108,9 @@ export default class Lokasi extends React.Component {
   }
 
   onPagination = (key, pageNumber) => {
+    const {SearchValue} = this.state;
     const { token } = this.props;
-    this.props.listLocation({ PageNumber: pageNumber }, token)
+    this.props.listLocation({SearchValue,PageNumber: pageNumber }, token)
   }
   renderCreate = () => {
     const { name } = this.state;
@@ -127,7 +132,11 @@ export default class Lokasi extends React.Component {
     this.setState({ isOpenModal: !isOpenModal })
     await this.props.updateLocation(data, token)
     this.props.listLocation(null, token)
-    { this.props.updateLocatoinResponse && this.notifySuccess('Location successfuly updated!') }
+    if(this.props.updateLocatoinResponse) {
+      return this.notifySuccess('Location successfuly updated!') 
+    }else {
+      return this.notifyError('Location unsuccessful updated!')
+    }
   }
 
   renderDetail = () => {
@@ -167,7 +176,7 @@ export default class Lokasi extends React.Component {
   };
 
   handleActions = async (data) => {
-    console.log('Entity',data)
+    
     this.setState({
       isConfirmModal: !this.state.isConfirmModal,
       id: data
@@ -342,7 +351,7 @@ export default class Lokasi extends React.Component {
     );
   }
   render() {
-    console.log('Lokasi', this.props)
+    
     const { isLoading } = this.props;
     return (
       <div className='container'>
