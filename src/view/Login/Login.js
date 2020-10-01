@@ -17,6 +17,9 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import { MENU } from "constants/menu";
 import { CircularProgress } from "@material-ui/core";
+import { getStorage } from "utils/storage.helper";
+import { USER_STORAGE } from "constants/storage";
+import { isEmpty } from "lodash";
 
 function Copyright() {
   return (
@@ -73,10 +76,16 @@ export default function Login(props) {
   const _handleSubmit = (value) => {    
     props.login(value);
   };
-  
+  useEffect (() => {
+    const user = getStorage(USER_STORAGE);
+    console.log(user)
+    if(!isEmpty(user)){
+      props.navigateTo(MENU.DASHBOARD)
+    }
+  })
   useEffect(() => {
-    
     const {token,navigateTo} = props
+    console.log('Loading ada ga ',props)
     if(token !== null){
       navigateTo(MENU.DASHBOARD)
     }

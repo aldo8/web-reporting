@@ -20,7 +20,8 @@ export const listLocation = (data,token) => async (dispatch) => {
     } catch (error) {
         console.log('error request:',error)
         dispatch({
-            type:`${GET_LOCATION}${FAILURE_TYPE}`
+            type:`${GET_LOCATION}${FAILURE_TYPE}`,
+            payload:{unAuthorize:true}
         })
         
     }

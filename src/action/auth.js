@@ -1,5 +1,5 @@
 import {authApi} from 'api'
-import {REQUEST_TYPE,FAILURE_TYPE,LOGIN,SUCCESS_TYPE, GET_USER} from './actionTypes';
+import {REQUEST_TYPE,FAILURE_TYPE,LOGIN,SUCCESS_TYPE, GET_USER, RESET_AUTH} from './actionTypes';
 import normalizeHelper from 'utils/normalize.helper';
 import { schemaAuth } from 'schema/auth';
 import { setStorage, getStorage } from 'utils/storage.helper';
@@ -44,4 +44,9 @@ export const getUser = () => dispatch => {
                 payload:{message:null},
             })
         }
+}
+export const resetAuth = () => dispatch => {
+    dispatch({
+        type:`${RESET_AUTH}${SUCCESS_TYPE}`
+    })
 }

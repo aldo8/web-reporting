@@ -1,4 +1,4 @@
-import { SUCCESS_TYPE, USER, DETAIL_USER, UPDATE_USER, DELETE_USER, CREATE_USER, FAILURE_TYPE } from "action/actionTypes";
+import { SUCCESS_TYPE, USER, DETAIL_USER, UPDATE_USER, DELETE_USER, CREATE_USER, FAILURE_TYPE, GET_LOCATION, GET_OUTLET, RESET_AUTHORIZATION } from "action/actionTypes";
 import { combineReducers } from "redux";
 
 const initialStateUser = {
@@ -61,13 +61,22 @@ export const createUser = (state={...initialCreate},action) => {
     }
 }
 const initialError = {
-    message:false
+    message:false,
+    unAuthorize:false
 }
 export const errorMessage = (state={...initialError},action) => {
     const {payload,type} = action;
     switch (type) {
+        case `${USER}${FAILURE_TYPE}`:
+            return {...state,unAuthorize:payload.unAuthorize}
+        case `${GET_LOCATION}${FAILURE_TYPE}`:
+            return {...state,unAuthorize:payload.unAuthorize}
+        case `${GET_OUTLET}${FAILURE_TYPE}`:
+            return {...state,unAuthorize:payload.unAuthorize}
         case `${DETAIL_USER}${FAILURE_TYPE}`:
             return {...state,message:payload.message}
+        case `${RESET_AUTHORIZATION}${SUCCESS_TYPE}`:
+            return {...state,unAuthorize:false}
         default:
             return state;
     }

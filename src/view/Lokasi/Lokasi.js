@@ -7,6 +7,9 @@ import { KeyboardArrowLeft, KeyboardArrowRight, Edit } from '@material-ui/icons'
 import { toast } from 'react-toastify';
 import moment from 'moment'
 import {Check,Clear} from '@material-ui/icons/';
+import { removeStorage } from 'utils/storage.helper';
+import { USER_STORAGE } from 'constants/storage';
+import { MENU } from 'constants/menu';
 
 export default class Lokasi extends React.Component {
   constructor(props) {
@@ -350,13 +353,23 @@ export default class Lokasi extends React.Component {
       </div>
     );
   }
+  handleAuth = () => {
+    if(this.props.unAuthorize){
+        removeStorage(USER_STORAGE)
+        this.props.resetAuth()
+        this.props.navigateTo(MENU.LOGIN)
+    }else{
+        return null
+    }
+}
   render() {
-    
+
     const { isLoading } = this.props;
     return (
       <div className='container'>
         <button class="positive ui button" onClick={() => this.handleClickModal(null, 'create')}>Create Lokasi</button>
         {isLoading && <CircularProgress className='circular-progress' size={100} />}
+        {this.handleAuth()}
         {this.renderFilter()}
         {this.renderTable()}
         {this.renderPagination()}

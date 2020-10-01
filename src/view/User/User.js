@@ -9,6 +9,9 @@ import { isEmpty } from 'lodash';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Check, Clear } from '@material-ui/icons/';
+import { removeStorage } from 'utils/storage.helper';
+import { USER_STORAGE } from 'constants/storage';
+import { MENU } from 'constants/menu';
 
 export default class User extends React.Component {
     constructor(props) {
@@ -469,13 +472,19 @@ export default class User extends React.Component {
 
 
     }
+    handleAuth = () => {
+            removeStorage(USER_STORAGE)
+            this.props.resetAuth()
+            this.props.navigateTo(MENU.LOGIN)
+    }
     render() {
-        
+        console.log('User aja',this.props.unAuthorize)   
         const { isLoading } = this.props;
         return (
             <div className='container'>
                 <button class="positive ui button" onClick={() => this.handleClickModal(null, 'create')}>Create User</button>
                 {isLoading && <CircularProgress className='circular-progress' size={100} />}
+                {this.props.unAuthorize ? this.handleAuth() : null}
                 {this.renderFilter()}
                 {this.renderTable()}
                 {this.renderPagination()}

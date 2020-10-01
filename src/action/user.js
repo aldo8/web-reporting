@@ -1,4 +1,4 @@
-import {SUCCESS_TYPE, FAILURE_TYPE, REQUEST_TYPE, USER, DETAIL_USER, UPDATE_USER, DELETE_USER, CREATE_USER} from 'action/actionTypes';
+import {SUCCESS_TYPE, FAILURE_TYPE, REQUEST_TYPE, USER, DETAIL_USER, UPDATE_USER, DELETE_USER, CREATE_USER,RESET_AUTHORIZATION} from 'action/actionTypes';
 import normalizeHelper from 'utils/normalize.helper';
 import { userApi } from 'api';
 import { schemaListUser } from 'schema/user';
@@ -19,7 +19,8 @@ export const listUser = (data,token) => async (dispatch) => {
     } catch (error) {
         console.log('error request:',error)
         dispatch({
-            type:`${USER}${FAILURE_TYPE}`
+            type:`${USER}${FAILURE_TYPE}`,
+            payload:{unAuthorize:true}
         })
         
     }
@@ -95,4 +96,10 @@ export const deleteUser = (data,token) => async (dispatch) => {
             type:`${DELETE_USER}${FAILURE_TYPE}`
         })
     }
+}
+
+export const resetAuthorize = () => dispatch => {
+    dispatch({
+        type:`${RESET_AUTHORIZATION}${SUCCESS_TYPE}`
+    })
 }

@@ -10,6 +10,9 @@ import { toast } from 'react-toastify';
 import {Check,Clear,KeyboardArrowLeft, KeyboardArrowRight } from '@material-ui/icons';
 import { Formik } from "formik";
 import { isEmpty } from "lodash";
+import { removeStorage } from "utils/storage.helper";
+import { USER_STORAGE } from "constants/storage";
+import { MENU } from "constants/menu";
 
 export default class Outlet extends React.Component {
   constructor(props) {
@@ -509,12 +512,22 @@ export default class Outlet extends React.Component {
       </div>
     )
   }
+  handleAuth = () => {
+    if(this.props.unAuthorize){
+        removeStorage(USER_STORAGE)
+        this.props.resetAuth()
+        this.props.navigateTo(MENU.LOGIN)
+    }else{
+        return null
+    }
+}
   render() {
     const { isLoading } = this.props;
     return (
       <div className="container">
         <button class="positive ui button" onClick={() => this.handleClickModal(false)}>Create Outlet</button>
         {isLoading && <CircularProgress size={100} className="circular-progress" />}
+        {this.handleAuth()}
         {this.renderFilter()}
         {this.renderTable()}
         {this.renderPagination()}

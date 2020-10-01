@@ -224,7 +224,6 @@ export default class Report extends React.Component {
         const { displayFilter } = this.state;
         let Location = [];
         let Outlet = [];
-        Location.unshift({ id: null, name: 'Pilih Semua Lokasi' })
         Outlet.unshift({ id: null, name: 'Pilih Semua Outlet' })
         listLocation.data && listLocation.data.map((data) => {
             return Location.push({ id: data.id, name: data.name })
@@ -366,8 +365,6 @@ export default class Report extends React.Component {
                 </div>
             </div>
         );
-
-
     }
     renderContent = () => {
         const formatter = new Intl.NumberFormat('id-ID', {

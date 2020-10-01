@@ -3,6 +3,8 @@ export const SUCCESS_TYPE = '_SUCCESS_TYPE';
 export const FAILURE_TYPE = '_FAILURE_TYPE';
 export const LOGIN = 'LOGIN';
 export const GET_USER = 'GET_USER';
+export const RESET_AUTH = 'RESET_AUTH';
+export const RESET_AUTHORIZATION = 'RESET_AUTHORIZATION';
 
 // Services User
 export const USER = 'USER';

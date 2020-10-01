@@ -68,28 +68,37 @@ export default class Dashboard extends React.Component {
             }    
         })
     }
+    handleSearch = () => {
+        const {location} = this.state;
+        const {token} = this.props;
+        if(location.name === 'Pilih Lokasi Pasar'){
+            alert('Pilih Lokasi Pasar')
+        }else{
+            this.props.getDashboard(location.id,token)
+        }
+        
+    }
     renderFilter = () => {
-        const {dataDashboardLocation,token} = this.props;
+        const {dataDashboardLocation} = this.props;
         let Location = [];
         dataDashboardLocation?.data && dataDashboardLocation.data.map((data) => {
           return Location.push({id:data.id,name:data.name})
         })
-        
         return (
             <>
                 <div className='filters-container'>
-                    <div className='dropdowns-container' style={{ padding: 0 }}>
+                    <div className='dropdowns-container'>
                         <DropdownComponent data={Location} selected={this.state.location.name} onSelectAction={(data) => this.handleFilter(data)} />
                     </div>
-                    <div className='dropdowns-container' style={{ paddingTop:'30px' }}>
-                    <Button onClick={() => this.props.getDashboard(this.state.location.id,token)}>Search</Button>
+                    <div className='dropdowns-container' style={{ paddingTop:'12px' }}>
+                    <Button onClick={() => this.handleSearch()}>Search</Button>
                     </div>
                 </div>
             </>
         )
     }
-    
     render() {
+        
         const { isLoading } = this.props;
         if (isLoading) {
             return <CircularProgress className='circular-progress' size={100} />

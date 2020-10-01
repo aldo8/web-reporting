@@ -5,6 +5,7 @@ import { listOutlet,createOutlet,getOutletDetail, updateOutlet, deleteOutlet} fr
 import { createLoadingSelector } from 'utils/selector.helper';
 import { DELETE_DEVICES, DETAIL_OUTLET, GET_OUTLET, UPDATE_DEVICES } from 'action/actionTypes';
 import { listLocation } from 'action/location';
+import { resetAuth } from 'action/auth';
 
 const loadingSelector = createLoadingSelector([GET_OUTLET,DETAIL_OUTLET,DELETE_DEVICES,UPDATE_DEVICES])
 const mapStateToProps = (state) => ({
@@ -15,7 +16,8 @@ const mapStateToProps = (state) => ({
     detailOutlet:state.outlet.detailOutlet.data,
     deleteOutletReponse:state.outlet.deleteOutlet.response,
     updateOutletReponse:state.outlet.updateOutlet.response,
-    createOutletReponse:state.outlet.createOutlet.response
+    createOutletReponse:state.outlet.createOutlet.response,
+    unAuthorize:state.user.errorMessage.unAuthorize
 })
 const mapDispatchToProps = (dispatch) => ({
     navigateTo:(path) => dispatch(push(path)),
@@ -24,6 +26,7 @@ const mapDispatchToProps = (dispatch) => ({
     getOutletDetail:(data,token) => dispatch(getOutletDetail(data,token)),
     updateOutlet:(data,token) => dispatch(updateOutlet(data,token)),
     deleteOutlet:(data,token) => dispatch(deleteOutlet(data,token)),
-    listLocation:(data,token) => dispatch(listLocation(data,token))
+    listLocation:(data,token) => dispatch(listLocation(data,token)),
+    resetAuth:() => dispatch(resetAuth())
 })
 export default connect(mapStateToProps,mapDispatchToProps)(Outlet);

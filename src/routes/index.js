@@ -24,7 +24,7 @@ const routes = (
     <Route exact path={MENU.OUTLET} component={Authorization(Outlet)} />
     <Route exact path={MENU.SETTING} component={Authorization(Setting)} />
     <Route exact path={MENU.REPORT} component={Authorization(Report)} />
-    <Route exact path={MENU.LOGIN} component={Login} />
+    <Route exact path={MENU.LOGIN} component={(Login)} />
     <Route exact path='*'component={Login} />
   </Switch>
   </div>

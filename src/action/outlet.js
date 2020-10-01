@@ -19,7 +19,8 @@ export const listOutlet = (data,token) => async (dispatch) => {
     } catch (error) {
         console.log('error request:',error)
         dispatch({
-            type:`${GET_OUTLET}${FAILURE_TYPE}`
+            type:`${GET_OUTLET}${FAILURE_TYPE}`,
+            payload:{unAuthorize:true}
         })
         
     }
