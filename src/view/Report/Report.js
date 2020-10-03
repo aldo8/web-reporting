@@ -8,6 +8,9 @@ import { PDFExport } from '@progress/kendo-react-pdf';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from 'moment'
+import { MENU } from 'constants/menu';
+import { removeStorage } from 'utils/storage.helper';
+import { USER_STORAGE } from 'constants/storage';
 
 export default class Report extends React.Component {
     constructor(props) {
@@ -447,14 +450,17 @@ export default class Report extends React.Component {
             </PDFExport>
         )
     }
+    handleAuth = () => {
+        removeStorage(USER_STORAGE)
+        this.props.resetAuthorize()
+        this.props.navigateTo(MENU.LOGIN)
+    }
     render() {
-        
         const { isLoading, listTransaction } = this.props;
-        if (isLoading) {
-            return <CircularProgress size={100} className='circular-progress' />
-        }
         return (
             <div className='container'>
+                {this.props.isLoading && <CircularProgress size={100} className='circular-progress' />}
+                {this.props.unAuthorize && this.handleAuth()}
                 {this.renderFilter()}
                 {this.renderContent()}
                 {listTransaction.data && listTransaction.data.length > 0 && this.renderPagination()}

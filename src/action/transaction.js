@@ -18,7 +18,8 @@ export const getListTransaction = (data,token) => async (dispatch) => {
         })
     } catch (error) {
         dispatch({
-            type:`${GET_LIST_TRANSACTION}${FAILURE_TYPE}`
+            type:`${GET_LIST_TRANSACTION}${FAILURE_TYPE}`,
+            payload:{unAuthorize:true}
         })
     }
 }

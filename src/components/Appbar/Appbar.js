@@ -235,11 +235,10 @@ export default function ApplicationBar(props) {
         props.navigateTo(MENU.REPORT);
         break;
       case 'EXIT':
+        console.log('Aku dipanggil')
         removeStorage(USER_STORAGE);
-        props.navigateTo(MENU.LOGIN);
-        window.location.reload()
-        
-        
+        props.logout()
+        props.navigateTo(MENU.LOGIN); 
         break;
       default:
         break;

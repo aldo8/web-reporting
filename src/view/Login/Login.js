@@ -125,8 +125,8 @@ export default function Login(props) {
                   margin="normal"
                   required
                   fullWidth
-                  id="email"
-                  label="Email Address"
+                  id="username"
+                  label="Username"
                   name="email"
                   autoFocus
                 />

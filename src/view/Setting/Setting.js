@@ -17,7 +17,7 @@ export default class Setting extends React.Component {
   componentDidMount = async () => {
     const { token } = this.props;
     await this.props.getDetailSetting(token);
-    this.setState({ isDetail: this.props.detailSetting.data })
+    this.setState({ isDetail: this.props?.detailSetting?.data })
   }
   renderTable = () => {
     const header = ['Name', 'Value']

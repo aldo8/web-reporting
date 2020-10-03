@@ -356,8 +356,9 @@ export default class Lokasi extends React.Component {
   handleAuth = () => {
     if(this.props.unAuthorize){
         removeStorage(USER_STORAGE)
-        this.props.resetAuth()
+        this.props.resetAuthorize()
         this.props.navigateTo(MENU.LOGIN)
+    
     }else{
         return null
     }

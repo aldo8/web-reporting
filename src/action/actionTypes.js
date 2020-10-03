@@ -5,7 +5,6 @@ export const LOGIN = 'LOGIN';
 export const GET_USER = 'GET_USER';
 export const RESET_AUTH = 'RESET_AUTH';
 export const RESET_AUTHORIZATION = 'RESET_AUTHORIZATION';
-
 // Services User
 export const USER = 'USER';
 export const CREATE_USER = 'CREATE_USER';

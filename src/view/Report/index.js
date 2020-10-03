@@ -6,6 +6,7 @@ import { createLoadingSelector } from 'utils/selector.helper';
 import { GET_LIST_TRANSACTION, GET_LOCATION, GET_OUTLET } from 'action/actionTypes';
 import { listLocation } from 'action/location';
 import { listOutlet } from 'action/outlet';
+import { resetAuthorize } from 'action/user';
 
 const loadingSelector = createLoadingSelector([GET_LIST_TRANSACTION,GET_LOCATION,GET_OUTLET])
 const mapStateToProps = (state) => ({
@@ -14,11 +15,13 @@ const mapStateToProps = (state) => ({
     listTransaction: state.transaction.listTransaction.data,
     listLocation: state.location.listLocation.data,
     listOutlet: state.outlet.listOutlet.data,
+    unAuthorize:state.user.errorMessage.unAuthorize
 })
 const mapDispatchToProps = (dispatch) => ({
     navigateTo: (path) => dispatch(push(path)),
     getListTransaction: (data, token) => dispatch(getListTransaction(data, token)),
     getListLocation: (data, token) => dispatch(listLocation(data, token)),
-    getListOutlet: (data, token) => dispatch(listOutlet(data, token))
+    getListOutlet: (data, token) => dispatch(listOutlet(data, token)),
+    resetAuthorize:() => dispatch(resetAuthorize())
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Report);

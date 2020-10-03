@@ -19,7 +19,8 @@ export const getDashboard = (data,token) => async (dispatch) => {
     } catch (error) {
         console.log('error request:',error)
         dispatch({
-            type:`${GET_DASHBOARD}${FAILURE_TYPE}`
+            type:`${GET_DASHBOARD}${FAILURE_TYPE}`,
+            payload:{unAuthorize:true}
         })
         
     }

@@ -4,7 +4,7 @@ import Lokasi from './Lokasi';
 import { getLocationDetail,createLocation,deleteLocation,listLocation,updateLocation } from 'action/location';
 import { createLoadingSelector } from 'utils/selector.helper';
 import { CREATE_LOCATION, DELETE_LOCATION, DETAIL_LOCATION, GET_LOCATION, UPDATE_LOCATION } from 'action/actionTypes';
-import { resetAuth } from 'action/auth';
+import { resetAuthorize } from 'action/user';
 
 const loadingSelector = createLoadingSelector([CREATE_LOCATION,GET_LOCATION,UPDATE_LOCATION,DELETE_LOCATION,DETAIL_LOCATION])
 const mapStateToProps = (state) => ({
@@ -24,6 +24,6 @@ const mapDispatchToProps = (dispatch) => ({
     createLocation:(data,token) => dispatch(createLocation(data,token)),
     updateLocation:(data,token) => dispatch(updateLocation(data,token)),
     deleteLocation:(data,token) => dispatch(deleteLocation(data,token)),
-    resetAuth:() => dispatch(resetAuth())
+    resetAuthorize:() => dispatch(resetAuthorize())
 })
 export default connect(mapStateToProps,mapDispatchToProps)(Lokasi);

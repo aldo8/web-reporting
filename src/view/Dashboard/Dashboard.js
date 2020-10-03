@@ -1,7 +1,10 @@
 import { CircularProgress } from '@material-ui/core';
 import DropdownComponent from 'components/DropdownComponent/DropdownComponent';
+import { MENU } from 'constants/menu';
+import { USER_STORAGE } from 'constants/storage';
 import React from 'react';
 import { Button, Card, Feed } from 'semantic-ui-react';
+import { removeStorage } from 'utils/storage.helper';
 
 export default class Dashboard extends React.Component {
     constructor(props) {
@@ -97,14 +100,18 @@ export default class Dashboard extends React.Component {
             </>
         )
     }
-    render() {
+    handleAuth = () => {
         
+            removeStorage(USER_STORAGE)
+            this.props.resetAuthorize()
+            this.props.navigateTo(MENU.LOGIN)
+    }
+    render() {
         const { isLoading } = this.props;
-        if (isLoading) {
-            return <CircularProgress className='circular-progress' size={100} />
-        }
         return (
             <main className='container'>
+                {isLoading && <CircularProgress className='circular-progress' size={100} />}
+                {this.props.unAuthorize && this.handleAuth()}
                 {this.renderFilter()}
                 {this.renderDashboard()}
             </main>

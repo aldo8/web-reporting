@@ -85,17 +85,17 @@ export default class User extends React.Component {
         } else {
 
             await this.props.getUserDetail(data.id, token);
-            
-            if(this.props.errorMessageUser){
+
+            if (this.props.errorMessageUser) {
                 alert('Sorry Data Not Found')
-            }else{
+            } else {
                 this.setState({
                     dataDetail: this.props.detailUser?.data,
                     isOpenModal: true,
                     isDetail: true
                 });
             }
-            
+
         }
 
     };
@@ -128,8 +128,7 @@ export default class User extends React.Component {
     renderDetail = () => {
         const { dataDetail } = this.state;
         
-        let role =
-            this.props.userRole === 'SA' ? [{ role: 'SA', name: 'Super Admin' }, { role: 'A', name: 'Admin' }, { role: 'U', name: 'User' }] : [{ role: 'A', name: 'Admin' }, { role: 'U', name: 'User' }]
+        let role = this.props.userRole.role === 'SA' ? [{ role: 'SA', name: 'Super Admin' }, { role: 'A', name: 'Admin' }, { role: 'U', name: 'User' }] : [{ role: 'A', name: 'Admin' }, { role: 'U', name: 'User' }]
         return (
             <>
                 <div class="ui form" style={{ backgroundColor: 'white', padding: "10px" }} >
@@ -139,7 +138,21 @@ export default class User extends React.Component {
                     </div>
                     <div class="field">
                         <label>Username</label>
-                        <input placeholder={dataDetail.userName} value={dataDetail.userName} />
+                        <input placeholder={dataDetail.userName}/>
+                    </div>
+                    <div class="field">
+                        <label>Password</label>
+                        <input type="password" placeholder="Password" value={dataDetail?.password} onChange={(e) => this.setState({dataDetail:{...dataDetail,password:e.target.value}})}/>
+                        {dataDetail?.password?.length < 5 ?
+                            (<div className='error-text'>{'Password min 5 character'}</div>) : null
+                        }
+                    </div>
+                    <div class="field">
+                        <label>Confirm Password</label>
+                        <input type="password" placeholder="Confirm Password" value={dataDetail?.confirmPassword} onChange={(e) => this.setState({dataDetail:{...dataDetail,confirmPassword:e.target.value}})}/>
+                        {dataDetail?.password !== dataDetail?.confirmPassword ?
+                            (<div className='error-text'>{`Password Not Match`}</div>) : null
+                        }
                     </div>
                     <div class="field">
                         <label>Role</label>
@@ -187,7 +200,8 @@ export default class User extends React.Component {
 
     renderCreate = () => {
         const { createUser } = this.state;
-        let role = this.props.userRole === 'SA' ? [{ role: 'SA', name: 'Super Admin' }, { role: 'A', name: 'Admin' }, { role: 'U', name: 'User' }] : [{ role: 'A', name: 'Admin' }, { role: 'U', name: 'User' }]
+        console.log('role',this.props.userRole)
+        let role = this.props.userRole.role === 'SA' ? [{ role: 'SA', name: 'Super Admin' }, { role: 'A', name: 'Admin' }, { role: 'U', name: 'User' }] : [{ role: 'A', name: 'Admin' }, { role: 'U', name: 'User' }]
         const createUserSchema = Yup.object().shape({
             name: Yup.string()
                 .min(3, 'Too Short minimum 3 character!')
@@ -219,7 +233,7 @@ export default class User extends React.Component {
             >
                 {(props) => (
                     <div class="ui form" style={{ backgroundColor: 'white', padding: "10px" }} >
-                        
+
                         <div class="field">
                             <label>Name</label>
                             <input type="text" placeholder="Name" value={props.values.name} onChange={(e) => props.setFieldValue('name', e.target.value)} />
@@ -321,9 +335,9 @@ export default class User extends React.Component {
         )
     }
     onPagination = (key, pageNumber) => {
-        const {SearchValue} = this.state;
+        const { SearchValue } = this.state;
         const { token } = this.props;
-        this.props.listUser({SearchValue,PageNumber: pageNumber }, token)
+        this.props.listUser({ SearchValue, PageNumber: pageNumber }, token)
     }
     handleFilter = (event) => {
         this.setState({
@@ -473,18 +487,17 @@ export default class User extends React.Component {
 
     }
     handleAuth = () => {
-            removeStorage(USER_STORAGE)
-            this.props.resetAuth()
-            this.props.navigateTo(MENU.LOGIN)
+        removeStorage(USER_STORAGE)
+        this.props.resetAuthorize()
+        this.props.navigateTo(MENU.LOGIN)
     }
     render() {
-        console.log('User aja',this.props.unAuthorize)   
         const { isLoading } = this.props;
         return (
             <div className='container'>
                 <button class="positive ui button" onClick={() => this.handleClickModal(null, 'create')}>Create User</button>
                 {isLoading && <CircularProgress className='circular-progress' size={100} />}
-                {this.props.unAuthorize ? this.handleAuth() : null}
+                {this.props.unAuthorize && this.handleAuth()}
                 {this.renderFilter()}
                 {this.renderTable()}
                 {this.renderPagination()}

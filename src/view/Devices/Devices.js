@@ -7,6 +7,9 @@ import { Formik } from 'formik';
 import * as Yup from 'yup';
 import { isEmpty } from 'lodash';
 import { toast } from 'react-toastify';
+import { removeStorage } from 'utils/storage.helper';
+import { USER_STORAGE } from 'constants/storage';
+import { MENU } from 'constants/menu';
 
 export default class Devices extends React.Component {
     constructor(props) {
@@ -237,8 +240,6 @@ export default class Devices extends React.Component {
                 initialValues={createDevice}
             >
                 {(props) => (
-
-
                     <div class="ui form" style={{ backgroundColor: 'white', padding: "10px" }} >
                         <div class="field">
                             <label>Phone Number</label>
@@ -497,6 +498,15 @@ export default class Devices extends React.Component {
             </Modal>
         )
     }
+    handleAuth = () => {
+        if(this.props.unAuthorize){
+            removeStorage(USER_STORAGE)
+            this.props.resetAuthorize()
+            this.props.navigateTo(MENU.LOGIN)
+        }else{
+            return null
+        }
+    }
     render() {
 
         if (this.props.isLoading) {
@@ -505,6 +515,7 @@ export default class Devices extends React.Component {
         return (
             <div className='container'>
                 <button class="positive ui button" onClick={() => this.handleClickModal(null, 'create')}>Create Devices</button>
+                {this.handleAuth()}
                 {this.renderFilter()}
                 {this.renderTable()}
                 {this.renderModal()}

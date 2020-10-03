@@ -6,6 +6,7 @@ import { createLoadingSelector } from 'utils/selector.helper';
 import { CREATE_DEVICES, DETAIL_DEVICES, GET_DEVICES, UPDATE_DEVICES,GET_LOCATION,GET_OUTLET } from 'action/actionTypes';
 import { listLocation } from 'action/location';
 import { listOutlet } from 'action/outlet';
+import { resetAuthorize } from 'action/user';
 
 const loadingSelector = createLoadingSelector([GET_DEVICES,CREATE_DEVICES,UPDATE_DEVICES,DETAIL_DEVICES,GET_LOCATION,GET_OUTLET])
 const mapStateToProps = (state) => ({
@@ -17,7 +18,8 @@ const mapStateToProps = (state) => ({
     detailDevice:state.device.detailDevice.data,
     createResponse:state.device.createDevice.response,
     updateDevicesResponse:state.device.updateDevice.response,
-    deleteDevicesResponse:state.device.deleteDevice.response
+    deleteDevicesResponse:state.device.deleteDevice.response,
+    unAuthorize:state.user.errorMessage.unAuthorize
 })
 const mapDispatchToProps = (dispatch) => ({
     navigateTo: (path) => dispatch(push(path)),
@@ -28,5 +30,6 @@ const mapDispatchToProps = (dispatch) => ({
     deleteDevice: (data, token) => dispatch(deleteDevice(data, token)),
     listLocation:(data,token) => dispatch(listLocation(data,token)),
     listOutlet:(data,token) => dispatch(listOutlet(data,token)),
+    resetAuthorize:() => dispatch(resetAuthorize())
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Devices);
