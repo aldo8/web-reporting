@@ -1,4 +1,4 @@
-import {SUCCESS_TYPE, FAILURE_TYPE, REQUEST_TYPE,GET_LIST_TRANSACTION, DASHBOARD_LOCATION,DASHBOARD_OUTLET} from 'action/actionTypes';
+import {SUCCESS_TYPE, FAILURE_TYPE, REQUEST_TYPE,GET_LIST_TRANSACTION, DASHBOARD_LOCATION,DASHBOARD_OUTLET,LIST_LOCATION_TRANSACTION,LIST_OUTLET_TRANSACTION} from 'action/actionTypes';
 import normalizeHelper from 'utils/normalize.helper';
 import { transactionApi } from 'api';
 import { schemaListTransaction, schemaLocationTransaction, schemaOutletTransaction } from 'schema/transaction';
@@ -57,6 +57,45 @@ export const dashboardOutlet = (data,token) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type:`${DASHBOARD_OUTLET}${FAILURE_TYPE}`
+        })
+    }
+}
+export const listLocationTransaction = (token) => async (dispatch) => {
+    console.log('listLocationTransaction')
+    dispatch({
+        type:`${LIST_LOCATION_TRANSACTION}${REQUEST_TYPE}`
+    })
+    try {
+        let response 
+        response = await api(token).locationTransaction()
+        response = normalizeHelper(response.data,schemaLocationTransaction)
+        dispatch({
+            type:`${LIST_LOCATION_TRANSACTION}${SUCCESS_TYPE}`,
+            payload:{response}
+        })
+    } catch (error) {
+        console.log('errorLocation',error)
+        dispatch({
+            type:`${LIST_LOCATION_TRANSACTION}${FAILURE_TYPE}`,
+        })
+    }
+}
+export const listOutletTransaction = (token) => async (dispatch) => {
+    dispatch({
+        type:`${LIST_OUTLET_TRANSACTION}${REQUEST_TYPE}`
+    })
+    try {
+        let response 
+        response = await api(token).outletTransaction()
+        response = normalizeHelper(response.data,schemaLocationTransaction)
+        dispatch({
+            type:`${LIST_OUTLET_TRANSACTION}${SUCCESS_TYPE}`,
+            payload:{response}
+        })
+    } catch (error) {
+        console.log('errorLocation',error)
+        dispatch({
+            type:`${LIST_OUTLET_TRANSACTION}${FAILURE_TYPE}`,
         })
     }
 }

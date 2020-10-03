@@ -85,7 +85,7 @@ export default function Login(props) {
   })
   useEffect(() => {
     const {token,navigateTo} = props
-    console.log('Loading ada ga ',props)
+    
     if(token !== null){
       navigateTo(MENU.DASHBOARD)
     }

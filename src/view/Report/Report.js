@@ -83,8 +83,8 @@ export default class Report extends React.Component {
     componentDidMount = () => {
         const { token } = this.props;
         // this.props.getListTransaction({ Sorts: `-created` }, token)
-        this.props.getListLocation(null, token)
-        this.props.getListOutlet(null, token)
+        this.props.getListLocation(token)
+        this.props.getListOutlet(token)
     }
     handleFilter = (key, value) => {
         const { currentFilter, displayFilter, startDate, endDate } = this.state;
@@ -228,10 +228,11 @@ export default class Report extends React.Component {
         let Location = [];
         let Outlet = [];
         Outlet.unshift({ id: null, name: 'Pilih Semua Outlet' })
-        listLocation.data && listLocation.data.map((data) => {
+        listLocation?.data && listLocation.data.map((data) => {
             return Location.push({ id: data.id, name: data.name })
         })
-        listOutlet.data && listOutlet.data.map((data) => {
+        listOutlet?.data && listOutlet.data.map((data) => {
+            console.log('OUT',data)
             return Outlet.push({ id: data.id, name: data.name })
         })
         return (

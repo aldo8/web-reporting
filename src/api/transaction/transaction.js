@@ -10,11 +10,11 @@ export default class transactionApi extends baseApi {
         
         return this.axios.get('/api/v1/transactions',{params})
     }
-    locationTransaction = (params) => {
-        return this.axios.get('/api/v1/transactions/locations',{params})
+    locationTransaction = () => {
+        return this.axios.get('/api/v1/transactions/locations')
     }
-    outletTransaction = (params) => {
-        return this.axios.get('/api/v1/transactions/outlets',{params})
+    outletTransaction = () => {
+        return this.axios.get('/api/v1/transactions/outlets')
     }
     
 }

@@ -1,4 +1,4 @@
-import { SUCCESS_TYPE, GET_LIST_TRANSACTION,DASHBOARD_LOCATION,DASHBOARD_OUTLET } from "action/actionTypes";
+import { SUCCESS_TYPE, GET_LIST_TRANSACTION,DASHBOARD_LOCATION,DASHBOARD_OUTLET, LIST_LOCATION_TRANSACTION, LIST_OUTLET_TRANSACTION } from "action/actionTypes";
 import { combineReducers } from "redux";
 
 const initialStateTransaction = {
@@ -34,11 +34,30 @@ export const dashboardOutlet = (state ={},action) => {
             
     }
 }
-
+export const listLocationTransaction = (state = {}, action) => {
+    const {payload,type} = action
+    switch (type) {
+        case `${LIST_LOCATION_TRANSACTION}${SUCCESS_TYPE}`:
+            return {...state,data:payload.response}
+        default:
+            return state
+    }
+}
+export const listOutletTransaction = (state = {}, action) => {
+    const {payload,type} = action
+    switch (type) {
+        case `${LIST_OUTLET_TRANSACTION}${SUCCESS_TYPE}`:
+            return {...state,data:payload.response}
+        default:
+            return state
+    }
+}
 const transactionReducer = combineReducers({
     listTransaction,
     dashboardLocation,
-    dashboardOutlet
+    dashboardOutlet,
+    listLocationTransaction,
+    listOutletTransaction
 
 })
 export {transactionReducer}

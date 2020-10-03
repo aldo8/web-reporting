@@ -30,15 +30,16 @@ export const createUser = (data,token) => async  (dispatch) => {
     dispatch({
         type:`${CREATE_USER}${REQUEST_TYPE}`
     })
-    const response = await api(data).createUser(data)
-    console.log('error Create',response)
+  
     try {
+        const response = await api(data).createUser(data)
+        console.log('error Create',response)
         dispatch({
             type:`${CREATE_USER}${SUCCESS_TYPE}`,
             payload:{data:true}
         })
     } catch (error) {
-        
+        console.log('errorreq',error)
         dispatch({
             type:`${CREATE_USER}${FAILURE_TYPE}`,
             payload:{message:error}
