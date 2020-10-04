@@ -224,14 +224,14 @@ export default class Report extends React.Component {
     }
     renderFilter = () => {
         const { listLocation, listOutlet } = this.props;
-        const { displayFilter } = this.state;
+        const { displayFilter,currentFilter } = this.state;
         let Location = [];
         let Outlet = [];
         Outlet.unshift({ id: null, name: 'Pilih Semua Outlet' })
         listLocation?.data && listLocation.data.map((data) => {
             return Location.push({ id: data.id, name: data.name })
         })
-        listOutlet?.data && listOutlet.data.map((data) => {
+        listOutlet?.data && listOutlet.data.filter((temp) => temp.locationId === currentFilter?.locationId).map((data) => {
             console.log('OUT',data)
             return Outlet.push({ id: data.id, name: data.name })
         })
@@ -457,10 +457,11 @@ export default class Report extends React.Component {
         this.props.navigateTo(MENU.LOGIN)
     }
     render() {
+        console.log('Odading',this.props)
         const { isLoading, listTransaction } = this.props;
         return (
             <div className='container'>
-                {this.props.isLoading && <CircularProgress size={100} className='circular-progress' />}
+                {isLoading && <CircularProgress size={100} className='circular-progress' />}
                 {this.props.unAuthorize && this.handleAuth()}
                 {this.renderFilter()}
                 {this.renderContent()}

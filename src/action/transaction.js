@@ -87,7 +87,7 @@ export const listOutletTransaction = (token) => async (dispatch) => {
     try {
         let response 
         response = await api(token).outletTransaction()
-        response = normalizeHelper(response.data,schemaLocationTransaction)
+        response = normalizeHelper(response.data,schemaOutletTransaction)
         dispatch({
             type:`${LIST_OUTLET_TRANSACTION}${SUCCESS_TYPE}`,
             payload:{response}
