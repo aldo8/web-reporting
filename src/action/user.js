@@ -59,10 +59,12 @@ export const getUserDetail = (data,token) => async (dispatch) => {
             payload:{response}
         })
     } catch (error) {
+        
         dispatch({
             type:`${DETAIL_USER}${FAILURE_TYPE}`,
             payload:{message:true}
         })
+        
     }
 }
 export const updateUser = (data,token) => async (dispatch) => {

@@ -87,7 +87,7 @@ export default class User extends React.Component {
             await this.props.getUserDetail(data.id, token);
 
             if (this.props.errorMessageUser) {
-                alert('Sorry Data Not Found')
+                this.notifyDelete('Sorry Data Not Found')
             } else {
                 this.setState({
                     dataDetail: this.props.detailUser?.data,
@@ -138,7 +138,7 @@ export default class User extends React.Component {
                     </div>
                     <div class="field">
                         <label>Username</label>
-                        <input placeholder={dataDetail.userName}/>
+                        <input placeholder={dataDetail.userName} onChange={(e) => this.setState({ dataDetail: { ...dataDetail, userName: e.target.value } })} />
                     </div>
                     <div class="field">
                         <label>Password</label>

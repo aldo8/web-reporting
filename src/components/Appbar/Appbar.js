@@ -124,6 +124,18 @@ export default function ApplicationBar(props) {
               <ListItemText primary='REPORT' />
             </ListItem>
           </List>
+
+          <List>
+            <ListItem
+              button
+              onClick={() => handleNavigation('PROFILE')}
+            >
+              <ListItemIcon>
+                <Person />
+              </ListItemIcon>
+              <ListItemText primary='PROFILE' />
+            </ListItem>
+          </List>
         </>
     )
   }
@@ -233,6 +245,9 @@ export default function ApplicationBar(props) {
         break;
       case `REPORT`:
         props.navigateTo(MENU.REPORT);
+        break;
+      case `PROFILE`:
+        props.navigateTo(MENU.PROFILE)
         break;
       case 'EXIT':
         removeStorage(USER_STORAGE);

@@ -10,6 +10,7 @@ import {
   Devices,
   Setting,
   Report,
+  Profile
 } from "view";
 import Authorization from "components/AuthGuard";
 
@@ -24,6 +25,7 @@ const routes = (
     <Route exact path={MENU.OUTLET} component={Authorization(Outlet)} />
     <Route exact path={MENU.SETTING} component={Authorization(Setting)} />
     <Route exact path={MENU.REPORT} component={Authorization(Report)} />
+    <Route exact path={MENU.PROFILE} component={Authorization(Profile)} />
     <Route exact path={MENU.LOGIN} component={(Login)} />
     <Route exact path='*'component={Login} />
   </Switch>

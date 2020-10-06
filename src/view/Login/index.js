@@ -8,7 +8,7 @@ import { createLoadingSelector } from 'utils/selector.helper';
 const loadingSelector = createLoadingSelector([LOGIN])
 const mapStateToProps = (state) => ({
     ...state.auth.data,
-    isloading:loadingSelector(state),
+    loadingLogin:loadingSelector(state),
 })
     
     

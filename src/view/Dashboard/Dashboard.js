@@ -5,6 +5,7 @@ import { USER_STORAGE } from 'constants/storage';
 import React from 'react';
 import { Button, Card, Feed } from 'semantic-ui-react';
 import { removeStorage } from 'utils/storage.helper';
+import { toast } from 'react-toastify';
 
 export default class Dashboard extends React.Component {
     constructor(props) {
@@ -71,11 +72,22 @@ export default class Dashboard extends React.Component {
             }    
         })
     }
+    notifyWarning = (message) => {
+        toast.warn(`${message}`, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
     handleSearch = () => {
         const {location} = this.state;
         const {token} = this.props;
         if(location.name === 'Pilih Lokasi Pasar'){
-            alert('Pilih Lokasi Pasar')
+            this.notifyWarning('Pilih Lokasi Pasar')
         }else{
             this.props.getDashboard(location.id,token)
         }

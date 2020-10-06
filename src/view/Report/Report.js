@@ -8,6 +8,7 @@ import { PDFExport } from '@progress/kendo-react-pdf';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import moment from 'moment'
+import { toast } from 'react-toastify';
 import { MENU } from 'constants/menu';
 import { removeStorage } from 'utils/storage.helper';
 import { USER_STORAGE } from 'constants/storage';
@@ -193,10 +194,23 @@ export default class Report extends React.Component {
             temp: this.queryTemp
         })
     }
+    
+    notifyWarning = (message) => {
+        toast.warn(`${message}`, {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
+
     handleFilterDate = () => {
         const { token } = this.props;
         if(this.state.displayFilter.locationId === 'Pilih Lokasi'){
-            alert('Pilih Lokasi')
+            this.notifyWarning('Pilih Lokasi')
         }else{
             this.props.getListTransaction(this.state.temp, token)
         }

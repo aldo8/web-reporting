@@ -95,12 +95,10 @@ export default function Login(props) {
   
   })
   const classes = useStyles();
-  if(props.isLoading){
-    return <CircularProgress className='circular-progress' size={100}/>
-  }
+  console.log('Lasdf',props)
   return (
-
     <Grid container component="main" className={classes.root}>
+    {props.loadingLogin && <CircularProgress className='circular-progress' size={100}/>  }
       <CssBaseline />
       <Grid item xs={false} sm={4} md={7} className={classes.image} />
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
