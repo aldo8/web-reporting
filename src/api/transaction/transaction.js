@@ -3,6 +3,7 @@ import apiConfig from 'configuration/api.config';
 
 export default class transactionApi extends baseApi {
     static newInstance = token => {
+        console.log('Per tokenan',token)
         if(!this.api) this.api = new transactionApi(apiConfig(token));
         return this.api;
     }

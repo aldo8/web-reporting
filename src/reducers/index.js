@@ -11,6 +11,8 @@ import { deviceReducer } from './device';
 import { settingReducer } from './setting';
 import { dashboardReducer } from './dashboard';
 import { RESET_AUTHORIZATION } from 'action/actionTypes';
+import { removeStorage } from 'utils/storage.helper';
+import { USER_STORAGE } from 'constants/storage';
 
 
 const x = combineReducers({
@@ -27,7 +29,6 @@ const x = combineReducers({
 })
 
 const appReducer = (state,action) => {
-    console.log('HIYA',action)
     // when a logout action is dispatch it will reset redux state
     if(action.type === RESET_AUTHORIZATION){
         state = undefined

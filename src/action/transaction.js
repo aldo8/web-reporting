@@ -37,7 +37,8 @@ export const dashboardLocation = (data,token) => async (dispatch) => {
         })
     } catch (error) {
         dispatch({
-            type:`${DASHBOARD_LOCATION}${FAILURE_TYPE}`
+            type:`${DASHBOARD_LOCATION}${FAILURE_TYPE}`,
+            payload:{unAuthorize:true}
         })
     }
 }
@@ -56,7 +57,8 @@ export const dashboardOutlet = (data,token) => async (dispatch) => {
         })
     } catch (error) {
         dispatch({
-            type:`${DASHBOARD_OUTLET}${FAILURE_TYPE}`
+            type:`${DASHBOARD_OUTLET}${FAILURE_TYPE}`,
+            payload:{unAuthorize:true}
         })
     }
 }
@@ -74,9 +76,9 @@ export const listLocationTransaction = (token) => async (dispatch) => {
             payload:{response}
         })
     } catch (error) {
-        console.log('errorLocation',error)
         dispatch({
             type:`${LIST_LOCATION_TRANSACTION}${FAILURE_TYPE}`,
+            payload:{unAuthorize:true}
         })
     }
 }
@@ -93,9 +95,9 @@ export const listOutletTransaction = (token) => async (dispatch) => {
             payload:{response}
         })
     } catch (error) {
-        console.log('errorLocation',error)
         dispatch({
             type:`${LIST_OUTLET_TRANSACTION}${FAILURE_TYPE}`,
+            payload:{unAuthorize:true}  
         })
     }
 }

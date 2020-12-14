@@ -76,26 +76,19 @@ export default function Login(props) {
   const _handleSubmit = (value) => {    
     props.login(value);
   };
-  useEffect (() => {
-    const user = getStorage(USER_STORAGE);
-    console.log(user)
-    if(!isEmpty(user)){
-      props.navigateTo(MENU.DASHBOARD)
-    }
-  })
   useEffect(() => {
     const {token,navigateTo} = props
-    
     if(token !== null){
       navigateTo(MENU.DASHBOARD)
     }
     if(props.isLoading){
       return <CircularProgress className='circular-progress' size={100}/>
     }
-  
+    if(props.isExit.resetAuthorize){
+      return window.location.reload()
+    }
   })
   const classes = useStyles();
-  console.log('Lasdf',props)
   return (
     <Grid container component="main" className={classes.root}>
     {props.loadingLogin && <CircularProgress className='circular-progress' size={100}/>  }

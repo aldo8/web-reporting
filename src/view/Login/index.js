@@ -9,6 +9,7 @@ const loadingSelector = createLoadingSelector([LOGIN])
 const mapStateToProps = (state) => ({
     ...state.auth.data,
     loadingLogin:loadingSelector(state),
+    isExit:state.user
 })
     
     

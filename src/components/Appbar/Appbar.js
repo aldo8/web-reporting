@@ -252,7 +252,7 @@ export default function ApplicationBar(props) {
       case 'EXIT':
         removeStorage(USER_STORAGE);
         props.logout()
-        props.navigateTo(MENU.LOGIN); 
+        props.navigateTo(MENU.LOGIN,'EXIT'); 
         break;
       default:
         break;

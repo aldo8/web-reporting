@@ -22,7 +22,7 @@ const apiConfig = (token) => {
         })
         axiosApi.interceptors.response.use(response => {
             if(process.env.NODE_ENV === 'development') {
-                console.log('Response',response)
+                console.log('Response Request:',response)
             }
             return response;
         })

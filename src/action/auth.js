@@ -5,16 +5,15 @@ import { schemaAuth } from 'schema/auth';
 import { setStorage, getStorage } from 'utils/storage.helper';
 import { USER_STORAGE } from 'constants/storage';
 
-const api = (token) => authApi.newInstance(token);
-export const login = (data,token) => async (dispatch) => {
+export const login = (data) => async (dispatch) => {
+    const api = () => authApi.newInstance();
     dispatch({
         type:`${LOGIN}${REQUEST_TYPE}`
     });
     try {
         let response
-        response = await api(token).login(data);
+        response = await api().login(data);
         response = normalizeHelper(response.data,schemaAuth);
-        
         setStorage(USER_STORAGE,response.data)
         dispatch({
             type:`${LOGIN}${SUCCESS_TYPE}`,
@@ -28,7 +27,7 @@ export const login = (data,token) => async (dispatch) => {
     }
 }
 
-export const getUser = () => dispatch => {
+export const getUser = () => (dispatch) => {
     dispatch({
         type:`${GET_USER}${REQUEST_TYPE}`
     })

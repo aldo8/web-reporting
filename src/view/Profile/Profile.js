@@ -4,6 +4,7 @@ import React from "react";
 import { USER_STORAGE } from "constants/storage";
 import { MENU } from "constants/menu";
 import { removeStorage } from "utils/storage.helper";
+import { isUndefined } from "lodash";
 
 
 export default class Profile extends React.Component {
@@ -58,7 +59,6 @@ handleAuth = () => {
     await this.props.updateProfile(profile, user.token);
     if (this.props.updateResponse) {
         this.setState({isConfirmModal:!isConfirmModal})
-        // setInterval(this.notifyCreate('User successfully updated!'),5000)
         setInterval(this.handleAuth(),5000)
         
     }else{
@@ -85,7 +85,7 @@ handleAuth = () => {
             type="text"
             name="first-name"
             placeholder="Name"
-            value={profile.name}
+            value={isUndefined(profile) ? null : profile.name }
             onChange={(e) =>
               this.setState({ profile: { ...profile, name: e.target.value } })
             }
@@ -94,8 +94,8 @@ handleAuth = () => {
         <div class="field">
           <label>Username</label>
           <input 
-            placeholder={profile.userName} 
-            value={profile.userName}
+            placeholder={profile?.userName} 
+            value={profile?.userName}
             onChange={(e) => this.setState({ profile: { ...profile, userName: e.target.value } })}
           />
         </div>

@@ -10,7 +10,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import moment from 'moment'
 import { toast } from 'react-toastify';
 import { MENU } from 'constants/menu';
-import { removeStorage } from 'utils/storage.helper';
+import { getStorage, removeStorage } from 'utils/storage.helper';
 import { USER_STORAGE } from 'constants/storage';
 
 export default class Report extends React.Component {
@@ -83,7 +83,7 @@ export default class Report extends React.Component {
     }
     componentDidMount = () => {
         const { token } = this.props;
-        // this.props.getListTransaction({ Sorts: `-created` }, token)
+        const x = getStorage(USER_STORAGE)
         this.props.getListLocation(token)
         this.props.getListOutlet(token)
     }
@@ -246,7 +246,6 @@ export default class Report extends React.Component {
             return Location.push({ id: data.id, name: data.name })
         })
         listOutlet?.data && listOutlet.data.filter((temp) => temp.locationId === currentFilter?.locationId).map((data) => {
-            console.log('OUT',data)
             return Outlet.push({ id: data.id, name: data.name })
         })
         return (
@@ -471,7 +470,6 @@ export default class Report extends React.Component {
         this.props.navigateTo(MENU.LOGIN)
     }
     render() {
-        console.log('Odading',this.props)
         const { isLoading, listTransaction } = this.props;
         return (
             <div className='container'>

@@ -1,4 +1,4 @@
-import { SUCCESS_TYPE, USER, DETAIL_USER, UPDATE_USER, DELETE_USER, CREATE_USER, FAILURE_TYPE, GET_LOCATION, GET_OUTLET, GET_LIST_TRANSACTION, GET_DASHBOARD } from "action/actionTypes";
+import { SUCCESS_TYPE, USER, DETAIL_USER, UPDATE_USER, DELETE_USER, CREATE_USER, FAILURE_TYPE, GET_LOCATION, GET_OUTLET, GET_LIST_TRANSACTION, GET_DASHBOARD, LIST_LOCATION_TRANSACTION, LIST_OUTLET_TRANSACTION } from "action/actionTypes";
 import { combineReducers } from "redux";
 
 const initialStateUser = {
@@ -79,6 +79,19 @@ export const errorMessage = (state = { ...initialError }, action) => {
             return { ...state, unAuthorize: payload.unAuthorize }
         case `${DETAIL_USER}${FAILURE_TYPE}`:
             return { ...state, message: payload.message }
+        case `${LIST_LOCATION_TRANSACTION}${FAILURE_TYPE}`:
+            return { ...state, unAuthorize: payload.unAuthorize }
+        case `${LIST_OUTLET_TRANSACTION}${FAILURE_TYPE}`:
+            return { ...state, unAuthorize: payload.unAuthorize }
+        default:
+            return state;
+    }
+}
+export const resetAuthorize = (state = false,action) => {
+    const {payload,type} = action;
+    switch (type) {
+        case `RESET_AUTHORIZATION`:
+            return {...state,response:payload.response}
         default:
             return state;
     }
@@ -89,6 +102,7 @@ const userReducer = combineReducers({
     updateUser,
     deleteUser,
     createUser,
-    errorMessage
+    errorMessage,
+    resetAuthorize
 })
 export { userReducer }

@@ -200,7 +200,6 @@ export default class User extends React.Component {
 
     renderCreate = () => {
         const { createUser } = this.state;
-        console.log('role',this.props.userRole)
         let role = this.props.userRole.role === 'SA' ? [{ role: 'SA', name: 'Super Admin' }, { role: 'A', name: 'Admin' }, { role: 'U', name: 'User' }] : [{ role: 'A', name: 'Admin' }, { role: 'U', name: 'User' }]
         const createUserSchema = Yup.object().shape({
             name: Yup.string()

@@ -103,6 +103,7 @@ export const deleteUser = (data,token) => async (dispatch) => {
 
 export const resetAuthorize = () => dispatch => {
     dispatch({
-        type:`${RESET_AUTHORIZATION}`
+        type:`${RESET_AUTHORIZATION}`,
+        payload:{response:true}
     })
 }
