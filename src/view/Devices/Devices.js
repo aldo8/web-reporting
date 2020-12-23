@@ -35,8 +35,8 @@ export default class Devices extends React.Component {
     componentDidMount = () => {
         const { token } = this.props
         this.props.getDevice(null, token);
-        this.props.listOutlet(null, token);
-        this.props.listLocation(null, token);
+        this.props.listOutlet(token);
+        this.props.listLocation(token);
     }
 
     notifySuccess = (message) => {
@@ -202,7 +202,7 @@ export default class Devices extends React.Component {
         const { dataOutlet, dataLocation } = this.props;
         let listLocation = []
         let listOutlet = []
-        dataOutlet.data && dataOutlet.data.map((data) => {
+        dataOutlet?.data && dataOutlet.data.map((data) => {
             return listOutlet.push({
                 outletId: data.id,
                 name: data.name,
@@ -210,7 +210,7 @@ export default class Devices extends React.Component {
             })
         })
 
-        dataLocation.data && dataLocation.data.filter((el) => el.isActive === true).map((data) => {
+        dataLocation?.data && dataLocation.data.filter((el) => el.isActive === true).map((data) => {
             return listLocation.push({
                 name: data.name,
                 locationId: data.id

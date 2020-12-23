@@ -37,7 +37,8 @@ export default class Outlet extends React.Component {
   componentDidMount = () => {
     const { token } = this.props;
     this.props.listOutlet("", token);
-    this.props.listLocation("", token);
+    // this.props.listLocation("", token);
+    this.props.listLocationTransaction(token);
   };
 
   onPagination = (key, pageNumber) => {
@@ -236,7 +237,7 @@ export default class Outlet extends React.Component {
     const { dataLocation } = this.props;
     this.Location = [];
 
-    dataLocation.data && dataLocation.data.map((data) => {
+    dataLocation?.data && dataLocation.data.map((data) => {
       return this.Location.push({ locationId: data.id, name: data.name })
     })
 
@@ -522,6 +523,7 @@ export default class Outlet extends React.Component {
     }
 }
   render() {
+    console.log('ASDF',this.props)
     const { isLoading } = this.props;
     return (
       <div className="container">

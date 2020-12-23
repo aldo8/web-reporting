@@ -63,7 +63,6 @@ export const dashboardOutlet = (data,token) => async (dispatch) => {
     }
 }
 export const listLocationTransaction = (token) => async (dispatch) => {
-    console.log('listLocationTransaction')
     dispatch({
         type:`${LIST_LOCATION_TRANSACTION}${REQUEST_TYPE}`
     })
